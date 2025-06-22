@@ -16,6 +16,15 @@ export interface RAGSearchResult {
   processingTime: number;
 }
 
+interface KeywordSearchResult {
+  id: number;
+  content: string;
+  source: string;
+  category: string;
+  metadata?: Record<string, unknown>;
+  matched_keywords?: string[];
+}
+
 /**
  * ハイブリッド検索実行（ベクトル + 全文検索）
  */
@@ -132,7 +141,7 @@ export async function searchByKeywords(
     }
 
     // キーワード検索結果をSearchResult形式に変換
-    return (results || []).map(result => ({
+    return (results || []).map((result: KeywordSearchResult) => ({
       id: result.id,
       content: result.content,
       source: result.source,

@@ -382,7 +382,7 @@ ui-eval-ai/
 1. **画像分析パイプライン**
    - 要素識別ロジック
    - プロンプト生成エンジン
-   - Claude API統合
+   - Gemini API統合
 
 2. **分析APIの実装**
    - `/api/analyze`エンドポイント
@@ -526,7 +526,7 @@ ui-eval-ai/
 - [Next.js 15 App Router](https://nextjs.org/docs)
 - [Supabase Documentation](https://supabase.com/docs)
 - [pgvector Documentation](https://github.com/pgvector/pgvector)
-- [Claude API Documentation](https://docs.anthropic.com/)
+- [Google Gemini API Documentation](https://ai.google.dev/docs)
 - [OpenAI Embeddings API](https://platform.openai.com/docs/guides/embeddings)
 
 ### デザインガイドライン

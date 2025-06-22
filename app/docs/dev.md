@@ -77,14 +77,19 @@
 
 ### AI・機械学習
 
-- **Claude 3.5 Haiku**: 画像分析・改善提案生成
-- **OpenAI text-embedding-ada-002**: テキストベクトル化
+- **Google Gemini 1.5 Flash**: 画像分析・改善提案生成（コスト最適化）
+  - Input: $0.075/1M tokens (vs Claude $15/1M tokens: **200倍削減**)
+  - Output: $0.30/1M tokens (vs Claude $75/1M tokens: **250倍削減**)
+- **Google Text Embedding 004**: テキストベクトル化（768次元）
+  - $0.00001/token (vs OpenAI $0.0001/token: **10倍削減**)
 - **pgvector**: ベクトル類似度検索
 
 ### インフラ・デプロイメント
 
 - **Vercel**: フロントエンド + API Routes
 - **Supabase Cloud**: マネージドPostgreSQL
+
+**💰 コスト削減効果**: 従来比約**95%削減**（月100回分析で約$150→$7.5）
 
 ---
 
@@ -384,36 +389,36 @@ ui-eval-ai/
   - [x] Claude画像分析クライアント
   - [x] バッチ処理対応
 
-### Phase 3: AI分析システム実装 📝
+### Phase 3: AI分析システム実装 ✅
 
-- [ ] **画像前処理システム**
-  - [ ] `image-processing.ts`実装
-  - [ ] 画像リサイズ・最適化
-  - [ ] Base64エンコーディング
-  - [ ] ファイル形式変換
+- [x] **画像前処理システム**
+  - [x] `image-processing.ts`実装
+  - [x] 画像リサイズ・最適化
+  - [x] Base64エンコーディング
+  - [x] ファイル形式変換
 
-- [ ] **UI要素識別システム**
-  - [ ] 要素識別プロンプト実装
-  - [ ] Claude API画像分析
-  - [ ] 構造化データ抽出
+- [x] **UI要素識別システム**
+  - [x] 要素識別プロンプト実装
+  - [x] Gemini API画像分析
+  - [x] 構造化データ抽出
 
-- [ ] **プロンプトエンジニアリング**
-  - [ ] `prompt-engineering.ts`実装
-  - [ ] 動的プロンプト生成
-  - [ ] ガイドライン統合
-  - [ ] 出力形式最適化
+- [x] **プロンプトエンジニアリング**
+  - [x] `prompt-engineering.ts`実装
+  - [x] 動的プロンプト生成
+  - [x] ガイドライン統合
+  - [x] 出力形式最適化
 
-- [ ] **メイン分析API**
-  - [ ] `/api/analyze`エンドポイント実装
-  - [ ] 分析パイプライン統合
-  - [ ] エラーハンドリング
-  - [ ] レスポンス最適化
+- [x] **メイン分析API**
+  - [x] `/api/analyze`エンドポイント実装
+  - [x] 分析パイプライン統合
+  - [x] エラーハンドリング
+  - [x] レスポンス最適化
 
-- [ ] **分析結果表示UI**
-  - [ ] `AnalysisResult.tsx`実装
-  - [ ] 結果の構造化表示
-  - [ ] TailwindCSSコード表示
-  - [ ] 改善提案UI
+- [x] **分析結果表示UI**
+  - [x] `AnalysisResult.tsx`実装
+  - [x] 結果の構造化表示
+  - [x] TailwindCSSコード表示
+  - [x] 改善提案UI
 
 ### Phase 4: UI/UX改善・最適化
 
@@ -552,7 +557,7 @@ ui-eval-ai/
 - [Next.js 15 App Router](https://nextjs.org/docs)
 - [Supabase Documentation](https://supabase.com/docs)
 - [pgvector Documentation](https://github.com/pgvector/pgvector)
-- [Claude API Documentation](https://docs.anthropic.com/)
+- [Google Gemini API Documentation](https://ai.google.dev/docs)
 - [OpenAI Embeddings API](https://platform.openai.com/docs/guides/embeddings)
 
 ### デザインガイドライン
