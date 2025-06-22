@@ -5,20 +5,24 @@
 **🎯 このドキュメントの目的**: AIアシスタントが常に参照し、プロジェクトの方向性を保ちながら実装を進めるためのマスタードキュメント
 
 **📝 更新ルール**: 実装過程で新しい知見や変更が生じた場合、このドキュメントに追記・更新を行う
+実装手順の項目を完了したら、該当項目にチェックを入れる。
 
 ---
 
 ## 📋 プロジェクト概要
 
 ### システムの目的
+
 ユーザーがデザイン画像をアップロードし、「このデザインの改善点は？」などの自然言語質問に対して、WCAG・Apple HIG・Refactoring UIなどの権威あるガイドラインに基づいた専門的な改善提案を提供するWebアプリケーション。
 
 ### ターゲットユーザー
+
 - **デザイナー**: 客観的なデザイン評価とガイドライン準拠確認
 - **フロントエンドエンジニア**: 実装レベルでの改善提案（TailwindCSSコード付き）
 - **プロダクトマネージャー**: デザイン品質の定量的評価
 
 ### 核心価値
+
 1. **専門性**: 業界標準ガイドラインに基づく信頼性の高い分析
 2. **実用性**: 具体的なコード例を含む実装可能な改善提案
 3. **アクセシビリティ**: 自然言語での質問に対応、専門知識不要
@@ -28,7 +32,8 @@
 ## 🏗️ システムアーキテクチャ
 
 ### 全体構成
-```
+
+``` plaintext
 ┌─────────────────────┐    ┌─────────────────────┐    ┌─────────────────────┐
 │    Frontend         │    │    Supabase         │    │    AI Services      │
 │    (Next.js 15)     │    │   (PostgreSQL +     │    │                     │
@@ -46,6 +51,7 @@
 ```
 
 ### データフロー
+
 1. **入力**: ユーザーが画像とプロンプトをアップロード
 2. **要素識別**: AI APIで画像のUI要素を自動分析
 3. **知識検索**: Supabaseでハイブリッド検索実行（ベクトル+全文）
@@ -57,22 +63,26 @@
 ## 💻 技術スタック
 
 ### フロントエンド
+
 - **Next.js 15**: App Router使用
 - **TypeScript**: 厳密な型安全性
 - **TailwindCSS**: ユーティリティファーストCSS
 - **React Hook Form**: フォーム状態管理
 
 ### バックエンド・データベース
+
 - **Supabase**: PostgreSQL + pgvector + 認証
 - **PostgreSQL Functions**: カスタムSQL関数でハイブリッド検索
 - **Row Level Security**: データ保護
 
 ### AI・機械学習
+
 - **Claude 3.5 Haiku**: 画像分析・改善提案生成
 - **OpenAI text-embedding-ada-002**: テキストベクトル化
 - **pgvector**: ベクトル類似度検索
 
 ### インフラ・デプロイメント
+
 - **Vercel**: フロントエンド + API Routes
 - **Supabase Cloud**: マネージドPostgreSQL
 
@@ -172,7 +182,8 @@ $$;
 ### 1. ファイルアップロード機能
 
 **仕様**:
-- 対応形式: JPEG, PNG, GIF
+
+- 対応形式: JPEG, PNG, GIF, webP
 - 最大サイズ: 10MB
 - クライアントサイド前処理: リサイズ、画質最適化
 
@@ -181,6 +192,7 @@ $$;
 ### 2. AI画像分析機能
 
 **段階的分析プロセス**:
+
 ```typescript
 // 分析フロー
 async function analyzeDesign(image: File, prompt: string): Promise<AnalysisResult> {
@@ -208,6 +220,7 @@ async function analyzeDesign(image: File, prompt: string): Promise<AnalysisResul
 ### 3. RAG検索システム
 
 **検索戦略**:
+
 - **ベクトル検索**: セマンティックな類似性（重み: 70%）
 - **全文検索**: キーワードマッチング（重み: 30%）
 - **動的クエリ生成**: 識別されたUI要素に基づく自動検索
@@ -223,6 +236,7 @@ async function analyzeDesign(image: File, prompt: string): Promise<AnalysisResul
 **エンドポイント**: `POST /api/analyze`
 
 **リクエスト**:
+
 ```typescript
 interface AnalyzeRequest {
   image: File;     // 画像ファイル（FormData）
@@ -231,6 +245,7 @@ interface AnalyzeRequest {
 ```
 
 **レスポンス**:
+
 ```typescript
 interface AnalyzeResponse {
   success: boolean;
@@ -269,8 +284,9 @@ interface AnalyzeResponse {
 
 ## 📁 プロジェクト構造
 
-```
-design-feedback-app/
+``` bash
+
+ui-eval-ai/
 ├── app/
 │   ├── api/
 │   │   ├── analyze/
@@ -328,9 +344,10 @@ design-feedback-app/
 
 ## 🚀 実装手順
 
-### Phase 1: プロジェクト基盤構築（Day 1-2）
+### Phase 1: プロジェクト基盤構築
 
 1. **Next.jsプロジェクト初期化**
+
    ```bash
    npx create-next-app@latest design-feedback-app --typescript --tailwind --app
    cd design-feedback-app
@@ -345,7 +362,7 @@ design-feedback-app/
    - Supabase接続情報
    - AI API キー
 
-### Phase 2: データベース・RAGシステム構築（Day 3-4）
+### Phase 2: データベース・RAGシステム構築
 
 1. **Supabaseセットアップ**
    - プロジェクト作成
@@ -360,7 +377,7 @@ design-feedback-app/
    - ハイブリッド検索関数作成
    - 検索API実装
 
-### Phase 3: AI分析システム実装（Day 5-6）
+### Phase 3: AI分析システム実装
 
 1. **画像分析パイプライン**
    - 要素識別ロジック
@@ -372,7 +389,7 @@ design-feedback-app/
    - エラーハンドリング
    - レスポンス最適化
 
-### Phase 4: UI/UX改善・最適化（Day 7）
+### Phase 4: UI/UX改善・最適化
 
 1. **ユーザーインターフェース改善**
    - 分析結果の見やすい表示
@@ -389,6 +406,7 @@ design-feedback-app/
 ## 🎯 品質基準・成功指標
 
 ### 技術品質基準
+
 - **TypeScript**: 厳密な型チェック、any型の使用禁止
 - **レスポンス時間**: 分析完了まで10秒以内
 - **エラーハンドリング**: 全APIで適切なエラーレスポンス
@@ -401,6 +419,7 @@ design-feedback-app/
 - **根拠**: 各提案に対する明確な理由付け
 
 ### ユーザー体験基準
+
 - **直感性**: 技術知識なしで利用可能
 - **信頼性**: 分析結果の一貫性
 - **有用性**: 実際に実装できる改善提案
@@ -410,7 +429,8 @@ design-feedback-app/
 ## 🔍 プロンプトエンジニアリング指針
 
 ### 要素識別プロンプト
-```
+
+``` markdown
 画像のUI要素を分析し、以下のJSON形式で返してください：
 {
   "elements": ["button", "text", "image", "form", "navigation"],
@@ -423,7 +443,9 @@ design-feedback-app/
 ```
 
 ### 包括分析プロンプト
-```
+
+``` markdown
+
 あなたはUI/UXデザインの専門家です。アップロードされた画像を分析し、具体的な改善提案を行ってください。
 
 【ユーザーの質問】
@@ -455,6 +477,7 @@ design-feedback-app/
 ```
 
 ## 📊 改善効果予測
+
 [予想される効果]
 ```
 

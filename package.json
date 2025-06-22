@@ -6,7 +6,9 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "setup-kb": "npx tsx scripts/setup-knowledge-base.ts",
+    "reset-kb": "npx tsx scripts/setup-knowledge-base.ts --reset"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.54.0",
@@ -17,6 +19,7 @@
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-hook-form": "^7.58.1",
+    "tsx": "^4.20.3",
     "zod": "^3.25.67"
   },
   "devDependencies": {
