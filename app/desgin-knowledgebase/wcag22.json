@@ -1,0 +1,660 @@
+{
+    "guidelines": [
+      {
+        "content": "すべての非テキストコンテンツには、同等の目的を果たすテキスト代替を提供する。大活字、点字、音声、記号、または簡単な言語などの形式に変換できるようにする。",
+        "source": "WCAG 2.2",
+        "category": "accessibility",
+        "subcategory": "知覚可能",
+        "keywords": ["非テキストコンテンツ", "テキスト代替", "alt属性", "代替テキスト", "画像", "アクセシビリティ", "スクリーンリーダー"],
+        "priority": "high"
+      },
+      {
+        "content": "時間の経過に伴って変化するメディアには代替コンテンツを提供する。音声のみまたは映像のみのメディアには等価な情報を提供する代替手段を用意する。",
+        "source": "WCAG 2.2",
+        "category": "accessibility",
+        "subcategory": "知覚可能",
+        "keywords": ["時間ベースメディア", "動画", "音声", "字幕", "音声解説", "キャプション"],
+        "priority": "high"
+      },
+      {
+        "content": "すべての録画済み音声コンテンツには字幕を提供する。メディアがテキストの代替メディアでない限り、同期メディアにおける字幕の提供は必須。",
+        "source": "WCAG 2.2",
+        "category": "accessibility",
+        "subcategory": "知覚可能",
+        "keywords": ["字幕", "キャプション", "音声", "録画", "同期メディア", "聴覚障害"],
+        "priority": "high"
+      },
+      {
+        "content": "情報や構造を失うことなく、コンテンツを異なる方法（シンプルなレイアウトなど）で提示できるようにする。",
+        "source": "WCAG 2.2",
+        "category": "accessibility",
+        "subcategory": "知覚可能",
+        "keywords": ["適応可能", "構造", "情報", "レイアウト", "読み上げ順序", "プログラム的決定"],
+        "priority": "high"
+      },
+      {
+        "content": "提示を通じて伝達される情報、構造、および関係性はプログラム的に決定可能であるか、テキストで利用可能にする。",
+        "source": "WCAG 2.2",
+        "category": "accessibility",
+        "subcategory": "知覚可能",
+        "keywords": ["情報と関係性", "セマンティック", "HTML", "構造化", "見出し", "リスト", "プログラム的決定"],
+        "priority": "high"
+      },
+      {
+        "content": "コンテンツが提示される順序が意味に影響する場合、正しい読み上げ順序をプログラム的に決定可能にする。",
+        "source": "WCAG 2.2",
+        "category": "accessibility",
+        "subcategory": "知覚可能",
+        "keywords": ["読み上げ順序", "論理的順序", "DOM順序", "タブ順序", "ナビゲーション順序"],
+        "priority": "high"
+      },
+      {
+        "content": "コンテンツを理解し操作するための説明は、形状、色、サイズ、視覚的位置、方向、音などの感覚的特性だけに依存してはならない。",
+        "source": "WCAG 2.2",
+        "category": "accessibility",
+        "subcategory": "知覚可能",
+        "keywords": ["感覚特性", "視覚的指示", "色に依存しない", "形状", "位置", "音声"],
+        "priority": "medium"
+      },
+      {
+        "content": "特定の表示向き（縦向きまたは横向き）に制限してはならない。ただし、特定の表示向きが必要不可欠な場合を除く。",
+        "source": "WCAG 2.2",
+        "category": "accessibility",
+        "subcategory": "知覚可能",
+        "keywords": ["表示向き", "画面向き", "縦向き", "横向き", "レスポンシブ", "モバイル"],
+        "priority": "medium"
+      },
+      {
+        "content": "ユーザーに関する情報を収集する各入力フィールドの目的は、プログラム的に決定可能でなければならない。",
+        "source": "WCAG 2.2",
+        "category": "accessibility",
+        "subcategory": "知覚可能",
+        "keywords": ["入力目的の特定", "フォーム", "自動入力", "オートコンプリート", "入力フィールド"],
+        "priority": "medium"
+      },
+      {
+        "content": "前景から背景を分離するなど、ユーザーがコンテンツを見たり聞いたりしやすくする。",
+        "source": "WCAG 2.2",
+        "category": "accessibility",
+        "subcategory": "知覚可能",
+        "keywords": ["判別可能", "コントラスト", "色", "背景", "前景", "視覚的提示"],
+        "priority": "high"
+      },
+      {
+        "content": "情報を伝達したり、アクションを示したり、応答を促したり、視覚的要素を区別する唯一の視覚的手段として色を使用してはならない。",
+        "source": "WCAG 2.2",
+        "category": "accessibility",
+        "subcategory": "知覚可能",
+        "keywords": ["色の使用", "色覚", "色覚異常", "視覚的区別", "アクセシブルな色"],
+        "priority": "high"
+      },
+      {
+        "content": "Webページで3秒より長く自動的に再生される音声には、一時停止、停止、または音量調整の仕組みを提供する。",
+        "source": "WCAG 2.2",
+        "category": "accessibility",
+        "subcategory": "知覚可能",
+        "keywords": ["音声制御", "自動再生", "音量", "一時停止", "停止"],
+        "priority": "high"
+      },
+      {
+        "content": "テキストと画像化された文字の視覚的提示は、少なくとも4.5:1のコントラスト比を持つ。大きなテキストは3:1以上。",
+        "source": "WCAG 2.2",
+        "category": "accessibility",
+        "subcategory": "知覚可能",
+        "keywords": ["コントラスト", "色のコントラスト", "テキスト", "最小コントラスト", "視認性", "ロービジョン"],
+        "priority": "high"
+      },
+      {
+        "content": "支援技術を使わずに、コンテンツや機能を失うことなく、テキストを200%まで拡大できるようにする。",
+        "source": "WCAG 2.2",
+        "category": "accessibility",
+        "subcategory": "知覚可能",
+        "keywords": ["テキストのサイズ変更", "拡大", "ズーム", "文字サイズ", "視覚障害"],
+        "priority": "medium"
+      },
+      {
+        "content": "使用している技術で視覚的提示が可能な場合は、文字画像ではなくテキストを使用して情報を伝達する。",
+        "source": "WCAG 2.2",
+        "category": "accessibility",
+        "subcategory": "知覚可能",
+        "keywords": ["文字画像", "テキスト", "フォント", "視覚的カスタマイズ", "可読性"],
+        "priority": "medium"
+      },
+      {
+        "content": "情報の損失や機能の損失なしに、320CSSピクセルの幅（縦スクロール）または256CSSピクセルの高さ（横スクロール）でコンテンツを提示する。",
+        "source": "WCAG 2.2",
+        "category": "accessibility",
+        "subcategory": "知覚可能",
+        "keywords": ["リフロー", "レスポンシブデザイン", "水平スクロール", "モバイル", "400%ズーム"],
+        "priority": "medium"
+      },
+      {
+        "content": "グラフィカルオブジェクトとユーザーインターフェースコンポーネントは、隣接する色に対して少なくとも3:1のコントラスト比を持つ。",
+        "source": "WCAG 2.2",
+        "category": "accessibility",
+        "subcategory": "知覚可能",
+        "keywords": ["非テキストコントラスト", "UI要素", "グラフィック", "ボタン", "アイコン", "境界線"],
+        "priority": "medium"
+      },
+      {
+        "content": "テキスト間隔のスタイルプロパティを設定しても、コンテンツや機能の損失が発生しないようにする。",
+        "source": "WCAG 2.2",
+        "category": "accessibility",
+        "subcategory": "知覚可能",
+        "keywords": ["テキスト間隔", "行間", "文字間", "語間", "段落間隔", "読みやすさ"],
+        "priority": "medium"
+      },
+      {
+        "content": "ポインターホバーやキーボードフォーカスで表示される追加コンテンツは、解除可能、ホバー可能、持続的でなければならない。",
+        "source": "WCAG 2.2",
+        "category": "accessibility",
+        "subcategory": "知覚可能",
+        "keywords": ["ホバーコンテンツ", "フォーカスコンテンツ", "ツールチップ", "ポップアップ", "追加コンテンツ"],
+        "priority": "medium"
+      },
+      {
+        "content": "ユーザーインターフェースコンポーネントとナビゲーションは操作可能でなければならない。",
+        "source": "WCAG 2.2",
+        "category": "accessibility",
+        "subcategory": "操作可能",
+        "keywords": ["操作可能", "ナビゲーション", "ユーザーインターフェース", "インタラクション"],
+        "priority": "high"
+      },
+      {
+        "content": "すべての機能をキーボードインターフェースから利用可能にする。個々のキーストロークに特定のタイミングを要求してはならない。",
+        "source": "WCAG 2.2",
+        "category": "accessibility",
+        "subcategory": "操作可能",
+        "keywords": ["キーボードアクセシブル", "キーボード操作", "マウス不要", "キーボードナビゲーション"],
+        "priority": "high"
+      },
+      {
+        "content": "キーボードフォーカスをページのどの要素にも閉じ込めてはならない。キーボードだけで全ての要素に移動可能でなければならない。",
+        "source": "WCAG 2.2",
+        "category": "accessibility",
+        "subcategory": "操作可能",
+        "keywords": ["フォーカストラップなし", "キーボードトラップ", "フォーカス移動", "フォーカス管理"],
+        "priority": "high"
+      },
+      {
+        "content": "コンテンツで文字キー、句読点、数字、記号のみを使用するキーボードショートカットには、無効化、再マップ、またはフォーカス時のみ有効化の仕組みを提供する。",
+        "source": "WCAG 2.2",
+        "category": "accessibility",
+        "subcategory": "操作可能",
+        "keywords": ["文字キーショートカット", "キーボードショートカット", "アクセスキー", "キー競合"],
+        "priority": "medium"
+      },
+      {
+        "content": "ユーザーがコンテンツを読み、使用するのに十分な時間を提供する。",
+        "source": "WCAG 2.2",
+        "category": "accessibility",
+        "subcategory": "操作可能",
+        "keywords": ["十分な時間", "時間制限", "タイムアウト", "セッション"],
+        "priority": "high"
+      },
+      {
+        "content": "コンテンツによって設定される各時間制限について、ユーザーは無効化、調整、または延長できなければならない。",
+        "source": "WCAG 2.2",
+        "category": "accessibility",
+        "subcategory": "操作可能",
+        "keywords": ["タイミング調整可能", "時間制限", "延長", "警告", "リアルタイムイベント"],
+        "priority": "high"
+      },
+      {
+        "content": "自動的に開始される動き、点滅、スクロール、自動更新情報には、一時停止、停止、非表示にする仕組みを提供する。",
+        "source": "WCAG 2.2",
+        "category": "accessibility",
+        "subcategory": "操作可能",
+        "keywords": ["一時停止", "停止", "非表示", "自動再生", "動きのあるコンテンツ", "点滅", "スクロール"],
+        "priority": "high"
+      },
+      {
+        "content": "再認証後もデータを失うことなく活動を続行できるようにする。認証セッションが期限切れになっても継続可能な仕組みを提供。",
+        "source": "WCAG 2.2",
+        "category": "accessibility",
+        "subcategory": "操作可能",
+        "keywords": ["再認証", "セッション期限", "データ保持", "ログイン", "認証"],
+        "priority": "medium"
+      },
+      {
+        "content": "データ損失を引き起こす可能性のあるユーザーの非アクティブ期間の長さについて警告する。",
+        "source": "WCAG 2.2",
+        "category": "accessibility",
+        "subcategory": "操作可能",
+        "keywords": ["タイムアウト警告", "非アクティブ", "データ損失", "セッション管理"],
+        "priority": "low"
+      },
+      {
+        "content": "てんかん発作や身体的反応を引き起こすことが知られている方法でコンテンツを設計してはならない。",
+        "source": "WCAG 2.2",
+        "category": "accessibility",
+        "subcategory": "操作可能",
+        "keywords": ["てんかん発作", "身体的反応", "閃光", "点滅"],
+        "priority": "high"
+      },
+      {
+        "content": "1秒間に3回を超える閃光を含むコンテンツを設計してはならない。一般的な閾値と赤い閃光の閾値を下回る必要がある。",
+        "source": "WCAG 2.2",
+        "category": "accessibility",
+        "subcategory": "操作可能",
+        "keywords": ["3回の閃光", "閃光閾値", "光感受性てんかん", "閃光"],
+        "priority": "high"
+      },
+      {
+        "content": "インタラクションによってトリガーされるモーションアニメーションは、機能や情報伝達に不可欠でない限り無効化できるようにする。",
+        "source": "WCAG 2.2",
+        "category": "accessibility",
+        "subcategory": "操作可能",
+        "keywords": ["アニメーション", "モーション", "前庭障害", "めまい", "動きに敏感"],
+        "priority": "medium"
+      },
+      {
+        "content": "キーボード以外の様々な入力を通じて、ユーザーが機能を操作しやすくする。",
+        "source": "WCAG 2.2",
+        "category": "accessibility",
+        "subcategory": "操作可能",
+        "keywords": ["入力モダリティ", "ポインター", "タッチ", "音声入力", "多様な入力"],
+        "priority": "medium"
+      },
+      {
+        "content": "マルチポイントやパスベースのジェスチャーで操作する機能は、シングルポイントでパスベースでないジェスチャーでも操作可能でなければならない。",
+        "source": "WCAG 2.2",
+        "category": "accessibility",
+        "subcategory": "操作可能",
+        "keywords": ["ポインタージェスチャー", "シングルポイント", "マルチタッチ", "ジェスチャー", "運動機能障害"],
+        "priority": "high"
+      },
+      {
+        "content": "シングルポイントで操作可能な機能について、ダウンイベントでの完了を避け、アップイベントで完了させるか中止可能にする。",
+        "source": "WCAG 2.2",
+        "category": "accessibility",
+        "subcategory": "操作可能",
+        "keywords": ["ポインターのキャンセル", "ダウンイベント", "アップイベント", "誤操作防止"],
+        "priority": "high"
+      },
+      {
+        "content": "テキストまたは文字画像を含むラベルを持つユーザーインターフェースコンポーネントでは、名前に視覚的に提示されているテキストを含む。",
+        "source": "WCAG 2.2",
+        "category": "accessibility",
+        "subcategory": "操作可能",
+        "keywords": ["ラベル内の名前", "音声入力", "ラベル", "アクセシブルな名前"],
+        "priority": "high"
+      },
+      {
+        "content": "デバイスの動きやユーザーの動きで操作できる機能は、ユーザーインターフェースコンポーネントでも操作可能で、偶発的な作動を防ぐために無効化できる。",
+        "source": "WCAG 2.2",
+        "category": "accessibility",
+        "subcategory": "操作可能",
+        "keywords": ["モーション作動", "デバイスの動き", "加速度センサー", "ジャイロスコープ", "偶発的作動"],
+        "priority": "medium"
+      },
+      {
+        "content": "ドラッグ操作で動作する機能は、ドラッグ不要なシングルポイントでも操作可能でなければならない。",
+        "source": "WCAG 2.2",
+        "category": "accessibility",
+        "subcategory": "操作可能",
+        "keywords": ["ドラッグ動作", "シングルポイント", "ドラッグアンドドロップ", "運動機能障害"],
+        "priority": "medium"
+      },
+      {
+        "content": "ポインター入力のターゲットサイズは最低24×24CSSピクセルとする。ただし例外条件を満たす場合を除く。",
+        "source": "WCAG 2.2",
+        "category": "accessibility",
+        "subcategory": "操作可能",
+        "keywords": ["ターゲットサイズ", "24ピクセル", "タッチターゲット", "クリック領域", "タップターゲット"],
+        "priority": "medium"
+      },
+      {
+        "content": "情報とユーザーインターフェースの操作は理解可能でなければならない。",
+        "source": "WCAG 2.2",
+        "category": "accessibility",
+        "subcategory": "理解可能",
+        "keywords": ["理解可能", "情報", "ユーザーインターフェース", "認知"],
+        "priority": "high"
+      },
+      {
+        "content": "テキストコンテンツを読みやすく理解しやすくする。",
+        "source": "WCAG 2.2",
+        "category": "accessibility",
+        "subcategory": "理解可能",
+        "keywords": ["読みやすい", "理解しやすい", "テキストコンテンツ", "可読性"],
+        "priority": "high"
+      },
+      {
+        "content": "各Webページのデフォルト人間言語をプログラム的に決定可能にする。",
+        "source": "WCAG 2.2",
+        "category": "accessibility",
+        "subcategory": "理解可能",
+        "keywords": ["ページの言語", "lang属性", "言語識別", "多言語", "スクリーンリーダー"],
+        "priority": "high"
+      },
+      {
+        "content": "コンテンツ内の各節や句の人間言語をプログラム的に決定可能にする。固有名詞、専門用語、言語不明な語句等は除く。",
+        "source": "WCAG 2.2",
+        "category": "accessibility",
+        "subcategory": "理解可能",
+        "keywords": ["部分的な言語", "言語変更", "多言語コンテンツ", "言語タグ"],
+        "priority": "medium"
+      },
+      {
+        "content": "Webページを予測可能な方法で表示し、動作させる。",
+        "source": "WCAG 2.2",
+        "category": "accessibility",
+        "subcategory": "理解可能",
+        "keywords": ["予測可能", "一貫性", "ナビゲーション", "動作"],
+        "priority": "high"
+      },
+      {
+        "content": "ユーザーインターフェースコンポーネントがフォーカスを受け取っても、コンテキストの変化を引き起こしてはならない。",
+        "source": "WCAG 2.2",
+        "category": "accessibility",
+        "subcategory": "理解可能",
+        "keywords": ["フォーカス時", "コンテキストの変化", "予期しない変化", "フォーカス管理"],
+        "priority": "high"
+      },
+      {
+        "content": "ユーザーインターフェースコンポーネントの設定変更が自動的にコンテキストの変化を引き起こしてはならない。事前に動作を知らせる場合を除く。",
+        "source": "WCAG 2.2",
+        "category": "accessibility",
+        "subcategory": "理解可能",
+        "keywords": ["入力時", "コンテキストの変化", "自動実行", "予期しない動作"],
+        "priority": "high"
+      },
+      {
+        "content": "一連のWebページ内で同じ機能を持つコンポーネントは一貫して識別される。",
+        "source": "WCAG 2.2",
+        "category": "accessibility",
+        "subcategory": "理解可能",
+        "keywords": ["一貫したナビゲーション", "識別の一貫性", "サイト全体", "ナビゲーションの統一"],
+        "priority": "medium"
+      },
+      {
+        "content": "ヘルプメカニズムが複数のWebページで繰り返される場合、同じ相対的順序で出現させる。ユーザーが変更を開始した場合を除く。",
+        "source": "WCAG 2.2",
+        "category": "accessibility",
+        "subcategory": "理解可能",
+        "keywords": ["一貫したヘルプ", "ヘルプメカニズム", "相対的順序", "ヘルプの配置"],
+        "priority": "medium"
+      },
+      {
+        "content": "ユーザーが間違いを避け、修正できるよう支援する。",
+        "source": "WCAG 2.2",
+        "category": "accessibility",
+        "subcategory": "理解可能",
+        "keywords": ["入力支援", "エラー回避", "エラー修正", "フォーム支援"],
+        "priority": "high"
+      },
+      {
+        "content": "入力エラーが自動的に検出された場合、エラーのある項目が特定され、エラーが文字でユーザーに説明される。",
+        "source": "WCAG 2.2",
+        "category": "accessibility",
+        "subcategory": "理解可能",
+        "keywords": ["エラーの特定", "入力エラー", "エラーメッセージ", "フォームバリデーション"],
+        "priority": "high"
+      },
+      {
+        "content": "コンテンツでユーザーによる入力を求める場合は、ラベルまたは説明文を提供する。",
+        "source": "WCAG 2.2",
+        "category": "accessibility",
+        "subcategory": "理解可能",
+        "keywords": ["ラベルまたは説明文", "フォームラベル", "入力説明", "フォーム要素"],
+        "priority": "high"
+      },
+      {
+        "content": "入力エラーが自動的に検出され修正方法が知られている場合、セキュリティや目的を損なわない限り、修正候補をユーザーに提示する。",
+        "source": "WCAG 2.2",
+        "category": "accessibility",
+        "subcategory": "理解可能",
+        "keywords": ["エラー修正の提案", "エラー修正", "入力支援", "修正候補"],
+        "priority": "medium"
+      },
+      {
+        "content": "法的義務や金融取引等のWebページでは、送信前の確認、訂正機能、または送信の取り消し機能を提供する。",
+        "source": "WCAG 2.2",
+        "category": "accessibility",
+        "subcategory": "理解可能",
+        "keywords": ["エラー回避", "法的義務", "金融取引", "確認", "訂正", "取り消し"],
+        "priority": "medium"
+      },
+      {
+        "content": "同じプロセス内でユーザーが以前に入力または提供した情報の再入力を求める場合、自動入力または選択による提供を行う。例外的な場合を除く。",
+        "source": "WCAG 2.2",
+        "category": "accessibility",
+        "subcategory": "理解可能",
+        "keywords": ["冗長な入力", "自動入力", "情報の再利用", "フォーム効率化", "ユーザビリティ"],
+        "priority": "medium"
+      },
+      {
+        "content": "認証プロセスにおいて認知機能テスト（パスワード記憶やパズル解決など）を要求しない。代替手段、認識対象、個人コンテンツの提供がある場合を除く。",
+        "source": "WCAG 2.2",
+        "category": "accessibility",
+        "subcategory": "理解可能",
+        "keywords": ["アクセシブル認証", "認知機能テスト", "認証", "パスワード", "認知負荷軽減"],
+        "priority": "medium"
+      },
+      {
+        "content": "認知機能テストを要求しない認証を提供する。ただし、代替手段がある場合やオブジェクト認識・個人コンテンツ使用が許可されない場合を除く。",
+        "source": "WCAG 2.2",
+        "category": "accessibility",
+        "subcategory": "理解可能",
+        "keywords": ["アクセシブル認証（強化版）", "認知機能", "認証方式", "セキュリティ", "アクセシビリティ"],
+        "priority": "low"
+      },
+      {
+        "content": "コンテンツは、現在および将来の支援技術を含む様々なユーザーエージェントが解釈できるよう十分に堅牢でなければならない。",
+        "source": "WCAG 2.2",
+        "category": "accessibility",
+        "subcategory": "堅牢",
+        "keywords": ["堅牢", "互換性", "支援技術", "ユーザーエージェント", "将来対応"],
+        "priority": "high"
+      },
+      {
+        "content": "すべてのユーザーインターフェースコンポーネントについて、名前と役割をプログラム的に決定可能にし、設定可能な状態等を支援技術に通知する。",
+        "source": "WCAG 2.2",
+        "category": "accessibility",
+        "subcategory": "堅牢",
+        "keywords": ["名前・役割・値", "プログラム的決定", "支援技術", "ARIA", "セマンティクス"],
+        "priority": "high"
+      },
+      {
+        "content": "マークアップ言語で実装されたコンテンツにおいて、ステータスメッセージを役割やプロパティを通じてプログラム的に決定可能にする。",
+        "source": "WCAG 2.2",
+        "category": "accessibility",
+        "subcategory": "堅牢",
+        "keywords": ["ステータスメッセージ", "ライブリージョン", "ARIA", "動的コンテンツ", "通知"],
+        "priority": "medium"
+      },
+      {
+        "content": "フォーカスインジケーターが表示される際、フォーカス状態と非フォーカス状態の間で最低限のコントラスト比と視認性を確保する。",
+        "source": "WCAG 2.2",
+        "category": "accessibility",
+        "subcategory": "操作可能",
+        "keywords": ["フォーカス外観", "フォーカスインジケーター", "キーボードナビゲーション", "視認性", "コントラスト"],
+        "priority": "medium"
+      },
+      {
+        "content": "機能がキーボードフォーカスを受け取った際、その項目が少なくとも部分的に見える状態を確保する。",
+        "source": "WCAG 2.2",
+        "category": "accessibility",
+        "subcategory": "操作可能",
+        "keywords": ["フォーカス表示", "キーボードナビゲーション", "スクロール", "表示領域", "視認性"],
+        "priority": "medium"
+      },
+      {
+        "content": "Webコンテンツの主要な言語を正しく指定し、スクリーンリーダーが適切な音声エンジンを使用できるようにする。",
+        "source": "WCAG 2.2",
+        "category": "accessibility",
+        "subcategory": "理解可能",
+        "keywords": ["言語設定", "html lang属性", "音声読み上げ", "国際化", "多言語対応"],
+        "priority": "high"
+      },
+      {
+        "content": "動画コンテンツには音声解説を提供し、視覚的情報を音声で補完する。重要な視覚的詳細を説明する。",
+        "source": "WCAG 2.2",
+        "category": "accessibility",
+        "subcategory": "知覚可能",
+        "keywords": ["音声解説", "音声ガイド", "動画", "視覚障害", "視覚情報"],
+        "priority": "medium"
+      },
+      {
+        "content": "ライブ音声コンテンツには字幕を提供し、リアルタイムでの情報アクセスを保証する。",
+        "source": "WCAG 2.2",
+        "category": "accessibility",
+        "subcategory": "知覚可能",
+        "keywords": ["ライブキャプション", "リアルタイム字幕", "ライブ配信", "聴覚障害", "同時字幕"],
+        "priority": "medium"
+      },
+      {
+        "content": "表形式データには適切な見出しセルとデータセルの関係性を定義し、スクリーンリーダーで理解可能にする。",
+        "source": "WCAG 2.2",
+        "category": "accessibility",
+        "subcategory": "知覚可能",
+        "keywords": ["テーブル", "表", "見出しセル", "データセル", "table要素", "th要素", "td要素"],
+        "priority": "high"
+      },
+      {
+        "content": "フォーム要素には明確なラベルを関連付け、入力内容と目的を明確にする。label要素や適切なARIA属性を使用する。",
+        "source": "WCAG 2.2",
+        "category": "accessibility",
+        "subcategory": "理解可能",
+        "keywords": ["フォームラベル", "label要素", "for属性", "aria-label", "フォームアクセシビリティ"],
+        "priority": "high"
+      },
+      {
+        "content": "見出し構造を論理的に構成し、h1からh6要素を適切な階層で使用してコンテンツ構造を明確にする。",
+        "source": "WCAG 2.2",
+        "category": "accessibility",
+        "subcategory": "知覚可能",
+        "keywords": ["見出し構造", "見出し階層", "h1", "h2", "h3", "h4", "h5", "h6", "アウトライン"],
+        "priority": "high"
+      },
+      {
+        "content": "リンクテキストは単独でリンク先や目的が理解できるよう記述する。「こちら」「詳細」などの曖昧な表現を避ける。",
+        "source": "WCAG 2.2",
+        "category": "accessibility",
+        "subcategory": "理解可能",
+        "keywords": ["リンクテキスト", "リンクの目的", "アンカーテキスト", "意味のあるリンク"],
+        "priority": "high"
+      },
+      {
+        "content": "ページの各セクションには適切なランドマーク要素やARIAランドマークを使用し、スクリーンリーダーでナビゲーションしやすくする。",
+        "source": "WCAG 2.2",
+        "category": "accessibility",
+        "subcategory": "知覚可能",
+        "keywords": ["ランドマーク", "セクション", "main", "nav", "aside", "footer", "header", "ARIA"],
+        "priority": "medium"
+      },
+      {
+        "content": "エラーメッセージは具体的で建設的な内容とし、ユーザーが修正方法を理解できるよう詳細に説明する。",
+        "source": "WCAG 2.2",
+        "category": "accessibility",
+        "subcategory": "理解可能",
+        "keywords": ["エラーメッセージ", "具体的エラー", "修正方法", "ユーザビリティ", "フォームエラー"],
+        "priority": "high"
+      },
+      {
+        "content": "カスタムコンポーネントには適切なARIA属性を使用し、支援技術に正しい情報を提供する。",
+        "source": "WCAG 2.2",
+        "category": "accessibility",
+        "subcategory": "堅牢",
+        "keywords": ["ARIA", "カスタムコンポーネント", "支援技術", "セマンティック", "アクセシビリティAPI"],
+        "priority": "medium"
+      },
+      {
+        "content": "キーボード操作において、現在フォーカスされている要素が視覚的に明確に識別できるよう適切なフォーカススタイルを提供する。",
+        "source": "WCAG 2.2",
+        "category": "accessibility",
+        "subcategory": "操作可能",
+        "keywords": ["フォーカススタイル", "アウトライン", "フォーカスリング", "キーボード操作", "視覚的フィードバック"],
+        "priority": "high"
+      },
+      {
+        "content": "色だけでなく、テキスト、アイコン、パターンなどの複数の視覚的手がかりを組み合わせて情報を伝達する。",
+        "source": "WCAG 2.2",
+        "category": "accessibility",
+        "subcategory": "知覚可能",
+        "keywords": ["色以外の手がかり", "視覚的手がかり", "アイコン", "パターン", "色覚異常対応"],
+        "priority": "high"
+      },
+      {
+        "content": "音声や動画コンテンツには文字起こし（トランスクリプト）を提供し、聴覚障害者がアクセスできるようにする。",
+        "source": "WCAG 2.2",
+        "category": "accessibility",
+        "subcategory": "知覚可能",
+        "keywords": ["トランスクリプト", "文字起こし", "音声コンテンツ", "動画", "聴覚障害"],
+        "priority": "medium"
+      },
+      {
+        "content": "自動完了機能を提供する際は、ユーザーの入力負荷を軽減し、認知障害のあるユーザーも利用しやすくする。",
+        "source": "WCAG 2.2",
+        "category": "accessibility",
+        "subcategory": "理解可能",
+        "keywords": ["自動完了", "オートコンプリート", "入力支援", "認知負荷軽減", "ユーザビリティ"],
+        "priority": "medium"
+      },
+      {
+        "content": "タイムアウトが発生する前に十分な警告を行い、ユーザーがセッションを延長できるオプションを提供する。",
+        "source": "WCAG 2.2",
+        "category": "accessibility",
+        "subcategory": "操作可能",
+        "keywords": ["タイムアウト警告", "セッション延長", "十分な時間", "警告メッセージ"],
+        "priority": "high"
+      },
+      {
+        "content": "モバイルデバイスでのタッチターゲットは十分なサイズを確保し、隣接する要素との間に適切な間隔を設ける。",
+        "source": "WCAG 2.2",
+        "category": "accessibility",
+        "subcategory": "操作可能",
+        "keywords": ["タッチターゲット", "モバイル", "タップ領域", "指での操作", "間隔"],
+        "priority": "medium"
+      },
+      {
+        "content": "ページの読み込み時や状態変化時には、適切なページタイトルを設定し、ユーザーが現在の場所を理解できるようにする。",
+        "source": "WCAG 2.2",
+        "category": "accessibility",
+        "subcategory": "理解可能",
+        "keywords": ["ページタイトル", "title要素", "現在位置", "ナビゲーション支援"],
+        "priority": "high"
+      },
+      {
+        "content": "必須入力フィールドには明確な必須マークや説明を提供し、ユーザーが必要な情報を理解できるようにする。",
+        "source": "WCAG 2.2",
+        "category": "accessibility",
+        "subcategory": "理解可能",
+        "keywords": ["必須フィールド", "required属性", "必須マーク", "アスタリスク", "フォーム案内"],
+        "priority": "high"
+      },
+      {
+        "content": "スキップリンクを提供し、キーボードユーザーが繰り返しコンテンツをバイパスしてメインコンテンツに直接アクセスできるようにする。",
+        "source": "WCAG 2.2",
+        "category": "accessibility",
+        "subcategory": "操作可能",
+        "keywords": ["スキップリンク", "メインコンテンツ", "繰り返しコンテンツ", "キーボードナビゲーション", "バイパス"],
+        "priority": "high"
+      },
+      {
+        "content": "動的に変更されるコンテンツについては、ARIAライブリージョンを使用してスクリーンリーダーに変更を通知する。",
+        "source": "WCAG 2.2",
+        "category": "accessibility",
+        "subcategory": "堅牢",
+        "keywords": ["ライブリージョン", "aria-live", "動的コンテンツ", "変更通知", "スクリーンリーダー"],
+        "priority": "medium"
+      },
+      {
+        "content": "複雑なコンテンツには要約や概要を提供し、認知障害のあるユーザーが理解しやすくする。",
+        "source": "WCAG 2.2",
+        "category": "accessibility",
+        "subcategory": "理解可能",
+        "keywords": ["要約", "概要", "複雑なコンテンツ", "認知障害", "理解支援"],
+        "priority": "medium"
+      },
+      {
+        "content": "パンくずリストを提供し、ユーザーが現在の位置とサイト構造を理解できるナビゲーション支援を行う。",
+        "source": "WCAG 2.2",
+        "category": "accessibility",
+        "subcategory": "理解可能",
+        "keywords": ["パンくずリスト", "ブレッドクラム", "現在位置", "サイト構造", "ナビゲーション"],
+        "priority": "medium"
+      }
+    ]
+}

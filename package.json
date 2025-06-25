@@ -8,7 +8,10 @@
     "start": "next start",
     "lint": "next lint",
     "setup-db": "npx tsx scripts/test-api-key.ts",
-    "test-apis": "npx tsx scripts/test-fallback.ts"
+    "test-apis": "npx tsx scripts/test-fallback.ts",
+    "add-guidelines": "npx tsx scripts/add-custom-guidelines.ts",
+    "expand-knowledge": "npx tsx scripts/expand-knowledge-base.ts",
+    "check-db": "npx tsx scripts/check-db-status.ts"
   },
   "dependencies": {
     "@google/genai": "^1.6.0",

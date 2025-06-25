@@ -1,0 +1,36 @@
+{
+  "guidelines": [
+    {
+      "content": "ボタンには明確で理解しやすいラベルを付け、アクションの結果を予測できるようにしてください。",
+      "source": "Material Design",
+      "category": "usability",
+      "subcategory": "button_design",
+      "keywords": ["ボタン", "ラベル", "明確性", "UI"],
+      "priority": "high"
+    },
+    {
+      "content": "読み込み時間が2秒を超える場合は、プログレスインジケーターを表示してユーザーに進捗を示してください。",
+      "source": "Google UX",
+      "category": "performance",
+      "subcategory": "loading_indicators",
+      "keywords": ["ローディング", "プログレス", "待機時間", "UX"],
+      "priority": "medium"
+    },
+    {
+      "content": "フォームの入力フィールドには、期待される入力形式の例（プレースホルダー）を表示してください。",
+      "source": "Nielsen Norman Group",
+      "category": "usability",
+      "subcategory": "form_design",
+      "keywords": ["フォーム", "プレースホルダー", "入力", "ガイダンス"],
+      "priority": "medium"
+    },
+    {
+      "content": "セキュリティ関連の重要な操作（削除、支払いなど）には、確認ダイアログを表示してください。",
+      "source": "OWASP UX Security",
+      "category": "security",
+      "subcategory": "confirmation_dialogs",
+      "keywords": ["セキュリティ", "確認", "ダイアログ", "重要操作"],
+      "priority": "high"
+    }
+  ]
+} 
