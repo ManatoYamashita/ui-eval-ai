@@ -3,502 +3,129 @@ description:
 globs: 
 alwaysApply: true
 ---
-# AI Design Feedback App - Cursor Development Rules
-
-## Project Overview
-You are developing an AI-powered design feedback web application that analyzes uploaded images and provides professional UI/UX improvement suggestions based on authoritative design guidelines (WCAG, Apple HIG, Refactoring UI).
-
-## Architecture & Tech Stack
-- **Frontend**: Next.js 15 (App Router), TypeScript, TailwindCSS
-- **Database**: Supabase (PostgreSQL + pgvector)
-- **AI Services**: Claude 3.5 Haiku (image analysis), OpenAI Embeddings (text vectorization)
-- **Search**: Hybrid search (vector + full-text search)
-- **Deployment**: Vercel (frontend), Supabase Cloud (database)
-
-## Project Structure
-```
-design-feedback-app/
-├── app/
-│   ├── api/
-│   │   ├── analyze/route.ts          # Main analysis API
-│   │   ├── search/route.ts           # Guidelines search API
-│   │   └── embed/route.ts            # Text embedding API
-│   ├── components/
-│   │   └── ui/
-│   │       ├── FileUpload.tsx        # File upload component
-│   │       ├── AnalysisResult.tsx    # Analysis results display
-│   │       └── LoadingSpinner.tsx    # Loading states
-│   ├── lib/
-│   │   ├── supabase.ts              # Supabase client
-│   │   ├── ai-clients.ts            # AI API clients
-│   │   ├── ai-analysis.ts           # Image analysis logic
-│   │   ├── rag-search.ts            # RAG search logic
-│   │   └── utils.ts                 # Utility functions
-│   ├── types/
-│   │   ├── analysis.ts              # Analysis types
-│   │   ├── guidelines.ts            # Guidelines types
-│   │   └── api.ts                   # API types
-│   └── page.tsx                     # Main page
-└── scripts/
-    └── setup-knowledge-base.ts      # Knowledge base setup
-```
-
-## Core System Design
-
-### RAG Analysis Pipeline
-1. **Image preprocessing**: Resize, optimize quality
-2. **Element identification**: Auto-detect UI elements using AI
-3. **Dynamic RAG search**: Search relevant guidelines based on detected elements
-4. **Structured prompt generation**: Create comprehensive analysis prompts
-5. **AI analysis**: Generate improvement suggestions with code examples
-
-### Database Schema (Supabase)
-```sql
-CREATE TABLE design_guidelines (
-  id BIGSERIAL PRIMARY KEY,
-  content TEXT NOT NULL,
-  source VARCHAR(100) NOT NULL,     -- WCAG, Apple HIG, Refactoring UI
-  category VARCHAR(50) NOT NULL,    -- accessibility, usability, visual_design
-  subcategory VARCHAR(100),         -- color_contrast, touch_targets, typography
-  embedding VECTOR(1536),           -- OpenAI embeddings
-  metadata JSONB,
-  keywords TEXT[],
-  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
-```
-
-## TypeScript Standards
-
-### Strict Type Safety
-- Use strict TypeScript settings
-- No `any` types allowed
-- All functions must have explicit return types
-- Use branded types for IDs and sensitive data
-
-### Interface Definitions
-```typescript
-interface AnalysisRequest {
-  image: File;
-  prompt: string;
-}
-
-interface AnalysisResponse {
-  success: boolean;
-  analysis: {
-    current_issues: string;
-    improvements: ImprovementSuggestion[];
-    predicted_impact: PredictedImpact;
-  };
-  guidelines_used: GuidelineReference[];
-  processing_time: number;
-}
-
-interface ImprovementSuggestion {
-  priority: 'high' | 'medium' | 'low';
-  title: string;
-  problem: string;
-  solution: string;
-  implementation: string;  // TailwindCSS code example
-  guideline_reference: string;
-}
-```
-
-## Coding Standards
-
-### Component Structure
-- Use functional components with hooks
-- Implement proper error boundaries
-- Include loading states for all async operations
-- Use Suspense for data fetching where appropriate
-
-### API Route Structure
-```typescript
-export async function POST(request: NextRequest) {
-  try {
-    // 1. Validate input
-    // 2. Process request
-    // 3. Return structured response
-  } catch (error) {
-    console.error('API Error:', error);
-    return Response.json(
-      { error: 'Descriptive error message' },
-      { status: appropriateStatusCode }
-    );
-  }
-}
-```
-
-### Error Handling
-- All async functions must have try-catch blocks
-- Return user-friendly error messages
-- Log detailed errors for debugging
-- Use proper HTTP status codes
-
-## AI Integration Guidelines
-
-### Claude API Integration
-```typescript
-const analysisPrompt = `
-あなたはUI/UXデザインの専門家です。以下の画像を分析してください：
-
-【分析観点】
-1. アクセシビリティ (WCAG準拠)
-2. ユーザビリティ (操作性・情報設計)
-3. 視覚デザイン (階層・色彩・レイアウト)
-
-【出力形式】
-## 🔍 現状分析
-## 💡 改善提案（優先度順）
-### 🔴 高優先度
-### 🟡 中優先度
-### 🟢 低優先度
-## 💻 実装例 (TailwindCSS)
-## 📊 改善効果予測
-
-各提案には根拠となるガイドラインを明記してください。
-`;
-```
-
-### OpenAI Embeddings
-- Use text-embedding-ada-002 model
-- Implement proper retry logic for API failures
-- Cache embeddings when possible
-
-### RAG Search Implementation
-```typescript
-// Hybrid search: 70% vector similarity + 30% text ranking
-const { data } = await supabase.rpc('hybrid_search', {
-  query_text: searchQuery,
-  query_embedding: embedding,
-  match_threshold: 0.7,
-  match_count: 5
-});
-```
-
-## UI/UX Standards
-
-### TailwindCSS Usage
-- Use utility-first approach
-- Create custom components for repeated patterns
-- Implement responsive design mobile-first
-- Use semantic color names in tailwind.config.js
-
-### Accessibility Requirements
-- All interactive elements must have proper ARIA labels
-- Minimum touch target size: 44px × 44px
-- Color contrast ratio: 4.5:1 for normal text, 3:1 for large text
-- Keyboard navigation support required
-
-### Loading States
-```typescript
-{isAnalyzing ? (
-  <div className="flex items-center justify-center">
-    <LoadingSpinner />
-    <span className="ml-2">分析中...</span>
-  </div>
-) : (
-  'デザインを分析する'
-)}
-```
-
-## Performance Requirements
-
-### File Upload Optimization
-- Maximum file size: 10MB
-- Supported formats: JPEG, PNG, GIF
-- Client-side image compression before upload
-- Progress indicators for uploads
-
-### API Response Time
-- Analysis completion: < 10 seconds
-- Search queries: < 2 seconds
-- Database queries: < 500ms
-
-### Caching Strategy
-- Cache embeddings in memory during session
-- Use Supabase query caching for guidelines
-- Implement request deduplication
-
-## Security Guidelines
-
-### File Upload Security
-```typescript
-// Validate file type and size
-const allowedTypes = ['image/jpeg', 'image/png', 'image/gif'];
-const maxSize = 10 * 1024 * 1024; // 10MB
-
-if (!allowedTypes.includes(file.type)) {
-  throw new Error('Unsupported file type');
-}
-if (file.size > maxSize) {
-  throw new Error('File too large');
-}
-```
-
-### API Security
-- Rate limiting: 100 requests per hour per IP
-- Input sanitization for all user inputs
-- Proper CORS configuration
-- Environment variables for all secrets
-
-### Data Privacy
-- No persistent storage of uploaded images
-- Clear user data after analysis completion
-- Implement proper error messages without exposing system details
-
-## Database Operations
-
-### Supabase Client Usage
-```typescript
-import { createClient } from '@supabase/supabase-js';
-
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY! // Use service role for admin operations
-);
-```
-
-### Query Optimization
-- Use appropriate indexes for search operations
-- Implement query result pagination for large datasets
-- Use database functions for complex operations
-
-## Testing Requirements
-
-### Unit Testing
-- Test all utility functions
-- Mock external API calls
-- Test error handling paths
-
-### Integration Testing
-- Test complete analysis pipeline
-- Verify database operations
-- Test file upload functionality
-
-## Development Workflow
-
-### Code Quality
-- Use ESLint and Prettier for consistent formatting
-- Run TypeScript strict mode checks
-- Implement proper logging for debugging
-
-### Environment Setup
-```bash
-# Required environment variables
-NEXT_PUBLIC_SUPABASE_URL=
-NEXT_PUBLIC_SUPABASE_ANON_KEY=
-SUPABASE_SERVICE_ROLE_KEY=
-ANTHROPIC_API_KEY=
-OPENAI_API_KEY=
-```
-
-## Implementation Priorities
-
-### Phase 1: Core Infrastructure
-1. Next.js project setup with TypeScript
-2. Basic file upload component
-3. Supabase database schema
-4. Environment configuration
-
-### Phase 2: RAG System
-1. Knowledge base setup script
-2. Hybrid search function implementation
-3. Embedding generation system
-4. Search API endpoints
-
-### Phase 3: AI Analysis
-1. Image preprocessing pipeline
-2. Element identification system
-3. Prompt engineering for Claude API
-4. Analysis result processing
-
-### Phase 4: UI Polish
-1. Result display components
-2. Loading and error states
-3. Responsive design implementation
-4. Accessibility improvements
-
-## Common Patterns
-
-### Async Function Template
-```typescript
-async function processAnalysis(
-  image: File, 
-  prompt: string
-): Promise<AnalysisResult> {
-  try {
-    // Validate inputs
-    validateInputs(image, prompt);
-    
-    // Process
-    const result = await performAnalysis(image, prompt);
-    
-    // Return structured result
-    return {
-      success: true,
-      data: result,
-      timestamp: new Date().toISOString()
-    };
-  } catch (error) {
-    console.error('Analysis failed:', error);
-    throw new AnalysisError('Analysis processing failed', error);
-  }
-}
-```
-
-### Error Boundary Component
-```typescript
-'use client';
-
-export default function ErrorBoundary({
-  error,
-  reset,
-}: {
-  error: Error & { digest?: string };
-  reset: () => void;
-}) {
-  return (
-    <div className="text-center p-8">
-      <h2 className="text-lg font-semibold text-red-600">
-        エラーが発生しました
-      </h2>
-      <button
-        onClick={reset}
-        className="mt-4 px-4 py-2 bg-blue-600 text-white rounded"
-      >
-        再試行
-      </button>
-    </div>
-  );
-}
-```
-
-## Documentation Standards
-
-### Code Comments
-- Use JSDoc for all public functions
-- Comment complex business logic
-- Include usage examples for utility functions
-
-### README Requirements
-- Clear setup instructions
-- API documentation
-- Environment variable descriptions
-- Deployment guidelines
-
-## Quality Checklist
-
-Before committing code, ensure:
-- [ ] TypeScript compilation passes without errors
-- [ ] All tests pass
-- [ ] ESLint passes without warnings
-- [ ] Components are properly typed
-- [ ] Error handling is implemented
-- [ ] Loading states are included
-- [ ] Accessibility requirements are met
-- [ ] Performance benchmarks are met
-
-## Documentation Management
-
-### Master Reference Document
-- **ALWAYS** reference `/app/docs/dev.md` before implementing any features
-- This file contains the complete project specification and implementation guidelines
-- If you encounter any conflicts between these rules and dev.md, prioritize dev.md
-
-### Documentation Update Requirements
-When implementing features or discovering new insights:
-
-1. **Check dev.md first**: Verify current specifications and implementation patterns
-2. **Update dev.md**: If implementation reveals new patterns, optimizations, or corrections
-3. **Create new docs**: Add specialized documentation in `/app/docs/` when needed
-
-### Documentation Structure in `/app/docs/`
-```
-/app/docs/
-├── dev.md                    # Master development reference (MAIN SOURCE OF TRUTH)
-├── api.md                    # API documentation and examples
-├── database.md               # Database schema and migration guides
-├── deployment.md             # Deployment and environment setup
-├── troubleshooting.md        # Common issues and solutions
-├── performance.md            # Performance optimization guides
-└── security.md               # Security guidelines and best practices
-```
-
-### When to Create New Documentation
-Create new documentation files when:
-- **API complexity**: Endpoints require detailed examples or complex workflows
-- **Database operations**: Complex queries, migrations, or schema changes
-- **Performance insights**: Optimization discoveries or benchmarking results
-- **Security findings**: New security considerations or implementation patterns
-- **Troubleshooting**: Recurring issues or complex debugging procedures
-- **Deployment specifics**: Environment-specific configurations or procedures
-
-### Documentation Update Process
-```typescript
-// Example: When implementing a new feature
-1. Read /app/docs/dev.md to understand current specifications
-2. Implement the feature following the guidelines
-3. If you discover improvements or clarifications:
-   - Update relevant sections in dev.md
-   - Add detailed examples to specialized docs if needed
-   - Document any deviations from original plan with reasoning
-
-// Example update format for dev.md:
-/*
-## 📝 Implementation Updates
-
-### [Date] - [Feature/Change]
-**What changed**: [Description]
-**Why**: [Reasoning]
-**Impact**: [Effect on other parts]
-**New patterns**: [Any new best practices discovered]
-*/
-```
-
-### Documentation Standards
-- Use clear, actionable language
-- Include code examples for complex concepts
-- Update timestamps for significant changes
-- Maintain backward compatibility notes
-- Cross-reference related sections
-
-## Development Workflow with Documentation
-
-### Before Starting Implementation
-1. **Read dev.md**: Understand the feature requirements and current specifications
-2. **Check specialized docs**: Review relevant API, database, or security documentation
-3. **Plan implementation**: Ensure alignment with documented patterns
-
-### During Implementation
-1. **Follow dev.md guidelines**: Use established patterns and standards
-2. **Document deviations**: If you need to deviate from the plan, document why
-3. **Note improvements**: Keep track of optimizations or better approaches discovered
-
-### After Implementation
-1. **Update dev.md**: Add any new insights, patterns, or corrections
-2. **Create specialized docs**: If the feature requires detailed documentation
-3. **Update troubleshooting**: Add any issues encountered and their solutions
-
-### Documentation Review Checklist
-Before completing any feature:
-- [ ] dev.md is updated with any new patterns or changes
-- [ ] Specialized documentation is created if complexity warrants it
-- [ ] Code examples in documentation are tested and accurate
-- [ ] Cross-references between documents are updated
-- [ ] Implementation aligns with documented specifications
-
-## Development Notes
-
-When implementing features:
-1. **Always check `/app/docs/dev.md` first** - it's the source of truth
-2. Start with type definitions as specified in dev.md
-3. Implement error handling following documented patterns
-4. Add loading states for all async operations
-5. Test with real data scenarios
-6. Consider edge cases and error conditions
-7. Implement proper logging for debugging
-8. Follow the established patterns consistently
-9. **Update documentation** if you discover better approaches
-10. **Create new docs** if the feature complexity requires it
-
-Remember: This is a production-ready application that needs to handle real user data securely and efficiently while providing professional-quality design analysis. All implementations must be properly documented for future maintainability.
+# UI Evaluation AI - Curosr rules
+
+このドキュメントは、AIデザインフィードバックアプリの開発において、技術スタックの変更や具体的な実装の詳細に左右されず、**常に遵守すべき普遍的なルール**を定めます。これらのルールは、プロジェクトの品質、保守性、スケーラビリティを確保するための指針となります。
+
+---
+
+## 1. 概要 (Overview)
+
+本プロジェクトは、AIを活用し、アップロードされた画像のUI/UX分析に基づいて**権威あるデザインガイドライン（WCAG, Apple HIG, Refactoring UIなど。これらはあとで増える可能性あり）** に準拠したプロフェッショナルな改善提案を提供するウェブアプリケーションを開発します。私たちの目標は、**シンプルでカスタマイズ性が高く、かつ美しいデザインアプローチ**を通じて、ユーザーに最高の価値を提供することです。設計は後から改善できますが、アルゴリズムとコア機能の実装は、ガイドなしではより困難であるため、シンプルさを最優先します。
+
+---
+
+## 2. 技術スタック (Tech Stack)
+
+技術の進化は速いですが、以下の技術選択原則は普遍的に適用されます。
+
+* **フロントエンド**: ユーザーインターフェースは、モダンな開発パラダイム（React、TypeScript）とユーティリティファーストのCSSフレームワーク（TailwindCSS）を採用し、高いパフォーマンスと開発効率を目指します。現在採用しているNext.js 15 (App Router) は、この方針に合致します。
+* **データベース**: 堅牢性、スケーラビリティ、そして高度なデータ操作（例：ベクトル検索）に対応できるデータベースソリューションを基盤とします。
+* **AIサービス**: コアとなるAI機能は、最新のAIモデルと効率的なAPI連携を通じて実現し、機能性とコスト効率を両立させます。
+* **データ検索**: 大量の情報の中から最も関連性の高いデータを効率的に取得するため、高度な検索メカニズム（例：ハイブリッド検索）を常に採用します。
+
+---
+
+## 3. コアシステム (Core System)
+
+アプリケーションの中核となる機能は、以下の普遍的なパイプライン設計原則に従って実装されます。
+
+### AI分析パイプライン
+
+1.  **入力前処理**: ユーザーからの入力データは、常にAI処理に適した形式に前処理・最適化されます。
+2.  **要素識別**: AIを用いて、入力データから重要な構成要素や特徴を正確に識別します。
+3.  **知識適用**: 識別された情報に基づき、関連する知識ベースから情報を検索・適用し、AIの推論を補強します。
+4.  **構造化出力生成**: AIモデルからの出力は、常に明確で構造化された形式であり、後続の処理やユーザーへの表示に適した形にします。
+5.  **フィードバック生成**: AIが分析を実行し、具体的な改善提案や関連する情報を含む形で結果を出力します。
+
+---
+
+## 4. TypeScript標準 (TypeScript Standards)
+
+コードの品質、可読性、保守性を確保するため、TypeScriptの使用において以下のルールを厳守します。
+
+* **厳密な型安全性**: TypeScriptのコンパイラオプションは常に**厳密な設定（strict mode）** を有効にし、型関連のエラーを未然に防ぎます。
+* **`any` 型の禁止**: 特段の正当な理由がない限り、`any` 型の使用は禁止します。不明な型や動的なデータ構造に対しては、より具体的な型（`unknown`、`Record<string, unknown>`など）や、適切なインターフェース/型エイリアスを定義して対応します。
+* **明示的な型定義**: すべての関数、変数、定数には、可能な限り**明示的な型定義**を付与し、コードの意図とデータフローを明確にします。
+* **インターフェース/型エイリアスの活用**: アプリケーション内の複雑なデータ構造やAPIの契約（Contract）を明確に定義するため、適切にインターフェースや型エイリアスを使用します。
+
+---
+
+## 5. コーディング標準 (Coding Standards)
+
+開発者が一貫性のある、高品質なコードを書くための標準です。
+
+* **コンポーネント設計**: Reactコンポーネントは、Hooksを活用した**関数コンポーネント**として実装します。単一責任の原則、再利用性、疎結合性を重視し、必要に応じてAtomic Designのようなデザインパターンを適用します。
+* **API構造**: APIエンドポイントは、以下の普遍的なパターンに従って構築します。
+    1.  **入力検証**: すべてのAPIリクエストは、セキュリティとデータ整合性を確保するため、厳密な入力検証を行います。
+    2.  **ロジックの分離**: APIハンドラは、リクエストの受け付けとレスポンスの整形に徹し、ビジネスロジックはサービスレイヤーやヘルパー関数として明確に分離します。
+    3.  **構造化されたレスポンス**: APIレスポンスは、成功・失敗に関わらず、予測可能で一貫性のある構造化された形式（例：JSON）とします。
+* **エラーハンドリング**: すべての非同期処理には**`try-catch`ブロック**を必ず設け、適切なエラー処理を行います。
+    * **ユーザーフレンドリーなメッセージ**: エンドユーザーには、理解しやすく、行動を促すようなエラーメッセージを提供します。
+    * **詳細なログ**: デバッグや問題追跡のため、サーバーサイドで詳細なエラー情報（スタックトレースなど）をログに出力します。
+    * **適切なHTTPステータスコード**: APIは、エラーの種類に応じて適切なHTTPステータスコード（例: 400 Bad Request, 404 Not Found, 500 Internal Server Error）を返します。
+
+---
+
+## 6. UI/UX標準 (UI/UX Standards)
+
+ユーザーエクスペリエンスの質を確保するための普遍的な指針です。日本のデジタル庁およびVercel社が公開しているデザインシステムを参照し、**シンプルで美しく、かつ高いカスタマイズ性を持つソリューション**を提供します。
+
+* **ユーティリティファースト/コンポーネントベース**: スタイリングには、TailwindCSSのようなユーティリティファーストのアプローチ、または再利用可能なコンポーネントシステムを基本とし、一貫性と効率性を促進します。
+* **レスポンシブデザイン**: すべてのUIは、モバイルからデスクトップまで多様なデバイスと画面サイズに対応する**モバイルファーストのレスポンシブデザイン**を基本とします。
+* **ローディング状態の明示**: データフェッチや長時間かかる処理には、ユーザーがシステムの応答を待っていることを明確に伝えるための**ローディング状態**（スピナー、プログレスバーなど）を必ず表示します。
+
+---
+
+## 7. アクセシビリティ標準 (Accessibility Standards)
+
+すべてのユーザーがアプリケーションを快適に利用できるよう、アクセシビリティを最優先事項とし、WCAGなどの国際的なガイドラインに準拠します。
+
+* **セマンティックHTMLとARIAラベル**: スクリーンリーダーを含む支援技術の利用者がアプリケーションを正しく理解できるよう、**セマンティックなHTML要素**を適切に使用し、必要に応じて**ARIAラベル**を付与します。
+* **十分なタッチターゲットサイズ**: クリック可能またはタップ可能な要素（ボタン、リンクなど）は、誤操作を防ぎ、モバイルデバイスでの操作性を向上させるために**十分なタッチターゲットサイズ**を確保します（推奨44px × 44px以上）。
+* **適切なコントラスト比**: テキストと背景色のコントラスト比は、弱視のユーザーでも読みやすいよう、WCAGの基準（例: 通常テキスト 4.5:1、大きなテキスト 3:1）に厳密に準拠します。
+* **キーボードナビゲーションのサポート**: マウスを使用しないユーザー（キーボード操作のみのユーザーや支援技術利用者）がアプリケーションのすべてのインタラクティブ要素を操作できるよう、**完全なキーボードナビゲーション**をサポートします。フォーカス管理も適切に行います。
+
+---
+
+## 8. 開発ワークフロー (Development Workflow)
+
+効率的かつ高品質な開発を継続するための普遍的なワークフローです。
+
+* **コード品質の確保**:
+    * **静的解析ツール**: ESLint、Prettierなどのコード品質ツールを導入し、CI/CDパイプラインに組み込むことで、コードの一貫性と品質を自動的に保証します。
+    * **静的型チェック**: TypeScriptの厳密モードを常に有効にし、コンパイル時の型エラーをなくします。
+    * **適切なロギング**: デバッグ、監視、および問題追跡のために、アプリケーション全体で意味のある、構造化されたロギングを実装します。
+* **テストの実施**:
+    * **単体テスト**: 個々の関数、コンポーネント、モジュールが期待通りに動作することを検証するため、網羅的な単体テストを記述します。
+    * **結合テスト**: 複数のモジュールやシステム間の連携が正しく機能することを確認するため、重要なフローに対して結合テストを記述します。
+* **環境変数の管理**: APIキー、データベース接続情報、その他の機密データは、**すべて環境変数を通じて管理**し、決してコードベースに直接ハードコードしません。
+
+---
+
+## 9. ドキュメンテーション管理 (Documentation Management)
+
+プロジェクトの知識を維持し、チーム内での共有と引き継ぎを促進するための普遍的なドキュメント管理ルールです。
+
+* **マスター参照ドキュメント**: プロジェクトの主要な仕様、設計原則、および実装ガイドラインは、**`/app/docs/dev.md`を唯一の信頼できる情報源（Single Source of Truth）** とします。機能実装の前に必ずこのドキュメントを参照し、必要に応じて自身の作業中に得られた知見を追記・修正します。
+* **最新情報の参照**: 開発中に最新の動的な情報、深い背景知識、またはプロジェクトの現状に関するリアルタイムな洞察が必要な場合は、`use context7`を使用して**Context7 MCP**を参照してください。これは、`dev.md`に加えて、よりタイムリーな情報を提供する補完的な情報源として活用します。
+* **ドキュメント更新の原則**: 新しい機能の実装、既存機能の変更、または新たな知見（最適化、ベストプラクティス、問題解決など）が発見された場合は、**関連するドキュメントを速やかに更新**します。これは、チーム全体の知識ベースを常に最新の状態に保つために不可欠です。
+* **コードコメントとJSDoc**: すべての公開関数や複雑なビジネスロジックには、**適切なコードコメントやJSDoc**を付与し、コードの意図、機能、使用方法を明確にします。
+* **READMEの充実**: プロジェクトのREADMEファイルには、以下の基本情報を含めます。
+    * プロジェクトの目的と概要
+    * 開発環境のセットアップ手順
+    * 主要なAPIのエンドポイントと基本的な使用例
+    * 必要な環境変数のリストと説明
+    * デプロイ手順の概要
+
+提案の最後に、何を行なったかのまとめと、次に行うべきことを示してください。
+
+---
+
+## その他
+
+これらの普遍的な開発ルールを理解した上で、次に具体的に以下のタスクに取り組みましょう。
+
+**不明点の質問**: 開発を進める中で疑問や不明な点があれば、些細なことでも遠慮なく質問してください。OJTメンターとして、私がサポートします。
+
+共に高品質なアプリケーションを開発していきましょう！

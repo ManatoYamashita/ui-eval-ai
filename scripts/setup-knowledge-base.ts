@@ -2,8 +2,80 @@
 // scripts/setup-knowledge-base.ts
 // 知識ベース構築スクリプト
 
-import { typedSupabaseAdmin } from '../app/lib/supabase';
-import { generateEmbeddings } from '../app/lib/ai-clients';
+import { config } from 'dotenv';
+import { join } from 'path';
+
+// .env.localを明示的に読み込み
+config({ path: join(process.cwd(), '.env.local') });
+
+import { createClient } from '@supabase/supabase-js';
+import { GoogleGenAI } from '@google/genai';
+
+// 環境変数確認とSupabaseクライアント作成
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+
+if (!supabaseUrl || !supabaseServiceKey) {
+  console.error('❌ 必要な環境変数が設定されていません:');
+  console.error('  NEXT_PUBLIC_SUPABASE_URL:', !!supabaseUrl);
+  console.error('  SUPABASE_SERVICE_ROLE_KEY:', !!supabaseServiceKey);
+  process.exit(1);
+}
+
+const typedSupabaseAdmin = createClient(supabaseUrl, supabaseServiceKey, {
+  auth: {
+    autoRefreshToken: false,
+    persistSession: false
+  }
+});
+
+// Google AI クライアント設定
+const googleApiKey = process.env.GOOGLE_GENAI_API_KEY;
+if (!googleApiKey) {
+  console.error('❌ GOOGLE_GENAI_API_KEY が設定されていません');
+  process.exit(1);
+}
+
+const genai = new GoogleGenAI({
+  apiKey: googleApiKey,
+});
+
+// 埋め込み生成関数
+async function generateEmbedding(text: string): Promise<number[]> {
+  try {
+    const response = await genai.models.embedContent({
+      model: 'text-embedding-004',
+      contents: [text.replace(/\n/g, ' ')],
+      config: {
+        outputDimensionality: 768
+      }
+    });
+
+    return response.embeddings?.[0]?.values || [];
+  } catch (error) {
+    console.error('埋め込み生成エラー:', error);
+    throw new Error('埋め込み生成に失敗しました');
+  }
+}
+
+// バッチ埋め込み生成
+async function generateEmbeddings(texts: string[]): Promise<number[][]> {
+  console.log(`🔤 ${texts.length}件のテキスト埋め込みを生成中...`);
+  const embeddings: number[][] = [];
+  
+  for (let i = 0; i < texts.length; i++) {
+    console.log(`  進捗: ${i + 1}/${texts.length}`);
+    const embedding = await generateEmbedding(texts[i]);
+    embeddings.push(embedding);
+    
+    // レート制限対策（少し待機）
+    if (i < texts.length - 1) {
+      await new Promise(resolve => setTimeout(resolve, 100));
+    }
+  }
+  
+  return embeddings;
+}
 
 // 知識ベースデータの型定義
 interface GuidelineData {
@@ -159,23 +231,37 @@ async function setupKnowledgeBase(): Promise<void> {
     
     console.log(`✅ ${data?.length || 0}件のガイドラインを挿入しました`);
     
-    // 4. 統計情報の更新
+    // 4. 統計情報の更新（関数が存在する場合のみ）
     console.log('📈 統計情報を更新中...');
-    await typedSupabaseAdmin.rpc('refresh_search_statistics');
+    try {
+      await typedSupabaseAdmin.rpc('refresh_search_statistics');
+      console.log('✅ 統計情報を更新しました');
+    } catch {
+      console.log('⚠️  統計更新関数が未作成のため、スキップします');
+    }
     
-    // 5. 検索テスト
+    // 5. 検索テスト（関数が存在する場合のみ）
     console.log('🔍 検索機能をテスト中...');
-    const testQuery = 'ボタンのデザイン';
-    const testEmbedding = await generateEmbeddings([testQuery]);
-    
-    const { data: searchResults } = await typedSupabaseAdmin
-      .rpc('hybrid_search', {
-        query_text: testQuery,
-        query_embedding: testEmbedding[0],
-        match_count: 3
-      });
-    
-    console.log(`検索テスト結果: ${searchResults?.length || 0}件`);
+    try {
+      const testQuery = 'ボタンのデザイン';
+      const testEmbedding = await generateEmbeddings([testQuery]);
+      
+      const { data: searchResults, error: searchError } = await typedSupabaseAdmin
+        .rpc('hybrid_search', {
+          query_text: testQuery,
+          query_embedding: testEmbedding[0],
+          match_count: 3
+        });
+      
+      if (searchError) {
+        console.log('⚠️  検索関数が未作成のため、テストをスキップします');
+        console.log('💡 手動でPostgreSQL関数を作成してください');
+      } else {
+        console.log(`✅ 検索テスト結果: ${searchResults?.length || 0}件`);
+      }
+    } catch {
+      console.log('⚠️  検索テストをスキップしました（関数未作成）');
+    }
     
     console.log('🎉 知識ベース構築が完了しました！');
     

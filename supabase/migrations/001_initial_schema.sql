@@ -11,7 +11,7 @@ CREATE TABLE IF NOT EXISTS design_guidelines (
   source VARCHAR(100) NOT NULL,             -- WCAG, Apple HIG, Refactoring UI
   category VARCHAR(50) NOT NULL,            -- accessibility, usability, visual_design
   subcategory VARCHAR(100),                 -- color_contrast, touch_targets, typography
-  embedding VECTOR(1536),                   -- OpenAI embeddings (1536次元)
+  embedding VECTOR(768),                    -- Google Text Embeddings (768次元)
   metadata JSONB,                          -- 追加情報（レベル、重要度等）
   keywords TEXT[],                         -- 検索用キーワード配列
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,

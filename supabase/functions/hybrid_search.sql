@@ -3,7 +3,7 @@
 
 CREATE OR REPLACE FUNCTION hybrid_search(
   query_text TEXT,
-  query_embedding VECTOR(1536),
+  query_embedding VECTOR(768),
   match_threshold FLOAT DEFAULT 0.7,
   match_count INT DEFAULT 5
 )
@@ -77,7 +77,7 @@ $$;
 -- カテゴリ別ハイブリッド検索関数
 CREATE OR REPLACE FUNCTION hybrid_search_by_category(
   query_text TEXT,
-  query_embedding VECTOR(1536),
+  query_embedding VECTOR(768),
   target_categories TEXT[] DEFAULT ARRAY['accessibility', 'usability', 'visual_design'],
   match_threshold FLOAT DEFAULT 0.7,
   match_count INT DEFAULT 5

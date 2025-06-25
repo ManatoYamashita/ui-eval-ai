@@ -15,57 +15,46 @@ export interface ImageProcessingOptions {
 }
 
 /**
- * 画像ファイルを前処理してClaude APIに適した形式に変換
+ * 分析用画像処理（サーバーサイド対応）
  */
 export async function processImageForAnalysis(
-  file: File,
-  options: ImageProcessingOptions = {}
+  file: File
 ): Promise<ProcessedImage> {
-  const {
-    maxWidth = 1024,
-    maxHeight = 1024,
-    quality = 0.85,
-    format = 'jpeg'
-  } = options;
-
+  
   try {
-    // ファイル形式の検証
+    // ファイル検証
     validateImageFile(file);
-
-    // 画像をCanvasに読み込み
-    const { canvas, ctx, originalWidth, originalHeight } = await loadImageToCanvas(file);
     
-    // リサイズ計算
-    const { width, height } = calculateDimensions(originalWidth, originalHeight, maxWidth, maxHeight);
+    console.log(`🖼️ Processing image: ${file.name} (${file.size} bytes)`);
     
-    // キャンバスサイズ調整
-    canvas.width = width;
-    canvas.height = height;
+    // ファイルが空でないことを確認
+    if (file.size === 0) {
+      throw new Error('File is empty');
+    }
     
-    // 高品質リサイズ
-    ctx.imageSmoothingEnabled = true;
-    ctx.imageSmoothingQuality = 'high';
+    // サーバーサイドでは直接Base64変換を行う
+    const base64Data = await convertFileToBase64(file);
     
-    // 元画像を再描画
-    const img = await createImageFromFile(file);
-    ctx.drawImage(img, 0, 0, width, height);
+    // Base64データが正常に取得できたことを確認
+    if (!base64Data || base64Data.length === 0) {
+      throw new Error('Failed to convert file to base64');
+    }
     
-    // Base64エンコード
-    const mimeType = `image/${format}`;
-    const base64DataUrl = canvas.toDataURL(mimeType, quality);
-    const base64Data = base64DataUrl.split(',')[1]; // data:image/jpeg;base64, を除去
+    // 基本的な画像情報を取得（実際のwidth/heightは概算）
+    const imageInfo = await getBasicImageInfo(file);
     
-    // サイズ計算
-    const processedSize = Math.ceil(base64Data.length * 0.75); // Base64デコード後のサイズ概算
-    
-    return {
+    const result = {
       base64Data,
-      mimeType,
-      width,
-      height,
+      mimeType: file.type,
+      width: imageInfo.width,
+      height: imageInfo.height,
       originalSize: file.size,
-      processedSize
+      processedSize: estimateFileSizeFromBase64(base64Data)
     };
+    
+    console.log(`✅ Image processed: ${imageInfo.width}x${imageInfo.height}, ${file.size} bytes`);
+    
+    return result;
 
   } catch (error) {
     console.error('Image processing error:', error);
@@ -74,79 +63,82 @@ export async function processImageForAnalysis(
 }
 
 /**
- * ファイルからImageオブジェクト作成
+ * ファイルをBase64に変換（サーバーサイド対応）
  */
-function createImageFromFile(file: File): Promise<HTMLImageElement> {
-  return new Promise((resolve, reject) => {
-    const img = new Image();
-    const url = URL.createObjectURL(file);
+async function convertFileToBase64(file: File): Promise<string> {
+  try {
+    // Node.js環境でFile.arrayBuffer()を使用
+    const arrayBuffer = await file.arrayBuffer();
     
-    img.onload = () => {
-      URL.revokeObjectURL(url);
-      resolve(img);
-    };
-    
-    img.onerror = () => {
-      URL.revokeObjectURL(url);
-      reject(new Error('Failed to load image'));
-    };
-    
-    img.src = url;
-  });
+    // Node.js環境でのBuffer使用
+    if (typeof Buffer !== 'undefined') {
+      const buffer = Buffer.from(arrayBuffer);
+      return buffer.toString('base64');
+    } else {
+      // ブラウザ環境のフォールバック（実際には使用されない）
+      const uint8Array = new Uint8Array(arrayBuffer);
+      const binaryString = Array.from(uint8Array)
+        .map(byte => String.fromCharCode(byte))
+        .join('');
+      return btoa(binaryString);
+    }
+  } catch (error) {
+    console.error('Base64 conversion error:', error);
+    throw new Error('Failed to convert file to base64');
+  }
 }
 
 /**
- * 画像をCanvasに読み込み
+ * 基本的な画像情報を取得（概算）
  */
-async function loadImageToCanvas(file: File): Promise<{
-  canvas: HTMLCanvasElement;
-  ctx: CanvasRenderingContext2D;
-  originalWidth: number;
-  originalHeight: number;
-}> {
-  const img = await createImageFromFile(file);
-  const canvas = document.createElement('canvas');
-  const ctx = canvas.getContext('2d');
+async function getBasicImageInfo(file: File): Promise<{ width: number; height: number }> {
+  // ファイルサイズから概算の解像度を推定
+  // これは正確ではないが、サーバーサイドでの簡易実装として使用
   
-  if (!ctx) {
-    throw new Error('Failed to get canvas context');
+  const sizeInKB = file.size / 1024;
+  
+  // ファイル名から解像度のヒントを得る
+  const filename = file.name.toLowerCase();
+  let estimatedWidth = 1920;
+  let estimatedHeight = 1080;
+  
+  // 一般的な解像度パターンを検出
+  if (filename.includes('4k') || filename.includes('2160')) {
+    estimatedWidth = 3840;
+    estimatedHeight = 2160;
+  } else if (filename.includes('fhd') || filename.includes('1080')) {
+    estimatedWidth = 1920;
+    estimatedHeight = 1080;
+  } else if (filename.includes('hd') || filename.includes('720')) {
+    estimatedWidth = 1280;
+    estimatedHeight = 720;
+  } else if (filename.includes('mobile') || filename.includes('phone')) {
+    estimatedWidth = 375;
+    estimatedHeight = 812;
+  } else if (filename.includes('tablet') || filename.includes('ipad')) {
+    estimatedWidth = 768;
+    estimatedHeight = 1024;
+  } else {
+    // ファイルサイズから推定
+    let estimatedPixels: number;
+    
+    if (file.type === 'image/jpeg') {
+      // JPEGは1ピクセルあたり約0.5-2バイト
+      estimatedPixels = Math.sqrt(sizeInKB * 1024 / 1.5);
+    } else if (file.type === 'image/png') {
+      // PNGは1ピクセルあたり約1-4バイト
+      estimatedPixels = Math.sqrt(sizeInKB * 1024 / 2.5);
+    } else {
+      // その他の形式は中間値を使用
+      estimatedPixels = Math.sqrt(sizeInKB * 1024 / 2);
+    }
+    
+    // 一般的なアスペクト比（16:9）を仮定
+    estimatedWidth = Math.round(estimatedPixels * 1.33);
+    estimatedHeight = Math.round(estimatedPixels * 0.75);
   }
   
-  return {
-    canvas,
-    ctx,
-    originalWidth: img.naturalWidth,
-    originalHeight: img.naturalHeight
-  };
-}
-
-/**
- * アスペクト比を保持したリサイズ計算
- */
-function calculateDimensions(
-  originalWidth: number,
-  originalHeight: number,
-  maxWidth: number,
-  maxHeight: number
-): { width: number; height: number } {
-  
-  // 既に制限内の場合はそのまま
-  if (originalWidth <= maxWidth && originalHeight <= maxHeight) {
-    return { width: originalWidth, height: originalHeight };
-  }
-  
-  const aspectRatio = originalWidth / originalHeight;
-  
-  let width = maxWidth;
-  let height = Math.round(width / aspectRatio);
-  
-  // 高さが制限を超える場合は高さ基準で再計算
-  if (height > maxHeight) {
-    height = maxHeight;
-    width = Math.round(height * aspectRatio);
-  }
-  
-  return { width, height };
+  return { width: estimatedWidth, height: estimatedHeight };
 }
 
 /**
@@ -201,8 +193,7 @@ export function calculateOptimalQuality(
  * 複数画像の一括処理
  */
 export async function processMultipleImages(
-  files: File[],
-  options: ImageProcessingOptions = {}
+  files: File[]
 ): Promise<ProcessedImage[]> {
   
   if (files.length > 10) {
@@ -210,7 +201,7 @@ export async function processMultipleImages(
   }
   
   try {
-    const promises = files.map(file => processImageForAnalysis(file, options));
+    const promises = files.map(file => processImageForAnalysis(file));
     return await Promise.all(promises);
   } catch (error) {
     console.error('Batch image processing error:', error);
@@ -233,7 +224,7 @@ export class ImageValidationError extends Error {
   }
 }
 
-// 画像メタデータ抽出（EXIF情報など）
+// 画像メタデータ抽出
 export interface ImageMetadata {
   fileName: string;
   fileSize: number;

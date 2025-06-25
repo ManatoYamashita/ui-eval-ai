@@ -91,24 +91,311 @@ export async function analyzeDesign(
     };
 
   } catch (error) {
-    console.error('Analysis error:', error);
+    console.error('❌ Analysis error:', error);
+    
+    // フォールバック分析を実行
+    console.log('🔄 Performing fallback analysis...');
+    const fallbackAnalysis = await generateFallbackAnalysis(userPrompt, detectedElements, relevantGuidelines);
     
     return {
       success: false,
-      analysis: {
-        current_issues: '',
-        improvements: [],
-        predicted_impact: {
-          accessibility_score: 0,
-          usability_improvement: '',
-          conversion_impact: ''
-        }
-      },
+      analysis: fallbackAnalysis,
       guidelines_used: [],
       processing_time: Date.now() - startTime,
       error: error instanceof Error ? error.message : 'Unknown analysis error'
     };
   }
+}
+
+/**
+ * 分析フォールバック（AI API失敗時）
+ */
+async function generateFallbackAnalysis(
+  userPrompt: string,
+  detectedElements: string[],
+  guidelines: SearchResult[]
+): Promise<{
+  current_issues: string;
+  improvements: ImprovementSuggestion[];
+  predicted_impact: PredictedImpact;
+}> {
+  
+  console.log('🔄 Generating fallback analysis without AI API...');
+  
+  try {
+    // ユーザープロンプトから改善領域を特定
+    const improvementAreas = identifyImprovementAreas(userPrompt, detectedElements);
+    
+    // ガイドラインから関連する改善提案を抽出
+    const improvements = generateGuidelineBasedImprovements(guidelines, improvementAreas);
+    
+    // 基本的な分析結果を構築
+    const fallbackAnalysis = {
+      current_issues: generateCurrentIssuesDescription(detectedElements, userPrompt),
+      improvements: improvements.slice(0, 5), // 最大5件の改善提案
+      predicted_impact: {
+        accessibility_score: calculateAccessibilityScore(improvements),
+        usability_improvement: 'UIの一貫性と使いやすさが向上します',
+        conversion_impact: '改善により、ユーザーエンゲージメントの向上が期待されます'
+      }
+    };
+
+    console.log('✅ Fallback analysis generated successfully');
+    return fallbackAnalysis;
+
+  } catch (error) {
+    console.error('❌ Fallback analysis generation failed:', error);
+    
+    // 最終フォールバック: ハードコードされた基本改善提案
+    return getBasicImprovementSuggestions(userPrompt);
+  }
+}
+
+/**
+ * 改善領域の特定
+ */
+function identifyImprovementAreas(userPrompt: string, elements: string[]): string[] {
+  const prompt = userPrompt.toLowerCase();
+  const areas: string[] = [];
+
+  // プロンプトから改善領域を推測
+  if (prompt.includes('アクセシビリティ') || prompt.includes('accessibility')) {
+    areas.push('accessibility');
+  }
+  if (prompt.includes('使いやす') || prompt.includes('usability') || prompt.includes('ユーザビリティ')) {
+    areas.push('usability');
+  }
+  if (prompt.includes('デザイン') || prompt.includes('visual') || prompt.includes('見た目')) {
+    areas.push('visual_design');
+  }
+  if (prompt.includes('色') || prompt.includes('color') || prompt.includes('コントラスト')) {
+    areas.push('color_contrast');
+  }
+  if (prompt.includes('ボタン') || prompt.includes('button')) {
+    areas.push('button_design');
+  }
+
+  // 検出された要素から改善領域を推測
+  elements.forEach(element => {
+    if (element.includes('button') && !areas.includes('button_design')) {
+      areas.push('button_design');
+    }
+    if (element.includes('text') && !areas.includes('typography')) {
+      areas.push('typography');
+    }
+    if (element.includes('color') && !areas.includes('color_contrast')) {
+      areas.push('color_contrast');
+    }
+  });
+
+  return areas.length > 0 ? areas : ['accessibility', 'usability'];
+}
+
+/**
+ * ガイドラインベースの改善提案生成
+ */
+function generateGuidelineBasedImprovements(
+  guidelines: SearchResult[],
+  areas: string[]
+): ImprovementSuggestion[] {
+  
+  const improvements: ImprovementSuggestion[] = [];
+  
+  guidelines.forEach((guideline, index) => {
+    // ガイドラインの内容から改善提案を生成
+    const improvement: ImprovementSuggestion = {
+      priority: index < 2 ? 'high' : index < 4 ? 'medium' : 'low',
+      title: extractTitleFromGuideline(guideline.content),
+      problem: extractProblemFromGuideline(guideline.content),
+      solution: guideline.content.substring(0, 200) + '...',
+      implementation: generateTailwindImplementation(guideline.category),
+      guideline_reference: `${guideline.source} - ${guideline.category}`
+    };
+    
+    improvements.push(improvement);
+  });
+
+  // ガイドラインが不足している場合、基本的な改善提案を追加
+  if (improvements.length < 3) {
+    improvements.push(...getDefaultImprovements().slice(0, 3 - improvements.length));
+  }
+
+  return improvements;
+}
+
+/**
+ * 現在の問題の説明生成
+ */
+function generateCurrentIssuesDescription(elements: string[], userPrompt: string): string {
+  const issues: string[] = [];
+  
+  if (userPrompt.includes('アクセシビリティ')) {
+    issues.push('アクセシビリティの観点から改善が必要な要素が検出されています');
+  }
+  
+  if (elements.includes('button')) {
+    issues.push('ボタン要素のタッチターゲットサイズや視認性に改善の余地があります');
+  }
+  
+  if (elements.includes('text')) {
+    issues.push('テキストの可読性とコントラスト比の確認が必要です');
+  }
+
+  return issues.length > 0 
+    ? issues.join('。') + '。'
+    : '全体的なUI/UXの改善により、ユーザー体験の向上が期待されます。';
+}
+
+/**
+ * アクセシビリティスコア計算
+ */
+function calculateAccessibilityScore(improvements: ImprovementSuggestion[]): number {
+  const baseScore = 65; // 基本スコア
+  const improvementBonus = Math.min(improvements.length * 5, 25); // 改善提案数によるボーナス
+  return Math.min(baseScore + improvementBonus, 95);
+}
+
+/**
+ * TailwindCSS実装例の生成
+ */
+function generateTailwindImplementation(category: string): string {
+  const implementations: Record<string, string> = {
+    accessibility: `
+/* アクセシビリティ改善 */
+.improved-button {
+  @apply min-h-[44px] min-w-[44px] 
+         focus:ring-2 focus:ring-blue-500 focus:outline-none
+         transition-colors duration-200;
+}`,
+    usability: `
+/* ユーザビリティ改善 */
+.user-friendly-element {
+  @apply hover:bg-gray-50 active:bg-gray-100
+         transition-all duration-150 ease-in-out
+         cursor-pointer;
+}`,
+    visual_design: `
+/* ビジュアルデザイン改善 */
+.visually-improved {
+  @apply shadow-sm border border-gray-200
+         rounded-lg bg-white
+         hover:shadow-md transition-shadow;
+}`,
+    color_contrast: `
+/* コントラスト改善 */
+.high-contrast-text {
+  @apply text-gray-900 bg-white
+         border-2 border-gray-300;
+}`
+  };
+
+  return implementations[category] || implementations.accessibility;
+}
+
+/**
+ * ガイドラインからタイトル抽出
+ */
+function extractTitleFromGuideline(content: string): string {
+  // 最初の文または重要なキーワードからタイトルを生成
+  const firstSentence = content.split('。')[0];
+  
+  if (content.includes('タッチターゲット') || content.includes('44px')) {
+    return 'タッチターゲットサイズの最適化';
+  }
+  if (content.includes('コントラスト') || content.includes('4.5:1')) {
+    return '色コントラスト比の改善';
+  }
+  if (content.includes('一貫性') || content.includes('統一')) {
+    return 'デザインの一貫性向上';
+  }
+  
+  return firstSentence.length > 30 
+    ? firstSentence.substring(0, 30) + '...'
+    : firstSentence;
+}
+
+/**
+ * ガイドラインから問題抽出
+ */
+function extractProblemFromGuideline(content: string): string {
+  if (content.includes('タッチターゲット')) {
+    return 'モバイルデバイスでのタッチ操作時に、小さなボタンは誤操作の原因となります';
+  }
+  if (content.includes('コントラスト')) {
+    return '低いコントラスト比により、視覚に障害のあるユーザーがテキストを読みにくくなります';
+  }
+  if (content.includes('一貫性')) {
+    return 'デザインの不一致により、ユーザーの学習コストが増加し、使いにくさにつながります';
+  }
+  
+  return '現在のデザインにおいて、ユーザビリティとアクセシビリティの観点から改善が必要です';
+}
+
+/**
+ * デフォルト改善提案
+ */
+function getDefaultImprovements(): ImprovementSuggestion[] {
+  return [
+    {
+      priority: 'high',
+      title: 'タッチターゲットサイズの確保',
+      problem: 'ボタンやリンクのサイズが小さく、モバイルデバイスでの操作性に問題があります',
+      solution: 'すべてのインタラクティブ要素を最小44px×44pxのサイズに設定してください',
+      implementation: `
+.touch-target {
+  @apply min-h-[44px] min-w-[44px] 
+         flex items-center justify-center
+         touch-manipulation;
+}`,
+      guideline_reference: 'WCAG 2.1 - Target Size (Level AAA)'
+    },
+    {
+      priority: 'high',
+      title: 'カラーコントラストの改善',
+      problem: 'テキストと背景色のコントラスト比が不十分で、可読性に問題があります',
+      solution: '通常テキストは4.5:1以上、大きなテキストは3:1以上のコントラスト比を確保してください',
+      implementation: `
+.high-contrast {
+  @apply text-gray-900 bg-white;
+  /* または */
+  @apply text-white bg-gray-900;
+}`,
+      guideline_reference: 'WCAG 2.1 - Contrast (Level AA)'
+    },
+    {
+      priority: 'medium',
+      title: 'フォーカス状態の明示',
+      problem: 'キーボード操作時のフォーカス状態が不明確で、アクセシビリティに問題があります',
+      solution: 'すべてのインタラクティブ要素に明確なフォーカス表示を追加してください',
+      implementation: `
+.focusable {
+  @apply focus:ring-2 focus:ring-blue-500 
+         focus:outline-none focus:ring-opacity-50;
+}`,
+      guideline_reference: 'WCAG 2.1 - Focus Visible (Level AA)'
+    }
+  ];
+}
+
+/**
+ * 基本改善提案（最終フォールバック）
+ */
+function getBasicImprovementSuggestions(userPrompt: string): {
+  current_issues: string;
+  improvements: ImprovementSuggestion[];
+  predicted_impact: PredictedImpact;
+} {
+  console.log('🆘 Using basic improvement suggestions as final fallback');
+  
+  return {
+    current_issues: 'システム分析中にエラーが発生しましたが、一般的な改善提案を提供します。',
+    improvements: getDefaultImprovements(),
+    predicted_impact: {
+      accessibility_score: 75,
+      usability_improvement: '基本的なアクセシビリティ改善により、より多くのユーザーが利用しやすくなります',
+      conversion_impact: 'ユーザビリティの向上により、離脱率の減少が期待されます'
+    }
+  };
 }
 
 /**

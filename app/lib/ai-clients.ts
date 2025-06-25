@@ -4,6 +4,8 @@ import { GoogleGenAI } from '@google/genai';
 const GOOGLE_GENAI_API_KEY = process.env.GOOGLE_GENAI_API_KEY;
 
 if (!GOOGLE_GENAI_API_KEY) {
+  console.error('❌ GOOGLE_GENAI_API_KEY environment variable is missing');
+  console.error('💡 Please set GOOGLE_GENAI_API_KEY in your .env.local file');
   throw new Error('GOOGLE_GENAI_API_KEY environment variable is required');
 }
 
@@ -15,6 +17,8 @@ export const genai = new GoogleGenAI({
 // テキスト埋め込み生成（Gemini Embedding）
 export async function generateEmbedding(text: string): Promise<number[]> {
   try {
+    console.log('🔍 Generating embedding for text:', text.substring(0, 100) + '...');
+    
     const response = await genai.models.embedContent({
       model: 'text-embedding-004',
       contents: [text.replace(/\n/g, ' ')],
@@ -23,10 +27,31 @@ export async function generateEmbedding(text: string): Promise<number[]> {
       }
     });
 
-    return response.embeddings?.[0]?.values || [];
-  } catch (error) {
-    console.error('Gemini embedding error:', error);
-    throw new Error('Failed to generate embedding');
+    const embedding = response.embeddings?.[0]?.values || [];
+    console.log('✅ Embedding generated successfully, dimensions:', embedding.length);
+    
+    return embedding;
+  } catch (error: unknown) {
+    console.error('❌ Gemini embedding error:', error);
+    
+    // APIキー制限エラーの詳細ログ
+    if (error && typeof error === 'object' && 'status' in error && error.status === 403) {
+      console.error('🚫 API Key Error Details:');
+      console.error('- This is a Google Cloud API key restriction error');
+      console.error('- Error Code: 403 (PERMISSION_DENIED)');
+      console.error('- Reason: API_KEY_HTTP_REFERRER_BLOCKED');
+      console.error('');
+      console.error('💡 To fix this error:');
+      console.error('1. Go to Google Cloud Console: https://console.cloud.google.com/');
+      console.error('2. Navigate to APIs & Services > Credentials');
+      console.error('3. Click on your API key');
+      console.error('4. Under "Application restrictions", select "None"');
+      console.error('5. Save the changes and wait a few minutes');
+      console.error('');
+    }
+    
+    const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+    throw new Error(`Failed to generate embedding: ${errorMessage}`);
   }
 }
 
@@ -57,6 +82,10 @@ export async function analyzeImageWithGemini(
   maxTokens: number = 4000
 ): Promise<string> {
   try {
+    console.log('🖼️ Starting Gemini image analysis...');
+    console.log('📝 Prompt length:', prompt.length);
+    console.log('🖼️ Image data size:', imageData.length, 'characters');
+    
     const response = await genai.models.generateContent({
       model: 'gemini-1.5-flash',
       contents: [{
@@ -80,10 +109,31 @@ export async function analyzeImageWithGemini(
       }
     });
 
-    return response.text || '';
-  } catch (error) {
-    console.error('Gemini analysis error:', error);
-    throw new Error('Failed to analyze image with Gemini');
+    const result = response.text || '';
+    console.log('✅ Gemini analysis completed, response length:', result.length);
+    
+    return result;
+  } catch (error: unknown) {
+    console.error('❌ Gemini analysis error:', error);
+    
+    // APIキー制限エラーの詳細ログ
+    if (error && typeof error === 'object' && 'status' in error && error.status === 403) {
+      console.error('🚫 API Key Error Details:');
+      console.error('- This is a Google Cloud API key restriction error');
+      console.error('- Error Code: 403 (PERMISSION_DENIED)');
+      console.error('- Reason: API_KEY_HTTP_REFERRER_BLOCKED');
+      console.error('');
+      console.error('💡 To fix this error:');
+      console.error('1. Go to Google Cloud Console: https://console.cloud.google.com/');
+      console.error('2. Navigate to APIs & Services > Credentials');
+      console.error('3. Click on your API key');
+      console.error('4. Under "Application restrictions", select "None"');
+      console.error('5. Save the changes and wait a few minutes');
+      console.error('');
+    }
+    
+    const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+    throw new Error(`Failed to analyze image with Gemini: ${errorMessage}`);
   }
 }
 
