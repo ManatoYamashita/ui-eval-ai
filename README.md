@@ -35,7 +35,7 @@
 
 ```bash
 # リポジトリクローン
-git clone <repository-url>
+git clone https://github.com/ManatoYamashita/ui-eval-ai
 cd ui-eval-ai
 
 # 依存関係インストール
