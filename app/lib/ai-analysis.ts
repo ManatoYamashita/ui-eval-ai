@@ -38,11 +38,7 @@ export async function analyzeDesign(
 
     // 1. 画像前処理
     console.log('🖼️ Processing image...');
-    const processedImage = await processImageForAnalysis(imageFile, {
-      maxWidth: 1024,
-      maxHeight: 1024,
-      quality: 0.85
-    });
+    const processedImage = await processImageForAnalysis(imageFile);
 
     // 2. UI要素識別
     console.log('🔍 Detecting UI elements...');
@@ -93,9 +89,12 @@ export async function analyzeDesign(
   } catch (error) {
     console.error('❌ Analysis error:', error);
     
-    // フォールバック分析を実行
+    // フォールバック分析を実行（エラー時はデフォルト値を使用）
     console.log('🔄 Performing fallback analysis...');
-    const fallbackAnalysis = await generateFallbackAnalysis(userPrompt, detectedElements, relevantGuidelines);
+    const fallbackDetectedElements = ['button', 'text', 'layout']; // デフォルト要素
+    const fallbackGuidelines: SearchResult[] = []; // 空のガイドライン配列
+    
+    const fallbackAnalysis = await generateFallbackAnalysis(userPrompt, fallbackDetectedElements, fallbackGuidelines);
     
     return {
       success: false,
@@ -147,7 +146,7 @@ async function generateFallbackAnalysis(
     console.error('❌ Fallback analysis generation failed:', error);
     
     // 最終フォールバック: ハードコードされた基本改善提案
-    return getBasicImprovementSuggestions(userPrompt);
+    return getBasicImprovementSuggestions();
   }
 }
 
@@ -201,7 +200,18 @@ function generateGuidelineBasedImprovements(
   
   const improvements: ImprovementSuggestion[] = [];
   
-  guidelines.forEach((guideline, index) => {
+  // 関連するガイドラインを優先的に処理（areasを活用）
+  const relevantGuidelines = guidelines.filter(guideline => 
+    areas.some(area => 
+      guideline.category === area || 
+      guideline.content.toLowerCase().includes(area.toLowerCase())
+    )
+  );
+  
+  // 関連ガイドラインが少ない場合は全ガイドラインを使用
+  const processGuidelines = relevantGuidelines.length > 0 ? relevantGuidelines : guidelines;
+  
+  processGuidelines.forEach((guideline, index) => {
     // ガイドラインの内容から改善提案を生成
     const improvement: ImprovementSuggestion = {
       priority: index < 2 ? 'high' : index < 4 ? 'medium' : 'low',
@@ -380,7 +390,7 @@ function getDefaultImprovements(): ImprovementSuggestion[] {
 /**
  * 基本改善提案（最終フォールバック）
  */
-function getBasicImprovementSuggestions(userPrompt: string): {
+function getBasicImprovementSuggestions(): {
   current_issues: string;
   improvements: ImprovementSuggestion[];
   predicted_impact: PredictedImpact;

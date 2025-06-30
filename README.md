@@ -1,6 +1,7 @@
 # UI Evaluation AI
 
 **目的**: AIを活用してデザイン画像を分析し、WCAG・Apple HIG・Refactoring UIなどの権威あるガイドラインに基づいた専門的な改善提案を提供するWebアプリケーション
+Googleの[NoteboolLM](https://notebooklm.google.com/notebook/65434286-11ba-4039-bec6-bfbc4acf4f60?authuser=1)でデザインガイドラインを読ませて自分が作ったデザインを評価させようと思ったんですが、画像をアップロードして質問ができなかったので、それができるサービスを作ろうと思いました。
 
 ## 主な機能
 
