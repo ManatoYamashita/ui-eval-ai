@@ -1,0 +1,476 @@
+{
+    "guidelines": [
+      {
+        "content": "新しいアプリのアイデアをデザインする際は、レイアウトから始めるのではなく、具体的な機能（例：フライト検索）から始めましょう。機能から始めることで、ナビゲーションなどのシェルに関する意思決定に必要な情報を得られます。",
+        "source": "Refactoring UI",
+        "category": "design-process",
+        "subcategory": "starting-a-project",
+        "keywords": ["デザインプロセス", "機能優先", "レイアウト", "アジャイルデザイン"],
+        "priority": "high"
+      },
+      {
+        "content": "デザインの初期段階では、書体、影、アイコンなどの詳細な決定にこだわりすぎないようにしましょう。まずはグレースケールでデザインし、スペース、コントラスト、サイズで階層を表現することに集中します。これにより、後から色を追加しやすくなります。",
+        "source": "Refactoring UI",
+        "category": "design-process",
+        "subcategory": "fidelity",
+        "keywords": ["ローファイデザイン", "グレースケール", "階層", "コントラスト", "スペース", "デザインプロセス"],
+        "priority": "medium"
+      },
+      {
+        "content": "製品のすべての機能を最初からデザインするのではなく、短いサイクルで作業を進めましょう。基本的なデザインが完成したらすぐに実装に移り、実際に使用できるインターフェースでデザインの問題を解決します。",
+        "source": "Refactoring UI",
+        "category": "design-process",
+        "subcategory": "iteration",
+        "keywords": ["イテレーション", "アジャイル開発", "デザインサイクル", "実装", "エッジケース"],
+        "priority": "high"
+      },
+      {
+        "content": "デザインにおいて、まだ実装する準備ができていない機能を示唆してはいけません。後で実装する「あればいい」機能は、シンプルなバージョンが完成してからデザインしましょう。",
+        "source": "Refactoring UI",
+        "category": "design-process",
+        "subcategory": "scope-management",
+        "keywords": ["スコープ", "ミニマム", "機能", "期待値", "計画"],
+        "priority": "high"
+      },
+      {
+        "content": "すべてのデザインには独自の個性があります。フォントの選択、色の使用、ボーダーラディウス（角丸の度合い）、使用する言語（トーン＆マナー）は、デザインの個性を決定する主要な要素です。",
+        "source": "Refactoring UI",
+        "category": "visual-design",
+        "subcategory": "personality",
+        "keywords": ["個性", "ブランド", "フォント", "色", "ボーダーラディウス", "トーン"],
+        "priority": "medium"
+      },
+      {
+        "content": "フォントの選択はデザインの雰囲気に大きく影響します。エレガントな見た目にはセリフ体、遊び心のある見た目には丸いサンセリフ体、プレーンな見た目にはニュートラルなサンセリフ体が効果的です。",
+        "source": "Refactoring UI",
+        "category": "typography",
+        "subcategory": "font-choice",
+        "keywords": ["フォント", "書体", "セリフ", "サンセリフ", "デザインの個性"],
+        "priority": "medium"
+      },
+      {
+        "content": "色はデザインに安心感、高級感、楽しさなどの感情を伝えることができます。青は安全で親しみやすく、金は高価で洗練された印象を与え、ピンクはより楽しい印象を与えます。",
+        "source": "Refactoring UI",
+        "category": "color",
+        "subcategory": "color-psychology",
+        "keywords": ["色", "感情", "青", "金", "ピンク", "配色"],
+        "priority": "medium"
+      },
+      {
+        "content": "ボーダーラディウスはデザイン全体の印象に大きな影響を与えます。小さい角丸はニュートラル、大きい角丸は遊び心のある印象、角丸なしはよりフォーマルな印象を与えます。一貫性を保つことが重要です。",
+        "source": "Refactoring UI",
+        "category": "visual-design",
+        "subcategory": "border-radius",
+        "keywords": ["ボーダーラディウス", "角丸", "一貫性", "デザインの個性"],
+        "priority": "medium"
+      },
+      {
+        "content": "インターフェースで使用する言葉遣いは、デザインの全体的な個性に大きな影響を与えます。プロフェッショナルなトーンと、フレンドリーでカジュアルな言葉遣いでは、ユーザーへの印象が大きく異なります。",
+        "source": "Refactoring UI",
+        "category": "content-design",
+        "subcategory": "language-tone",
+        "keywords": ["言葉遣い", "トーン", "マナー", "UXライティング", "個性"],
+        "priority": "medium"
+      },
+      {
+        "content": "無限の選択肢の中から値を選択するのではなく、事前に定義された小さなオプションセットを使用しましょう。これにより、意思決定が容易になり、デザインの一貫性が向上します。",
+        "source": "Refactoring UI",
+        "category": "design-system",
+        "subcategory": "constraints",
+        "keywords": ["デザインシステム", "制約", "一貫性", "効率", "決定疲れ"],
+        "priority": "high"
+      },
+      {
+        "content": "要素のサイズや間隔を決定する際に、1ピクセル単位で微調整するのではなく、事前に定義された制約付きの値のセット（例：16pxの倍数スケール）に限定しましょう。これにより、一貫性のあるデザインを効率的に作成できます。",
+        "source": "Refactoring UI",
+        "category": "layout-and-spacing",
+        "subcategory": "spacing-system",
+        "keywords": ["間隔システム", "サイズシステム", "グリッド", "効率", "一貫性"],
+        "priority": "high"
+      },
+      {
+        "content": "UIにおける視覚的階層は、要素が互いに関連してどれだけ重要に見えるかを指します。すべての要素が注意を引こうとすると、ノイズが多く混沌とした印象になります。二次的・三次的な情報を意図的に強調を弱めることで、デザインがより洗練されます。",
+        "source": "Refactoring UI",
+        "category": "visual-hierarchy",
+        "subcategory": "emphasis",
+        "keywords": ["視覚的階層", "強調", "デエンファシス", "コントラスト", "ノイズ"],
+        "priority": "high"
+      },
+      {
+        "content": "階層をコントロールするためにフォントサイズに頼りすぎないようにしましょう。プライマリコンテンツは大きくしすぎず、セカンダリコンテンツは小さくしすぎないように注意します。フォントの太さや色を使って重要度を伝える方が、可読性を損なわずに済みます。",
+        "source": "Refactoring UI",
+        "category": "typography",
+        "subcategory": "hierarchy",
+        "keywords": ["フォントサイズ", "フォントウェイト", "色", "階層", "可読性"],
+        "priority": "medium"
+      },
+      {
+        "content": "濃い背景に薄いグレーのテキストを使用すると、テキストがくすんで見えたり、無効に見えたりすることがあります。代わりに、背景色と同じ色相を持ち、彩度と明度を調整した新しい色を手動で選択することで、コントラストを下げつつ鮮やかさを保つことができます。",
+        "source": "Refactoring UI",
+        "category": "color",
+        "subcategory": "text-color",
+        "keywords": ["テキスト色", "背景色", "コントラスト", "HSL", "アクセシビリティ"],
+        "priority": "high"
+      },
+      {
+        "content": "ある要素を強調したいが、これ以上強調する要素を追加できない場合は、競合する他の要素をデエンファシス（強調を弱める）することを検討しましょう。例えば、アクティブなナビゲーション項目を目立たせるために、非アクティブな項目をより柔らかな色にすることができます。",
+        "source": "Refactoring UI",
+        "category": "visual-hierarchy",
+        "subcategory": "de-emphasis",
+        "keywords": ["デエンファシス", "強調", "ナビゲーション", "視覚的階層"],
+        "priority": "medium"
+      },
+      {
+        "content": "ユーザーにデータを提示する際（特にデータベースからのデータ）、安易に「ラベル：値」の形式で表示するのを避けましょう。フォーマットやコンテキストからデータの内容が明らかである場合は、ラベルを省略し、重要な情報を強調するように表示します。",
+        "source": "Refactoring UI",
+        "category": "content-design",
+        "subcategory": "data-display",
+        "keywords": ["データ表示", "ラベル", "コンテキスト", "階層", "簡潔性"],
+        "priority": "high"
+      },
+      {
+        "content": "セクションタイトルは、見た目の階層よりもセマンティックな目的で選択し、コンテンツが主役になるようにスタイルを設定しましょう。h1などの見出しタグのデフォルトスタイルに縛られず、必要に応じて小さくしたり、視覚的に隠したりします。",
+        "source": "Refactoring UI",
+        "category": "accessibility",
+        "subcategory": "semantic-markup",
+        "keywords": ["セマンティックマークアップ", "見出しタグ", "階層", "アクセシビリティ", "UIデザイン"],
+        "priority": "medium"
+      },
+      {
+        "content": "太字のテキストと同様に、アイコンは一般的に「重く」、多くの表面積を占めます。テキストの隣にアイコンを配置する場合、アイコンが強調されがちなので、より柔らかな色を与えることでコントラストを下げ、バランスを取りましょう。",
+        "source": "Refactoring UI",
+        "category": "visual-hierarchy",
+        "subcategory": "icons",
+        "keywords": ["アイコン", "コントラスト", "バランス", "視覚的階層", "フォントウェイト"],
+        "priority": "medium"
+      },
+      {
+        "content": "薄い1pxのボーダーが微妙すぎる場合、コントラストを下げる代わりに重さを増やす（幅を広げるなど）ことで強調することができます。これにより、デザインが粗くならずに柔らかい見た目を保つことができます。",
+        "source": "Refactoring UI",
+        "category": "visual-hierarchy",
+        "subcategory": "borders",
+        "keywords": ["ボーダー", "重さ", "コントラスト", "強調", "デザインのバランス"],
+        "priority": "medium"
+      },
+      {
+        "content": "複数のアクションがある場合、セマンティクスだけでなく、階層に基づいてデザインしましょう。プライマリアクションは目立つように、セカンダリアクションは明確だが目立たないように、ターシャリアクションは発見可能だが控えめにするのが良いでしょう。",
+        "source": "Refactoring UI",
+        "category": "interaction-design",
+        "subcategory": "buttons",
+        "keywords": ["ボタン", "アクション", "階層", "セマンティクス", "UX"],
+        "priority": "high"
+      },
+      {
+        "content": "デザインをすっきりさせる最も簡単な方法の1つは、すべての要素に少し余分なスペースを与えることです。まずは「多すぎる」と感じるくらいのスペースから始め、徐々に減らしていくことで、ちょうど良い量のホワイトスペースにたどり着くことができます。",
+        "source": "Refactoring UI",
+        "category": "layout-and-spacing",
+        "subcategory": "white-space",
+        "keywords": ["ホワイトスペース", "余白", "パディング", "クリーン", "シンプル"],
+        "priority": "high"
+      },
+      {
+        "content": "グリッドシステムはレイアウトの決定を簡素化しますが、すべての要素が流動的な幅を持つ必要はありません。サイドバーなど、内容に合わせて固定幅を設定した方が理にかなっている場合があります。",
+        "source": "Refactoring UI",
+        "category": "layout-and-spacing",
+        "subcategory": "grids",
+        "keywords": ["グリッド", "固定幅", "流動性", "レイアウト", "レスポンシブデザイン"],
+        "priority": "medium"
+      },
+      {
+        "content": "要素が異なる画面サイズで比例して縮小する必要があるという考えに縛られないようにしましょう。例えば、見出しのフォントサイズは本文のフォントサイズとは異なる比率で縮小する必要がある場合があります。",
+        "source": "Refactoring UI",
+        "category": "layout-and-spacing",
+        "subcategory": "responsive-sizing",
+        "keywords": ["レスポンシブデザイン", "スケーリング", "比例", "フォントサイズ", "パディング"],
+        "priority": "medium"
+      },
+      {
+        "content": "要素のグループを間隔によって結合させる場合、常にグループ内の間隔よりもグループ周辺の間隔を大きくしましょう。これにより、どの要素がどのグループに属するかが明確になり、UIの理解しやすさが向上します。",
+        "source": "Refactoring UI",
+        "category": "layout-and-spacing",
+        "subcategory": "ambiguous-spacing",
+        "keywords": ["間隔", "グループ化", "理解度", "視覚的階層"],
+        "priority": "high"
+      },
+      {
+        "content": "ほとんどのインターフェースではフォントサイズが多すぎます。デザインに一貫性をもたらし、ワークフローを高速化するために、事前に定義された厳密なタイプスケール（フォントサイズのセット）を設定しましょう。",
+        "source": "Refactoring UI",
+        "category": "typography",
+        "subcategory": "type-scale",
+        "keywords": ["タイプスケール", "フォントサイズ", "一貫性", "効率", "デザインシステム"],
+        "priority": "high"
+      },
+      {
+        "content": "HSL形式を使用して色を表現しましょう。HSLは人間が直感的に色を認識する方法（色相、彩度、明度）で色を表現するため、視覚的に関連性の高い色をコードで扱いやすくなります。",
+        "source": "Refactoring UI",
+        "category": "color",
+        "subcategory": "color-format",
+        "keywords": ["HSL", "色形式", "色相", "彩度", "明度", "開発効率"],
+        "priority": "high"
+      },
+      {
+        "content": "サイトには、主要なアクション、アクティブなナビゲーション要素などに使用される、1つまたは2つの主要な色が必要です。これらはサイトの全体的な外観を決定する色です。",
+        "source": "Refactoring UI",
+        "category": "color",
+        "subcategory": "primary-colors",
+        "keywords": ["プライマリカラー", "ブランドカラー", "配色", "主要色"],
+        "priority": "medium"
+      },
+      {
+        "content": "UIの異なるものを伝えるために、いくつかのアクセントカラーが必要です。例えば、新機能を強調するための目を引く色、破壊的なアクションを強調する赤、警告メッセージの黄色、良い傾向を示す緑などです。",
+        "source": "Refactoring UI",
+        "category": "color",
+        "subcategory": "accent-colors",
+        "keywords": ["アクセントカラー", "配色", "状態", "強調", "通知"],
+        "priority": "medium"
+      },
+      {
+        "content": "HSLの明度が0%または100%に近づくにつれて彩度の影響が弱まるため、色の明るいシェードと暗いシェードが色あせて見えないように、明度が50%から離れるほど彩度を上げる必要があります。",
+        "source": "Refactoring UI",
+        "category": "color",
+        "subcategory": "saturation",
+        "keywords": ["彩度", "明度", "HSL", "色の鮮やかさ", "色の調整"],
+        "priority": "medium"
+      },
+      {
+        "content": "純粋なグレーは彩度0%ですが、実際には暖色系のグレーや寒色系のグレーを使用することで、デザインに深みと雰囲気を加えることができます。青みを加えるとクールな印象に、黄やオレンジを加えると温かい印象になります。",
+        "source": "Refactoring UI",
+        "category": "color",
+        "subcategory": "grey-colors",
+        "keywords": ["グレー", "色温度", "彩度", "配色", "UIデザイン"],
+        "priority": "medium"
+      },
+      {
+        "content": "WCAGのコントラスト比の推奨事項を満たすために、白いテキストを暗い背景に配置するのではなく、暗いテキストを明るい背景に配置するなど、コントラストを反転させることを検討しましょう。これにより、アクセシビリティを維持しつつ、デザインの階層を改善できます。",
+        "source": "Refactoring UI",
+        "category": "accessibility",
+        "subcategory": "contrast",
+        "keywords": ["アクセシビリティ", "WCAG", "コントラスト", "テキスト", "色"],
+        "priority": "high"
+      },
+      {
+        "content": "色は情報を強化し、理解を容易にする素晴らしい方法ですが、色覚異常のユーザーがUIを解釈するのに苦労しないよう、色だけに頼らないように注意しましょう。アイコンを追加するなど、他の方法でも情報を伝えるようにします。",
+        "source": "Refactoring UI",
+        "category": "accessibility",
+        "subcategory": "color-blindness",
+        "keywords": ["アクセシビリティ", "色覚異常", "色だけに頼らない", "アイコン", "情報伝達"],
+        "priority": "high"
+      },
+      {
+        "content": "インターフェースの要素がページから浮き上がっているように見えたり、背景に埋め込まれているように見えたりする効果を出すには、現実世界の光が物にどのように影響するかを模倣します。上からの光をエミュレートし、明るいエッジと暗い影を適切に配置します。",
+        "source": "Refactoring UI",
+        "category": "visual-design",
+        "subcategory": "depth",
+        "keywords": ["奥行き", "光", "影", "立体感", "UI効果"],
+        "priority": "medium"
+      },
+      {
+        "content": "影は単なる派手な効果ではなく、要素を仮想のz軸上に配置し、意味のある奥行き感を伝えることができます。小さい影はわずかに浮き上がっているように見せ、大きい影はユーザーにより近く感じさせます。",
+        "source": "Refactoring UI",
+        "category": "visual-design",
+        "subcategory": "shadows",
+        "keywords": ["影", "奥行き", "Elevation", "フォーカス", "UI効果"],
+        "priority": "medium"
+      },
+      {
+        "content": "影は2つの部分で構成されることがあります。1つ目は大きく柔らかい影で、直接的な光源によるオブジェクトの後ろにキャストされる影をシミュレートします。2つ目はタイトで暗い影で、周囲の光が届きにくいオブジェクトの下の影をシミュレートします。",
+        "source": "Refactoring UI",
+        "category": "visual-design",
+        "subcategory": "shadow-composition",
+        "keywords": ["影", "複数の影", "奥行き", "光の表現", "UI効果"],
+        "priority": "medium"
+      },
+      {
+        "content": "フラットデザインでも奥行きを伝えることは可能です。背景色よりも明るい要素は近くに、暗い要素は遠くに感じさせることができます。また、ぼかしのない短くて垂直にオフセットされたソリッドシャドウを使用することもできます。",
+        "source": "Refactoring UI",
+        "category": "visual-design",
+        "subcategory": "flat-design",
+        "keywords": ["フラットデザイン", "奥行き", "色", "ソリッドシャドウ", "UIデザイン"],
+        "priority": "medium"
+      },
+      {
+        "content": "デザインに複数のレイヤーがあるように感じさせるために、異なる要素を重ねるのが効果的です。カードを2つの異なる背景の間に配置したり、要素を親よりも高くして両側で重なるようにしたりします。",
+        "source": "Refactoring UI",
+        "category": "visual-design",
+        "subcategory": "overlapping-elements",
+        "keywords": ["要素の重ね合わせ", "レイヤー", "奥行き", "UIデザイン"],
+        "priority": "medium"
+      },
+      {
+        "content": "悪い写真はデザイン全体を台無しにします。高品質なストックフォトを使用するか、必要に応じてプロのフォトグラファーを雇いましょう。プレースホルダー画像に頼り、後でスマートフォンの写真に置き換えるのは避けましょう。",
+        "source": "Refactoring UI",
+        "category": "images",
+        "subcategory": "photo-quality",
+        "keywords": ["写真", "画像品質", "ストックフォト", "ビジュアルデザイン"],
+        "priority": "high"
+      },
+      {
+        "content": "大きなヒーロー画像にヘッドラインを配置する際、テキストのコントラストが一貫していることを確認しましょう。半透明のオーバーレイを追加したり、画像自体のコントラストを下げたり、単色で画像に色を付けたりすることで解決できます。",
+        "source": "Refactoring UI",
+        "category": "images",
+        "subcategory": "text-on-images",
+        "keywords": ["画像とテキスト", "コントラスト", "オーバーレイ", "色付け", "可読性"],
+        "priority": "high"
+      },
+      {
+        "content": "アイコンを元のサイズより大きく拡大しないようにしましょう。ベクター画像であっても、小さなサイズで描かれたアイコンは拡大するとプロフェッショナルに見えません。代わりに、別の形で囲むなどして、アイコンの実際のサイズを保ちつつ、大きなスペースを埋めます。",
+        "source": "Refactoring UI",
+        "category": "images",
+        "subcategory": "icon-sizing",
+        "keywords": ["アイコン", "スケーリング", "ベクター画像", "品質", "詳細"],
+        "priority": "medium"
+      },
+      {
+        "content": "ユーザーがアップロードした画像は、デザインの一貫性を損なう可能性があります。レイアウトを乱さないように、画像を固定されたコンテナの中央に配置し、収まらない部分はトリミングしましょう。背景が似た色で画像が背景と一体化するのを防ぐために、微妙なインナーボックスシャドウを使用するのも効果的です。",
+        "source": "Refactoring UI",
+        "category": "images",
+        "subcategory": "user-uploaded-content",
+        "keywords": ["ユーザー生成コンテンツ", "画像管理", "アスペクト比", "トリミング", "ボックスシャドウ"],
+        "priority": "high"
+      },
+      {
+        "content": "箇条書きリストの箇条書き記号をアイコンに置き換えたり、引用符を視覚的な要素として強調したり、リンクに特別なスタイルを適用したりするなど、既存の要素を「スーパーチャージ」することでデザインを活性化できます。",
+        "source": "Refactoring UI",
+        "category": "finishing-touches",
+        "subcategory": "supercharge-defaults",
+        "keywords": ["装飾", "アイコン", "引用", "リンク", "カスタムスタイル"],
+        "priority": "low"
+      },
+      {
+        "content": "デザインに視覚的な魅力を加えるために、カードの上部、アクティブなナビゲーション項目、アラートメッセージの側面、見出しの下などにカラフルなアクセントボーダーを追加することを検討しましょう。",
+        "source": "Refactoring UI",
+        "category": "finishing-touches",
+        "subcategory": "accent-borders",
+        "keywords": ["アクセント", "ボーダー", "色", "視覚的魅力", "UI装飾"],
+        "priority": "low"
+      },
+      {
+        "content": "デザインが少し地味に感じる場合、背景に変化を加えることで単調さを解消できます。背景色を変更したり、微妙なグラデーションを使用したり、繰り返しパターンやシンプルな図形、イラストを追加したりします。",
+        "source": "Refactoring UI",
+        "category": "finishing-touches",
+        "subcategory": "background-decoration",
+        "keywords": ["背景", "装飾", "パターン", "グラデーション", "図形", "UI装飾"],
+        "priority": "low"
+      },
+      {
+        "content": "ユーザー生成コンテンツに依存する機能の場合、空の状態（Empty State）を優先的にデザインしましょう。画像やイラストを取り入れ、コールトゥアクションを強調することで、ユーザーに次のステップを促します。",
+        "source": "Refactoring UI",
+        "category": "finishing-touches",
+        "subcategory": "empty-states",
+        "keywords": ["空の状態", "エンプティステート", "ユーザー体験", "コールトゥアクション", "オンボーディング"],
+        "priority": "high"
+      },
+      {
+        "content": "2つの要素間に分離を作成する必要がある場合、すぐにボーダーを使用するのを避けましょう。ボックスシャドウ、異なる背景色、または単純に要素間の間隔を増やすことで、デザインを煩雑にすることなく目的を達成できます。",
+        "source": "Refactoring UI",
+        "category": "layout-and-spacing",
+        "subcategory": "fewer-borders",
+        "keywords": ["ボーダー", "分離", "ボックスシャドウ", "背景色", "間隔", "UIの簡潔性"],
+        "priority": "medium"
+      },
+      {
+        "content": "特定のコンポーネントが「こうあるべき」という既成概念に囚われず、既成概念を打ち破るようなデザインを試みましょう。ドロップダウンメニューに複数のカラムやサポートテキストを追加したり、テーブルの表現方法を変えたり、ラジオボタンを選択可能なカードにしたりするなど、創造的なアプローチを取り入れましょう。",
+        "source": "Refactoring UI",
+        "category": "design-thinking",
+        "subcategory": "think-outside-the-box",
+        "keywords": ["創造性", "既成概念打破", "コンポーネントデザイン", "UXの向上", "デザイン思考"],
+        "priority": "medium"
+      },
+      {
+        "content": "デザインで気に入ったものを見つけたら、「デザイナーが私が思いつかなかったことをしたか？」と自問自答しましょう。非直感的な決定に注目することで、自分のデザインに適用できる新しいアイデアを発見できます。",
+        "source": "Refactoring UI",
+        "category": "learning-and-growth",
+        "subcategory": "observational-learning",
+        "keywords": ["学習", "デザイン分析", "非直感的なデザイン", "インスピレーション"],
+        "priority": "medium"
+      },
+      {
+        "content": "お気に入りのインターフェースをゼロから再構築することは、デザインを洗練させる小さな詳細に気づくための最良の方法です。デベロッパーツールを覗かずに再構築することで、行の高さの調整、文字間隔の追加、複数の影の組み合わせなどのコツを発見できます。",
+        "source": "Refactoring UI",
+        "category": "learning-and-growth",
+        "subcategory": "rebuilding-interfaces",
+        "keywords": ["実践学習", "UI再構築", "デザインの細部", "自己学習"],
+        "priority": "high"
+      },
+      {
+        "content": "Web用に構築する際は、セマンティックなマークアップを使用することが重要です。見出しタグ（h1, h2, h3など）は意味的な目的で選択し、そのスタイルは視覚的階層を最適に表現するように自由に調整します。大きなフォントサイズに縛られず、コンテンツの焦点を考慮しましょう。",
+        "source": "Refactoring UI",
+        "category": "accessibility",
+        "subcategory": "semantic-markup",
+        "keywords": ["セマンティックマークアップ", "HTML構造", "アクセシビリティ", "見出し", "UIデザイン"],
+        "priority": "high"
+      },
+      {
+        "content": "HSL形式は、色を人間が直感的に認識する属性（色相、彩度、明度）で表現するため、ヘックスコードやRGBよりも有用です。これにより、視覚的に関連性の高い色をコード上で簡単に調整できます。",
+        "source": "Refactoring UI",
+        "category": "color",
+        "subcategory": "color-model",
+        "keywords": ["HSL", "色モデル", "色相", "彩度", "明度", "デザインツール"],
+        "priority": "high"
+      },
+      {
+        "content": "複雑なUIでは、10種類もの異なる色と、それぞれ5〜10段階のシェードが必要になることは珍しくありません。例えば、テキスト、背景、パネル、フォームコントロールのほとんどはグレーであり、主要なアクションやアクティブなナビゲーションにはプライマリカラーが必要です。さらに、警告や成功などのセマンティックな状態を伝えるためのアクセントカラーも必要です。",
+        "source": "Refactoring UI",
+        "category": "color",
+        "subcategory": "palette-size",
+        "keywords": ["カラーパレット", "色数", "グレー", "プライマリカラー", "アクセントカラー", "UI設計"],
+        "priority": "medium"
+      },
+      {
+        "content": "カラーパレットで色の明るいまたは暗いバリエーションを作成する際、CSSプリプロセッサの関数（`lighten`や`darken`など）を使用してオンザフライでシェードを作成するのを避けましょう。代わりに、事前に固定されたシェードセットを定義し、そこから選択するようにします。これにより、一貫性が保たれ、35種類の微妙に異なる青色が発生するような事態を防げます。",
+        "source": "Refactoring UI",
+        "category": "color",
+        "subcategory": "shade-definition",
+        "keywords": ["シェード", "カラーパレット", "一貫性", "色管理", "デザインシステム"],
+        "priority": "high"
+      },
+      {
+        "content": "テキストの行長は、45〜75文字の間に収めるのが最適です。これにより、可読性が向上し、ユーザーが次の行を見つけやすくなります。コンテンツエリアが広い場合でも、段落の幅は制限しましょう。",
+        "source": "Refactoring UI",
+        "category": "typography",
+        "subcategory": "line-length",
+        "keywords": ["行長", "可読性", "段落", "テキストデザイン", "em単位"],
+        "priority": "high"
+      },
+      {
+        "content": "複数のフォントサイズを1行で混在させる場合、テキストを垂直方向で中央揃えにするのではなく、ベースラインで揃えましょう。これにより、視覚的な基準点が明確になり、よりシンプルでクリーンな見た目になります。",
+        "source": "Refactoring UI",
+        "category": "typography",
+        "subcategory": "alignment",
+        "keywords": ["ベースライン", "テキストアラインメント", "フォントサイズ", "可読性"],
+        "priority": "medium"
+      },
+      {
+        "content": "行の高さ（line-height）は、行長とフォントサイズに比例して調整する必要があります。狭いコンテンツは短い行の高さ（例：1.5）を使用できますが、広いコンテンツはより長い行の高さ（例：2）が必要になる場合があります。また、テキストが小さい場合はより高い行の高さ、大きい見出しテキストには短い行の高さを使用します。",
+        "source": "Refactoring UI",
+        "category": "typography",
+        "subcategory": "line-height",
+        "keywords": ["行の高さ", "line-height", "可読性", "フォントサイズ", "行長"],
+        "priority": "high"
+      },
+      {
+        "content": "インターフェースのほとんどすべてがリンクである場合、段落テキストでリンクを「目立たせる」ために設計された処理を使用すると、非常に過度な印象を与える可能性があります。代わりに、より微妙な方法（より重いフォントウェイトや暗い色など）でほとんどのリンクを強調しましょう。",
+        "source": "Refactoring UI",
+        "category": "interaction-design",
+        "subcategory": "links",
+        "keywords": ["リンク", "強調", "フォントウェイト", "色", "インタラクション"],
+        "priority": "medium"
+      },
+      {
+        "content": "テキストは一般的に、言語の方向に合わせて左揃えにする必要があります。見出しや短い独立したテキストブロックには中央揃えが効果的ですが、2、3行を超える長いテキストは左揃えが好ましいです。数字を含むテーブルでは、数字を右揃えにすると比較しやすくなります。",
+        "source": "Refactoring UI",
+        "category": "typography",
+        "subcategory": "text-alignment",
+        "keywords": ["テキスト揃え", "左揃え", "中央揃え", "右揃え", "テーブル", "可読性"],
+        "priority": "medium"
+      },
+      {
+        "content": "レター・スペーシングは通常、そのままにしておくべきですが、特定の状況では調整することでデザインが向上します。ヘッドラインではレター・スペーシングを狭めると凝縮された見た目になり、すべて大文字のテキストでは可読性を向上させるためにレター・スペーシングを広げるのが効果的です。",
+        "source": "Refactoring UI",
+        "category": "typography",
+        "subcategory": "letter-spacing",
+        "keywords": ["レター・スペーシング", "文字間隔", "ヘッドライン", "大文字", "可読性"],
+        "priority": "medium"
+      }
+    ]
+}

@@ -1,0 +1,2309 @@
+{
+    "guidelines": [
+      {
+        "content": "コントロールとインターフェース要素は、その下のコンテンツを際立たせ、区別するように視覚的な階層を確立する必要があります。",
+        "source": "Apple Human Interface Guidelines",
+        "category": "core_principles",
+        "subcategory": "hierarchy",
+        "keywords": ["ヒエラルキー", "hierarchy", "視覚的階層", "visual hierarchy", "コンテンツ", "content"],
+        "priority": "high"
+      },
+      {
+        "content": "ハードウェアとソフトウェアの同心円状のデザインと調和し、インターフェース要素、システム体験、デバイス間の統一感を創出します。",
+        "source": "Apple Human Interface Guidelines",
+        "category": "core_principles",
+        "subcategory": "harmony",
+        "keywords": ["ハーモニー", "harmony", "統一感", "unity", "ハードウェア", "hardware", "ソフトウェア", "software"],
+        "priority": "high"
+      },
+      {
+        "content": "プラットフォームの慣習を採用し、ウィンドウサイズやディスプレイ間で継続的に適応する一貫したデザインを維持します。これは、学習曲線を減らし、ユーザーの不満を軽減する上で最も重要な利点の一つです。",
+        "source": "Apple Human Interface Guidelines",
+        "category": "core_principles",
+        "subcategory": "consistency",
+        "keywords": ["一貫性", "consistency", "プラットフォーム慣習", "platform conventions", "学習曲線", "learning curve", "ユーザー体験", "user experience"],
+        "priority": "high"
+      },
+      {
+        "content": "インターフェースは読みやすく、理解しやすいものでなければなりません。明確なテキスト、鮮明なアイコン、強力な視覚的階層に焦点を当て、曖昧さや混乱を避けます。",
+        "source": "Apple Human Interface Guidelines",
+        "category": "core_principles",
+        "subcategory": "clarity",
+        "keywords": ["明瞭性", "clarity", "読みやすさ", "readability", "テキスト", "text", "アイコン", "icon", "視覚的階層", "visual hierarchy"],
+        "priority": "high"
+      },
+      {
+        "content": "UIは控えめに振る舞い、ユーザーのコンテンツが主役となるようにします。これは、流動的なアニメーションや半透明、または控えめなUI要素によって達成されることが多いです。",
+        "source": "Apple Human Interface Guidelines",
+        "category": "core_principles",
+        "subcategory": "deference",
+        "keywords": ["尊重", "deference", "コンテンツファースト", "content-first", "UI", "控えめ", "subtle"],
+        "priority": "high"
+      },
+      {
+        "content": "視覚的なレイヤー、スムーズなトランジション、論理的な階層を通じて、空間的な奥行きと直感的なナビゲーションの感覚を生み出します。",
+        "source": "Apple Human Interface Guidelines",
+        "category": "core_principles",
+        "subcategory": "depth",
+        "keywords": ["奥行き", "depth", "レイヤー", "layers", "トランジション", "transitions", "ナビゲーション", "navigation"],
+        "priority": "high"
+      },
+      {
+        "content": "同じ色を異なる意味で使用することを避けます。ステータスやインタラクティビティなどの情報を伝えるために色を使用する場合、インターフェース全体で一貫して使用します。",
+        "source": "Apple Human Interface Guidelines",
+        "category": "foundational_elements",
+        "subcategory": "color_system",
+        "keywords": ["カラー", "color", "一貫性", "consistency", "ステータス", "status", "インタラクティビティ", "interactivity"],
+        "priority": "medium"
+      },
+      {
+        "content": "アプリケーションの色が、ライトモードとダークモードの両方のコンテキストで適切に機能することを確認します。システムカラーは、システムの外観に応じて微妙に変化し、テキスト、シンボル、その他の要素の適切な色の区別とコントラストを確保するために調整されます。カスタムカラーを使用する場合は、ライトとダークのバリアント、および各バリアントのコントラストを高めるオプションを提供します。",
+        "source": "Apple Human Interface Guidelines",
+        "category": "foundational_elements",
+        "subcategory": "color_system",
+        "keywords": ["カラー", "color", "適応性", "adaptability", "ライトモード", "light mode", "ダークモード", "dark mode", "コントラスト", "contrast"],
+        "priority": "high"
+      },
+      {
+        "content": "さまざまな照明条件（例：晴れた日の屋外、薄暗い場所、visionOS環境）や異なるデバイス（True Toneディスプレイ、さまざまなテレビ）でカラーテーマをテストします。",
+        "source": "Apple Human Interface Guidelines",
+        "category": "foundational_elements",
+        "subcategory": "color_system",
+        "keywords": ["カラー", "color", "テスト", "testing", "照明", "lighting", "デバイス", "device"],
+        "priority": "medium"
+      },
+      {
+        "content": "アートワークや半透明の要素（ツールバーなど）が近くの色にどのように影響するかを考慮します。",
+        "source": "Apple Human Interface Guidelines",
+        "category": "foundational_elements",
+        "subcategory": "color_system",
+        "keywords": ["カラー", "color", "アートワーク", "artwork", "透明度", "transparency", "ツールバー", "toolbar"],
+        "priority": "low"
+      },
+      {
+        "content": "ユーザーが色を選択できるようにする場合、システム提供のカラーコントロール（例：`ColorPicker`）を優先します。",
+        "source": "Apple Human Interface Guidelines",
+        "category": "foundational_elements",
+        "subcategory": "color_system",
+        "keywords": ["カラー", "color", "ユーザー選択", "user choice", "ColorPicker", "システムコントロール", "system controls"],
+        "priority": "medium"
+      },
+      {
+        "content": "オブジェクトの区別、インタラクティビティの表示、または重要な情報の伝達を色だけに頼ることを避けます。色覚異常やその他の視覚障害を持つユーザーが理解できるように、代替手段（テキストラベル、グリフ形状）を提供します。十分なコントラスト比（最小4.5:1、推奨7:1）を確保します。",
+        "source": "Apple Human Interface Guidelines",
+        "category": "foundational_elements",
+        "subcategory": "color_system",
+        "keywords": ["カラー", "color", "アクセシビリティ", "accessibility", "コントラスト比", "contrast ratio", "色覚異常", "color blindness", "代替手段", "alternative means"],
+        "priority": "high"
+      },
+      {
+        "content": "使用する色が他の国や文化でどのように認識されるかを考慮します（例：赤が一部の文化では危険を意味し、他の文化では肯定的な意味を持つ場合がある）。",
+        "source": "Apple Human Interface Guidelines",
+        "category": "foundational_elements",
+        "subcategory": "color_system",
+        "keywords": ["カラー", "color", "文化的考慮事項", "cultural considerations", "ローカライズ", "localization"],
+        "priority": "medium"
+      },
+      {
+        "content": "主要なアクション（例：「保存」、「続行」）には青を、破壊的なアクション（例：「削除」）には赤を予約します。",
+        "source": "Apple Human Interface Guidelines",
+        "category": "foundational_elements",
+        "subcategory": "color_system",
+        "keywords": ["カラー", "color", "特定の色使用", "specific color use", "主要アクション", "primary action", "破壊的アクション", "destructive action"],
+        "priority": "medium"
+      },
+      {
+        "content": "ほとんどの人が容易に読めるフォントサイズを使用します。さまざまな視距離や条件下でコンテンツが読めるように、各プラットフォームの推奨されるデフォルトおよび最小テキストサイズ（iOS/iPadOSでは11ptなど）に従います。",
+        "source": "Apple Human Interface Guidelines",
+        "category": "foundational_elements",
+        "subcategory": "typography",
+        "keywords": ["タイポグラフィ", "typography", "読みやすさ", "readability", "フォントサイズ", "font size", "プラットフォーム", "platform"],
+        "priority": "high"
+      },
+      {
+        "content": "一般的に、細いフォントの太さ（Ultralight、Thin、Light）は避けます。これらは、特にテキストが小さい場合に読みにくい場合があります。Regular、Medium、Semibold、またはBoldのフォントの太さを推奨します。",
+        "source": "Apple Human Interface Guidelines",
+        "category": "foundational_elements",
+        "subcategory": "typography",
+        "keywords": ["タイポグラフィ", "typography", "フォントの太さ", "font weight", "読みやすさ", "readability"],
+        "priority": "medium"
+      },
+      {
+        "content": "重要な情報を強調し、階層を視覚化するために、フォントの太さ、サイズ、色を必要に応じて調整します。ユーザーがテキストサイズを調整しても、テキスト要素の相対的な階層と視覚的な区別を維持するようにします。",
+        "source": "Apple Human Interface Guidelines",
+        "category": "foundational_elements",
+        "subcategory": "typography",
+        "keywords": ["タイポグラフィ", "typography", "強調", "emphasis", "階層", "hierarchy", "Dynamic Type"],
+        "priority": "high"
+      },
+      {
+        "content": "高度にカスタマイズされたインターフェースであっても、使用する書体の数を最小限に抑えます。あまりにも多くの異なる書体を混ぜると、情報階層が不明瞭になり、読みやすさが損なわれるだけでなく、インターフェースが内部的に一貫性がない、またはデザインが不十分であると感じられる可能性があります。",
+        "source": "Apple Human Interface Guidelines",
+        "category": "foundational_elements",
+        "subcategory": "typography",
+        "keywords": ["タイポグラフィ", "typography", "書体の最小化", "minimize typefaces", "一貫性", "consistency", "読みやすさ", "readability"],
+        "priority": "medium"
+      },
+      {
+        "content": "San Francisco（SF）は、ラテン文字、ギリシャ文字、キリル文字のシステムフォントであるサンセリフ書体ファミリーです（SF Pro、SF Compact、SF Arabicなど）。New York（NY）は、SFフォントと組み合わせて機能するように設計されたセリフ書体ファミリーです。",
+        "source": "Apple Human Interface Guidelines",
+        "category": "foundational_elements",
+        "subcategory": "typography",
+        "keywords": ["タイポグラフィ", "typography", "システムフォント", "system font", "SF Pro", "SF Compact", "SF Arabic", "New York", "NY"],
+        "priority": "low"
+      },
+      {
+        "content": "フォントサイズと太さを通じて情報階層を便利かつ一貫した方法で伝えるために、システム定義のテキストスタイルを使用します。システムフォントでテキストスタイルを使用すると、Dynamic Typeとより大きなアクセシビリティテキストサイズ（利用可能な場合）のサポートも保証され、ユーザーが自分に合ったテキストサイズを選択できます。",
+        "source": "Apple Human Interface Guidelines",
+        "category": "foundational_elements",
+        "subcategory": "typography",
+        "keywords": ["タイポグラフィ", "typography", "組み込みテキストスタイル", "built-in text styles", "Dynamic Type", "アクセシビリティ", "accessibility"],
+        "priority": "high"
+      },
+      {
+        "content": "テキストサイズの変更に対応する際に、重要なコンテンツを優先します。すべてのコンテンツが等しく重要であるわけではありません。ユーザーがより大きなテキストサイズを選択する場合、通常は関心のあるコンテンツを読みやすくしたいと考えており、画面上のすべての単語のサイズを大きくしたいとは限りません。",
+        "source": "Apple Human Interface Guidelines",
+        "category": "foundational_elements",
+        "subcategory": "typography",
+        "keywords": ["タイポグラフィ", "typography", "Dynamic Type", "アクセシビリティ", "accessibility", "テキストサイズ", "text size", "コンテンツ優先", "content priority"],
+        "priority": "high"
+      },
+      {
+        "content": "カスタム書体はiOSでサポートされていますが、読みにくいことが多いです。ブランディング目的や没入型ゲーム体験の作成など、カスタムフォントが必要な場合を除き、システムフォントを使用します。カスタムフォントを使用する場合は、読みやすいことを確認し、アクセシビリティ機能（太字テキストが有効になった場合など）を実装します。",
+        "source": "Apple Human Interface Guidelines",
+        "category": "foundational_elements",
+        "subcategory": "typography",
+        "keywords": ["タイポグラフィ", "typography", "カスタムフォント", "custom fonts", "システムフォント", "system fonts", "読みやすさ", "readability", "アクセシビリティ", "accessibility"],
+        "priority": "medium"
+      },
+      {
+        "content": "トラッキング（文字間のスペース）とリーディング（行間のスペース）を適切に調整します。広い列や長い文章では、行間のスペースを広げると読みやすくなります。高さが制限された領域では、行間のスペースを減らすとテキストが収まるのに役立ちますが、3行以上のテキストでは避けます。",
+        "source": "Apple Human Interface Guidelines",
+        "category": "foundational_elements",
+        "subcategory": "typography",
+        "keywords": ["タイポグラフィ", "typography", "トラッキング", "tracking", "リーディング", "leading", "スペース", "spacing"],
+        "priority": "medium"
+      },
+      {
+        "content": "関連する項目を、ネガティブスペース、背景の形状、色、マテリアル、または区切り線を使用してグループ化し、ユーザーが目的の情報を簡単に見つけられるようにします。コンテンツとコントロールが明確に区別されていることを確認します。",
+        "source": "Apple Human Interface Guidelines",
+        "category": "foundational_elements",
+        "subcategory": "layout",
+        "keywords": ["レイアウト", "layout", "グループ化", "grouping", "ネガティブスペース", "negative space", "区切り線", "separators"],
+        "priority": "medium"
+      },
+      {
+        "content": "重要な情報には十分なスペースを与え、すぐに見つけられるようにします。非本質的な詳細で混雑させないでください。最も重要な項目は、ウィンドウ、ディスプレイ、または視野の上部および先頭側に配置するのが一般的です（読み順）。",
+        "source": "Apple Human Interface Guidelines",
+        "category": "foundational_elements",
+        "subcategory": "layout",
+        "keywords": ["レイアウト", "layout", "優先順位付け", "prioritization", "スペース", "space", "認知負荷", "cognitive load"],
+        "priority": "high"
+      },
+      {
+        "content": "コンテキストの変化（デバイスの回転、ウィンドウのリサイズ、複数のディスプレイ、異なるデバイスへの切り替え）に優雅に適応し、認識可能な一貫性を保つレイアウトを設計します。システム定義のセーフエリア、マージン、ガイドを尊重します。",
+        "source": "Apple Human Interface Guidelines",
+        "category": "foundational_elements",
+        "subcategory": "layout",
+        "keywords": ["レイアウト", "layout", "適応性", "adaptability", "レスポンシブ", "responsive", "セーフエリア", "safe area", "マージン", "margins"],
+        "priority": "high"
+      },
+      {
+        "content": "背景と全画面のアートワークがディスプレイの端まで広がるようにします。スクロール可能なレイアウトは、デバイス画面の下部と側面まで続くようにします。コントロールやナビゲーションコンポーネントは、コンテンツの上に表示されるため、レイアウトでこれを考慮することが重要です。",
+        "source": "Apple Human Interface Guidelines",
+        "category": "foundational_elements",
+        "subcategory": "layout",
+        "keywords": ["レイアウト", "layout", "コンテンツの拡張", "content extension", "全画面", "full screen", "スクロール", "scrolling"],
+        "priority": "medium"
+      },
+      {
+        "content": "Liquid Glassマテリアルを活用して、iOS、iPadOS、macOS全体で一貫したコントロールの明確な外観を提供します。背景の代わりに、スクロールエッジ効果を使用してコンテンツとコントロール領域間のトランジションを提供します。",
+        "source": "Apple Human Interface Guidelines",
+        "category": "foundational_elements",
+        "subcategory": "layout",
+        "keywords": ["レイアウト", "layout", "コントロールとコンテンツの区別", "distinguish controls and content", "Liquid Glass", "スクロールエッジ効果", "scroll edge effect"],
+        "priority": "low"
+      },
+      {
+        "content": "コンポーネントを互いに揃えることで、スキャンしやすくし、組織と階層を伝えます。アライメントは、アプリを整頓された状態に見せ、情報を簡単に見つけられるようにします。",
+        "source": "Apple Human Interface Guidelines",
+        "category": "foundational_elements",
+        "subcategory": "layout",
+        "keywords": ["レイアウト", "layout", "アライメント", "alignment", "階層", "hierarchy", "スキャン", "scanability"],
+        "priority": "medium"
+      },
+      {
+        "content": "現在非表示になっているコンテンツをユーザーが発見できるように、視覚的なヒントを提供します（開示コントロール、部分的な項目表示など）。",
+        "source": "Apple Human Interface Guidelines",
+        "category": "foundational_elements",
+        "subcategory": "layout",
+        "keywords": ["レイアウト", "layout", "漸進的開示", "progressive disclosure", "視覚的ヒント", "visual cues"],
+        "priority": "low"
+      },
+      {
+        "content": "インタラクティブなコントロールの周囲に十分なスペースを確保し、論理的なセクションにグループ化することで、使いやすくします。関連性のないコントロールが近すぎたり、他のコンテンツで混雑したりすると、使いにくくなる可能性があります。",
+        "source": "Apple Human Interface Guidelines",
+        "category": "foundational_elements",
+        "subcategory": "layout",
+        "keywords": ["レイアウト", "layout", "インタラクティブコンポーネント", "interactive components", "スペース", "space", "ユーザビリティ", "usability"],
+        "priority": "high"
+      },
+      {
+        "content": "Appleのレイアウトは、異なる画面間で一貫したサイズを確保するために、ピクセルではなくポイントを使用します。標準的な測定値には、コアインターフェース要素の8ポイント、16ポイント、32ポイントの増分が含まれます。",
+        "source": "Apple Human Interface Guidelines",
+        "category": "foundational_elements",
+        "subcategory": "layout",
+        "keywords": ["レイアウト", "layout", "ポイントベースの測定", "point-based measurement", "一貫性", "consistency", "単位", "units"],
+        "priority": "medium"
+      },
+      {
+        "content": "ホワイトスペース（セクション間のマクロホワイトスペース、要素間のミクロホワイトスペース）を使用して、視覚的な余白を作り、ユーザーをコンテンツに導き、重要な情報を強調します。Dynamic Typeは、テキストサイズが変更されたときに、インターフェース要素間の適切な関係を維持するために、スペースを自動的に調整します。",
+        "source": "Apple Human Interface Guidelines",
+        "category": "foundational_elements",
+        "subcategory": "layout",
+        "keywords": ["レイアウト", "layout", "ホワイトスペース", "whitespace", "視覚的余白", "visual margin", "Dynamic Type"],
+        "priority": "high"
+      },
+      {
+        "content": "ユニークで記憶に残るアイコンは、アプリやゲームの目的と個性を表現し、ユーザーが一目で認識できるようにします。",
+        "source": "Apple Human Interface Guidelines",
+        "category": "foundational_elements",
+        "subcategory": "application_icons",
+        "keywords": ["アプリケーションアイコン", "application icon", "ユニーク", "unique", "認識", "recognition", "ブランド", "brand"],
+        "priority": "high"
+      },
+      {
+        "content": "アプリケーションアイコン（特にvisionOS）は、奥行きを提供するために2〜3のレイヤーで構成され、フォーカス時に微妙に異なる速度で移動します。前景レイヤーでは明確に定義されたエッジを推奨し、不透明度を変化させて奥行きと活気を高めます。背景は前景コンテンツを際立たせ、強調するように設計します（微妙なグラデーションが効果的）。背景は全面に広がり、不透明である必要があります。",
+        "source": "Apple Human Interface Guidelines",
+        "category": "foundational_elements",
+        "subcategory": "application_icons",
+        "keywords": ["アプリケーションアイコン", "application icon", "レイヤー", "layers", "奥行き", "depth", "visionOS", "グラデーション", "gradients"],
+        "priority": "medium"
+      },
+      {
+        "content": "スケーラビリティのためにベクターグラフィック（SVG、PDF）を推奨します。シェーディング、テクスチャ、ハイライトなどの効果を含むラスター画像にはPNGを使用します。",
+        "source": "Apple Human Interface Guidelines",
+        "category": "foundational_elements",
+        "subcategory": "application_icons",
+        "keywords": ["アプリケーションアイコン", "application icon", "グラフィック形式", "graphic format", "ベクター", "vector", "SVG", "PDF", "ラスター", "raster", "PNG"],
+        "priority": "medium"
+      },
+      {
+        "content": "適切に整形され、マスクされていないレイヤーを作成します。システムがアイコンの最終的な形状を生成するためにすべてのレイヤーエッジをマスクします（iOS/iPadOS/macOSでは角丸、visionOS/watchOSでは円形、tvOSでは長方形）。",
+        "source": "Apple Human Interface Guidelines",
+        "category": "foundational_elements",
+        "subcategory": "application_icons",
+        "keywords": ["アプリケーションアイコン", "application icon", "マスキング", "masking", "形状", "shape", "プラットフォーム", "platform"],
+        "priority": "high"
+      },
+      {
+        "content": "システムが角を調整したりマスキングを適用したりする際に切り捨てを避けるため、主要なコンテンツを中央に配置します。",
+        "source": "Apple Human Interface Guidelines",
+        "category": "foundational_elements",
+        "subcategory": "application_icons",
+        "keywords": ["アプリケーションアイコン", "application icon", "中央配置", "central alignment", "切り捨て", "truncation"],
+        "priority": "medium"
+      },
+      {
+        "content": "サポートするすべてのプラットフォームで視覚的に一貫したアイコンデザインを提供します。",
+        "source": "Apple Human Interface Guidelines",
+        "category": "foundational_elements",
+        "subcategory": "application_icons",
+        "keywords": ["アプリケーションアイコン", "application icon", "一貫性", "consistency", "プラットフォーム", "platform"],
+        "priority": "high"
+      },
+      {
+        "content": "シンプルさを追求します。シンプルなアイコンは、ユーザーが理解し、認識しやすい傾向があります。細かい視覚的特徴を持つアイコンは、煩雑に見えたり、小さいサイズでは詳細が判別しにくくなったりする場合があります。",
+        "source": "Apple Human Interface Guidelines",
+        "category": "foundational_elements",
+        "subcategory": "application_icons",
+        "keywords": ["アプリケーションアイコン", "application icon", "シンプルさ", "simplicity", "認識", "recognition"],
+        "priority": "high"
+      },
+      {
+        "content": "体験やブランドにとって不可欠な場合にのみ、アイコンにテキストを含めます。不要な単語（例：「Watch」、「Play」）は避け、アクセシビリティやローカライズをサポートしません。",
+        "source": "Apple Human Interface Guidelines",
+        "category": "foundational_elements",
+        "subcategory": "application_icons",
+        "keywords": ["アプリケーションアイコン", "application icon", "アイコン内のテキスト", "text in icon", "ブランド", "brand", "アクセシビリティ", "accessibility", "ローカライズ", "localization"],
+        "priority": "medium"
+      },
+      {
+        "content": "Appleのハードウェア製品のレプリカを使用しない（著作権で保護されている）。写真よりもイラストを推奨します。",
+        "source": "Apple Human Interface Guidelines",
+        "category": "foundational_elements",
+        "subcategory": "application_icons",
+        "keywords": ["アプリケーションアイコン", "application icon", "レプリカ", "replica", "著作権", "copyright", "イラスト", "illustration"],
+        "priority": "high"
+      },
+      {
+        "content": "アクションやコンテンツに直接関連する、馴染みのある視覚的メタファーを使用して、認識しやすく、高度に簡素化されたデザインを作成します。",
+        "source": "Apple Human Interface Guidelines",
+        "category": "foundational_elements",
+        "subcategory": "interface_icons_glyphs",
+        "keywords": ["インターフェースアイコン", "interface icon", "グリフ", "glyph", "デザイン原則", "design principles", "メタファー", "metaphor", "認識", "recognition", "簡素化", "simplification"],
+        "priority": "high"
+      },
+      {
+        "content": "アプリケーション内のすべてのインターフェースアイコン（カスタムおよびシステム提供の両方）で、一貫したサイズ、詳細レベル、線の太さ（ウェイト）、遠近感を維持します。",
+        "source": "Apple Human Interface Guidelines",
+        "category": "foundational_elements",
+        "subcategory": "interface_icons_glyphs",
+        "keywords": ["インターフェースアイコン", "interface icon", "視覚的一貫性", "visual consistency", "サイズ", "size", "ウェイト", "weight"],
+        "priority": "high"
+      },
+      {
+        "content": "一般的に、インターフェースアイコンと隣接するテキストのウェイトを一致させることで、コンテンツに一貫した外観と強調レベルを与えます。",
+        "source": "Apple Human Interface Guidelines",
+        "category": "foundational_elements",
+        "subcategory": "interface_icons_glyphs",
+        "keywords": ["インターフェースアイコン", "interface icon", "テキストとの一致", "text alignment", "ウェイト", "weight", "一貫性", "consistency"],
+        "priority": "medium"
+      },
+      {
+        "content": "必要に応じて、カスタムインターフェースアイコンにパディングを追加して、光学的なアライメントを達成します。特に非対称のアイコンの場合に重要です。",
+        "source": "Apple Human Interface Guidelines",
+        "category": "foundational_elements",
+        "subcategory": "interface_icons_glyphs",
+        "keywords": ["インターフェースアイコン", "interface icon", "光学的なアライメント", "optical alignment", "パディング", "padding"],
+        "priority": "low"
+      },
+      {
+        "content": "必要に応じてのみ選択状態のバージョンを提供します。ツールバー、タブバー、ボタンなどの標準システムコンポーネントで使用されるアイコンの場合、システムが視覚的な外観を自動的に更新するため、提供する必要はありません。",
+        "source": "Apple Human Interface Guidelines",
+        "category": "foundational_elements",
+        "subcategory": "interface_icons_glyphs",
+        "keywords": ["インターフェースアイコン", "interface icon", "選択状態", "selected state", "システムコンポーネント", "system components"],
+        "priority": "medium"
+      },
+      {
+        "content": "包括的な画像を使用します。性別にとらわれない人物像を好み、異なる文化や言語で認識しにくい画像を避けます。",
+        "source": "Apple Human Interface Guidelines",
+        "category": "foundational_elements",
+        "subcategory": "interface_icons_glyphs",
+        "keywords": ["インターフェースアイコン", "interface icon", "包括性", "inclusivity", "性別にとらわれない", "gender-neutral", "文化", "culture"],
+        "priority": "high"
+      },
+      {
+        "content": "意味を伝えるために不可欠な場合にのみ、デザインにテキストを含めます。文字をローカライズし、テキストの断片を示唆する必要がある場合は、抽象的な表現をデザインし、右から左へのコンテキストで使用するための反転バージョンを含めます。",
+        "source": "Apple Human Interface Guidelines",
+        "category": "foundational_elements",
+        "subcategory": "interface_icons_glyphs",
+        "keywords": ["インターフェースアイコン", "interface icon", "アイコン内のテキスト", "text in icon", "ローカライズ", "localization", "抽象表現", "abstract representation"],
+        "priority": "medium"
+      },
+      {
+        "content": "カスタムインターフェースアイコンを作成する場合は、PDFまたはSVGなどのベクター形式を使用します。システムはベクターベースのインターフェースアイコンを高解像度ディスプレイ用に自動的にスケーリングするため、高解像度バージョンを提供する必要はありません。",
+        "source": "Apple Human Interface Guidelines",
+        "category": "foundational_elements",
+        "subcategory": "interface_icons_glyphs",
+        "keywords": ["インターフェースアイコン", "interface icon", "ベクター形式", "vector format", "SVG", "PDF", "スケーリング", "scaling"],
+        "priority": "high"
+      },
+      {
+        "content": "カスタムインターフェースアイコンに代替テキストラベルを提供し、VoiceOverが画面の内容を音声で説明できるようにし、視覚障害を持つユーザーのナビゲーションを簡素化します。",
+        "source": "Apple Human Interface Guidelines",
+        "category": "foundational_elements",
+        "subcategory": "interface_icons_glyphs",
+        "keywords": ["インターフェースアイコン", "interface icon", "アクセシビリティ", "accessibility", "VoiceOver", "代替テキスト", "alt text"],
+        "priority": "high"
+      },
+      {
+        "content": "Appleハードウェア製品のレプリカを使用しないようにします。",
+        "source": "Apple Human Interface Guidelines",
+        "category": "foundational_elements",
+        "subcategory": "interface_icons_glyphs",
+        "keywords": ["インターフェースアイコン", "interface icon", "レプリカ", "replica", "著作権", "copyright"],
+        "priority": "high"
+      },
+      {
+        "content": "ビューの主な目的が単に画像を表示することである場合は、画像ビューを使用します。画像がインタラクティブである必要があるまれなケースでは、画像を表示するようにシステム提供のボタンを構成します。",
+        "source": "Apple Human Interface Guidelines",
+        "category": "foundational_elements",
+        "subcategory": "interface_icons_glyphs",
+        "keywords": ["画像", "image", "画像ビュー", "image view", "インタラクティブ", "interactive", "ボタン", "button"],
+        "priority": "low"
+      },
+      {
+        "content": "画像上にテキストを重ねる場合は注意が必要です。画像とテキストの両方の明瞭度が低下する可能性があります。テキストが画像と適切にコントラストを保ち、テキストシャドウや背景レイヤーを追加するなどしてテキストオブジェクトが目立つようにする方法を検討します。",
+        "source": "Apple Human Interface Guidelines",
+        "category": "foundational_elements",
+        "subcategory": "interface_icons_glyphs",
+        "keywords": ["画像", "image", "テキスト", "text", "コントラスト", "contrast", "読みやすさ", "readability"],
+        "priority": "medium"
+      },
+      {
+        "content": "アニメーションシーケンス内のすべての画像で一貫したサイズを使用し、パフォーマンスを向上させます。",
+        "source": "Apple Human Interface Guidelines",
+        "category": "foundational_elements",
+        "subcategory": "interface_icons_glyphs",
+        "keywords": ["画像", "image", "アニメーション", "animation", "一貫性", "consistency", "パフォーマンス", "performance"],
+        "priority": "medium"
+      },
+      {
+        "content": "編集可能な画像ビューが必要な場合は、イメージウェルを使用します（コピー、ペースト、ドラッグ、削除をサポート）。",
+        "source": "Apple Human Interface Guidelines",
+        "category": "foundational_elements",
+        "subcategory": "interface_icons_glyphs",
+        "keywords": ["画像", "image", "イメージウェル", "image well", "編集", "editing", "コピー", "copy", "ペースト", "paste", "ドラッグ", "drag"],
+        "priority": "low"
+      },
+      {
+        "content": "San Franciscoシステムフォントとシームレスに統合され、すべてのウェイトとサイズでテキストと自動的に整列する、何千もの一貫性のある高度に構成可能なシンボルを提供します。",
+        "source": "Apple Human Interface Guidelines",
+        "category": "foundational_elements",
+        "subcategory": "sf_symbols",
+        "keywords": ["SF Symbols", "シンボル", "symbol", "システムフォント", "system font", "一貫性", "consistency", "構成可能", "configurable"],
+        "priority": "high"
+      },
+      {
+        "content": "ツールバー、タブバー、コンテキストメニュー、テキスト内など、インターフェースアイコンが表示される場所であればどこでも、オブジェクトや概念を伝えるためにシンボルを使用できます。",
+        "source": "Apple Human Interface Guidelines",
+        "category": "foundational_elements",
+        "subcategory": "sf_symbols",
+        "keywords": ["SF Symbols", "シンボル", "symbol", "使用法", "usage", "ツールバー", "toolbar", "タブバー", "tab bar", "メニュー", "menu"],
+        "priority": "medium"
+      },
+      {
+        "content": "シンボル内のすべてのレイヤーに1つの色を適用するモノクロ、各レイヤーの階層レベルに応じて色の不透明度を変化させる階層、シンボルに2つ以上の色を適用するパレット、一部のシンボルに固有の色を適用して意味を強調するマルチカラーなど、複数のレンダリングモードをサポートします。",
+        "source": "Apple Human Interface Guidelines",
+        "category": "foundational_elements",
+        "subcategory": "sf_symbols",
+        "keywords": ["SF Symbols", "シンボル", "symbol", "レンダリングモード", "rendering mode", "モノクロ", "monochrome", "階層", "hierarchical", "パレット", "palette", "マルチカラー", "multicolor"],
+        "priority": "medium"
+      },
+      {
+        "content": "可変色を使用して、奥行きではなく、変化を伝えます。",
+        "source": "Apple Human Interface Guidelines",
+        "category": "foundational_elements",
+        "subcategory": "sf_symbols",
+        "keywords": ["SF Symbols", "シンボル", "symbol", "可変色", "variable color", "変化", "change"],
+        "priority": "low"
+      },
+      {
+        "content": "UltralightからBlackまでの9つのシンボルウェイトが提供され、San Franciscoシステムフォントのウェイトに対応しており、シンボルと隣接するテキスト間の正確なウェイトマッチングを可能にします。小、中（デフォルト）、大の3つのスケールも利用可能です。",
+        "source": "Apple Human Interface Guidelines",
+        "category": "foundational_elements",
+        "subcategory": "sf_symbols",
+        "keywords": ["SF Symbols", "シンボル", "symbol", "ウェイト", "weight", "スケール", "scale", "San Franciscoフォント", "San Francisco font"],
+        "priority": "high"
+      },
+      {
+        "content": "fill、slash、enclosedなどのいくつかのデザインバリアントが定義されており、UIの視覚的一貫性とシンプルさを維持しながら、正確な状態とアクションを伝えるのに役立ちます。アウトラインバリアントは、ツールバー、リスト、その他テキストとともにシンボルを表示する場所でうまく機能します。",
+        "source": "Apple Human Interface Guidelines",
+        "category": "foundational_elements",
+        "subcategory": "sf_symbols",
+        "keywords": ["SF Symbols", "シンボル", "symbol", "デザインバリアント", "design variant", "fill", "slash", "enclosed", "アウトライン", "outline"],
+        "priority": "medium"
+      },
+      {
+        "content": "シンボルを表示するビューが、アウトラインを使用するかフィルを使用するかを決定することが多いです（例：iOSのタブバーはフィルバリアントを好み、ツールバーはアウトラインバリアントを使用する）。",
+        "source": "Apple Human Interface Guidelines",
+        "category": "foundational_elements",
+        "subcategory": "sf_symbols",
+        "keywords": ["SF Symbols", "シンボル", "symbol", "文脈への適応", "contextual adaptation", "ビュー", "view", "タブバー", "tab bar", "ツールバー", "toolbar"],
+        "priority": "medium"
+      },
+      {
+        "content": "状態の変化や進行を伝えるためのアニメーション（ダウンアップ、アップアップ、オフアップ）をサポートします。",
+        "source": "Apple Human Interface Guidelines",
+        "category": "foundational_elements",
+        "subcategory": "sf_symbols",
+        "keywords": ["SF Symbols", "シンボル", "symbol", "アニメーション", "animation", "状態変化", "state change"],
+        "priority": "medium"
+      },
+      {
+        "content": "シンプルで、認識しやすく、包括的で、それが表すアクションやコンテンツに直接関連しているシンボルを設計するよう努めます。",
+        "source": "Apple Human Interface Guidelines",
+        "category": "foundational_elements",
+        "subcategory": "sf_symbols",
+        "keywords": ["SF Symbols", "シンボル", "symbol", "デザイン原則", "design principles", "シンプル", "simple", "認識", "recognition", "包括的", "inclusive"],
+        "priority": "high"
+      },
+      {
+        "content": "ボタンを使いやすくするために、周囲に十分なスペースを含めます（ヒット領域は少なくとも44x44 pt、visionOSでは60x60 pt）。",
+        "source": "Apple Human Interface Guidelines",
+        "category": "interaction_patterns",
+        "subcategory": "buttons",
+        "keywords": ["ボタン", "button", "ユーザビリティ", "usability", "ヒット領域", "hit area", "スペース", "space"],
+        "priority": "high"
+      },
+      {
+        "content": "カスタムボタンには常にプレス状態を含め、応答性を確保します。",
+        "source": "Apple Human Interface Guidelines",
+        "category": "interaction_patterns",
+        "subcategory": "buttons",
+        "keywords": ["ボタン", "button", "プレス状態", "press state", "応答性", "responsiveness"],
+        "priority": "high"
+      },
+      {
+        "content": "ビュー内で最も可能性の高いアクションには、目立つ視覚スタイル（アクセントカラーの背景）を使用します。認知負荷を避けるため、ビューあたり1つまたは2つの目立つボタンに制限します。",
+        "source": "Apple Human Interface Guidelines",
+        "category": "interaction_patterns",
+        "subcategory": "buttons",
+        "keywords": ["ボタン", "button", "視認性", "visibility", "アクセントカラー", "accent color", "認知負荷", "cognitive load"],
+        "priority": "medium"
+      },
+      {
+        "content": "複数のオプションの中から推奨される選択肢を視覚的に区別するには、サイズではなくスタイル（目立つスタイルと控えめなスタイル）を使用します。",
+        "source": "Apple Human Interface Guidelines",
+        "category": "interaction_patterns",
+        "subcategory": "buttons",
+        "keywords": ["ボタン", "button", "区別", "distinction", "スタイル", "style"],
+        "priority": "medium"
+      },
+      {
+        "content": "シンボル（アイコン）、テキストラベル、またはその両方を使用して、各ボタンの目的を明確に伝えます。",
+        "source": "Apple Human Interface Guidelines",
+        "category": "interaction_patterns",
+        "subcategory": "buttons",
+        "keywords": ["ボタン", "button", "目的", "purpose", "シンボル", "symbol", "アイコン", "icon", "テキストラベル", "text label"],
+        "priority": "high"
+      },
+      {
+        "content": "馴染みのあるアクションを馴染みのあるアイコンに関連付けます（例：`square.and.arrow.up` シンボルは共有関連のアクティビティを示す）。既存のSF SymbolsまたはカスタマイズされたSF Symbolsの使用を検討します。",
+        "source": "Apple Human Interface Guidelines",
+        "category": "interaction_patterns",
+        "subcategory": "buttons",
+        "keywords": ["ボタン", "button", "アイコン", "icon", "SF Symbols", "馴染みのあるアクション", "familiar action"],
+        "priority": "medium"
+      },
+      {
+        "content": "短く簡潔なテキストラベルを使用し、動詞で始めることを検討します（例：「カートに追加」）。タイトルスタイルの大文字を使用します。",
+        "source": "Apple Human Interface Guidelines",
+        "category": "interaction_patterns",
+        "subcategory": "buttons",
+        "keywords": ["ボタン", "button", "テキストラベル", "text label", "簡潔", "concise", "動詞", "verb", "タイトルスタイル", "title style"],
+        "priority": "medium"
+      },
+      {
+        "content": "一時的なビュー（シート、編集可能なビュー、アラートなど）では、最も選択される可能性が高いボタンに主要な役割（例：Returnキーに応答する）を割り当てます。",
+        "source": "Apple Human Interface Guidelines",
+        "category": "interaction_patterns",
+        "subcategory": "buttons",
+        "keywords": ["ボタン", "button", "主要な役割", "primary role", "一時的なビュー", "transient view"],
+        "priority": "high"
+      },
+      {
+        "content": "破壊的なアクションには、たとえそれが最も可能性の高い選択肢であっても、主要な役割を割り当てないでください。これは、意図しない選択を防ぐためです。",
+        "source": "Apple Human Interface Guidelines",
+        "category": "interaction_patterns",
+        "subcategory": "buttons",
+        "keywords": ["ボタン", "button", "破壊的なアクション", "destructive action", "主要な役割", "primary role", "安全性", "safety"],
+        "priority": "high"
+      },
+      {
+        "content": "複雑なデータセットを明確でスキャンしやすいビューに変換し、情報を整理します。",
+        "source": "Apple Human Interface Guidelines",
+        "category": "interaction_patterns",
+        "subcategory": "lists_and_tables",
+        "keywords": ["リスト", "list", "テーブル", "table", "目的", "purpose", "データ整理", "data organization", "スキャンしやすい", "scannable"],
+        "priority": "high"
+      },
+      {
+        "content": "テキストをリストまたはテーブルで表示することを推奨します。これらはスキャンと読みに特に適しています。サイズが大きく異なる項目や多数の画像がある場合は、コレクションの使用を検討します。",
+        "source": "Apple Human Interface Guidelines",
+        "category": "interaction_patterns",
+        "subcategory": "lists_and_tables",
+        "keywords": ["リスト", "list", "テーブル", "table", "コンテンツ優先", "content priority", "テキスト", "text", "コレクション", "collection"],
+        "priority": "medium"
+      },
+      {
+        "content": "適切であれば、テーブルの編集（並べ替え、項目の追加/削除）を許可します。iOSおよびiPadOSでは、ユーザーはテーブル項目を選択する前に編集モードに入る必要があります。",
+        "source": "Apple Human Interface Guidelines",
+        "category": "interaction_patterns",
+        "subcategory": "lists_and_tables",
+        "keywords": ["リスト", "list", "テーブル", "table", "編集可能性", "editability", "並べ替え", "sorting", "項目追加/削除", "add/remove items"],
+        "priority": "medium"
+      },
+      {
+        "content": "リスト項目を選択したときに適切なフィードバックを提供します。フィードバックは、項目の選択が新しいビューを表示するか、項目の状態を切り替えるかによって異なる場合があります。",
+        "source": "Apple Human Interface Guidelines",
+        "category": "interaction_patterns",
+        "subcategory": "lists_and_tables",
+        "keywords": ["リスト", "list", "テーブル", "table", "フィードバック", "feedback", "選択状態", "selection state"],
+        "priority": "high"
+      },
+      {
+        "content": "行コンテンツを簡潔に保ち、切り捨てや折り返しを避けます。長いコンテンツは詳細ビューに配置します。",
+        "source": "Apple Human Interface Guidelines",
+        "category": "interaction_patterns",
+        "subcategory": "lists_and_tables",
+        "keywords": ["リスト", "list", "テーブル", "table", "テキストの簡潔さ", "text conciseness", "切り捨て", "truncation", "詳細ビュー", "detail view"],
+        "priority": "high"
+      },
+      {
+        "content": "テキストがクリップまたは切り捨てられる可能性がある場合に、読みやすさを維持する方法を検討します（例：テキストの中央に省略記号を使用する）。",
+        "source": "Apple Human Interface Guidelines",
+        "category": "interaction_patterns",
+        "subcategory": "lists_and_tables",
+        "keywords": ["リスト", "list", "テーブル", "table", "読みやすさ", "readability", "省略記号", "ellipsis"],
+        "priority": "medium"
+      },
+      {
+        "content": "多列テーブルでは、名詞または短い名詞句をタイトルスタイルの大文字で記述し、句読点を追加しません。単一列テーブルビューに列見出しを含めない場合は、ラベルまたはヘッダーを使用してユーザーが文脈を理解できるようにします。",
+        "source": "Apple Human Interface Guidelines",
+        "category": "interaction_patterns",
+        "subcategory": "lists_and_tables",
+        "keywords": ["リスト", "list", "テーブル", "table", "列見出し", "column headers", "ラベル", "labels", "ヘッダー", "headers"],
+        "priority": "medium"
+      },
+      {
+        "content": "データとプラットフォームに合ったテーブルまたはリストスタイルを選択します（例：iOS/iPadOSのグループ化スタイル、watchOSの楕円形スタイル、macOSの罫線スタイル）。",
+        "source": "Apple Human Interface Guidelines",
+        "category": "interaction_patterns",
+        "subcategory": "lists_and_tables",
+        "keywords": ["リスト", "list", "テーブル", "table", "スタイル", "style", "プラットフォーム", "platform"],
+        "priority": "low"
+      },
+      {
+        "content": "表示する必要のある情報に合った行スタイルを選択します（例：行の先頭に小さな画像、その後に簡単な説明ラベル）。システム提供の行スタイル（例：`UIListContentConfiguration` API）を利用できます。",
+        "source": "Apple Human Interface Guidelines",
+        "category": "interaction_patterns",
+        "subcategory": "lists_and_tables",
+        "keywords": ["リスト", "list", "テーブル", "table", "行スタイル", "row style", "UIListContentConfiguration"],
+        "priority": "low"
+      },
+      {
+        "content": "行のコンテンツに関する詳細情報を表示するためにのみ情報ボタン（リスト行に表示される場合は詳細開示ボタンと呼ばれる）を使用します。階層的なテーブルやリストのナビゲーションはサポートしません。サブビューにドリルダウンさせる必要がある場合は、開示インジケータアクセサリコントロールを使用します。",
+        "source": "Apple Human Interface Guidelines",
+        "category": "interaction_patterns",
+        "subcategory": "lists_and_tables",
+        "keywords": ["リスト", "list", "テーブル", "table", "情報ボタン", "info button", "詳細開示ボタン", "disclosure button", "開示インジケータ", "disclosure indicator"],
+        "priority": "medium"
+      },
+      {
+        "content": "ユーザーが情報をすばやくスキャンして理解できるように、リストまたはテーブルの各行のコンテンツを整理します。主要な情報は先頭に配置し、補足的な詳細が続くようにします。アイコンやサムネイルの画像サイズは一貫性を保ち、要素間に十分な空白を追加し、すべての行で要素間の垂直方向のリズムを一定に保ちます。",
+        "source": "Apple Human Interface Guidelines",
+        "category": "interaction_patterns",
+        "subcategory": "lists_and_tables",
+        "keywords": ["リスト", "list", "テーブル", "table", "行コンテンツパターン", "row content pattern", "整理", "organization", "ホワイトスペース", "whitespace", "垂直リズム", "vertical rhythm"],
+        "priority": "high"
+      },
+      {
+        "content": "画像中心のインターフェースでは、一貫した行と列に要素を配置し、等間隔にします。レイアウトが異なる画面に適応する際、比例的なセル寸法を維持します。左から右への読者向けにコンテンツを論理的に順序付けます（左から右、上から下）。",
+        "source": "Apple Human Interface Guidelines",
+        "category": "interaction_patterns",
+        "subcategory": "lists_and_tables",
+        "keywords": ["リスト", "list", "テーブル", "table", "グリッド構造", "grid structure", "アライメント", "alignment", "セル寸法", "cell dimensions"],
+        "priority": "medium"
+      },
+      {
+        "content": "リストとテーブルは、すべてのユーザーアクションに明確に応答し、ユーザーが何が起こっているか、次に何をできるかを理解するのに役立つ即時の視覚的フィードバックを提供する必要があります。",
+        "source": "Apple Human Interface Guidelines",
+        "category": "interaction_patterns",
+        "subcategory": "lists_and_tables",
+        "keywords": ["リスト", "list", "テーブル", "table", "インタラクティブフィードバック", "interactive feedback", "応答性", "responsiveness"],
+        "priority": "high"
+      },
+      {
+        "content": "スクロールコンテンツの最上部に検索バーを目立つように配置し、文字が入力されるたびに、リスト内の対応する項目をフィルタリングしてハイライト表示します。結果がない場合に役立つ提案を表示し、ユーザーが入力し始める前に以前の検索を表示します。",
+        "source": "Apple Human Interface Guidelines",
+        "category": "interaction_patterns",
+        "subcategory": "lists_and_tables",
+        "keywords": ["リスト", "list", "テーブル", "table", "検索", "search", "検索バー", "search bar", "フィルタリング", "filtering"],
+        "priority": "medium"
+      },
+      {
+        "content": "VoiceOver、スイッチコントロール、その他の支援技術を使用しているかどうかにかかわらず、すべてのユーザーがリストとテーブルに完全にアクセスできるようにします。主要な要件は、コンテンツが明確でナビゲート可能であることです。",
+        "source": "Apple Human Interface Guidelines",
+        "category": "interaction_patterns",
+        "subcategory": "lists_and_tables",
+        "keywords": ["リスト", "list", "テーブル", "table", "アクセシビリティ", "accessibility", "VoiceOver", "スイッチコントロール", "Switch Control", "ナビゲーション", "navigation"],
+        "priority": "high"
+      },
+      {
+        "content": "各メニュー項目について、明確かつ簡潔に説明するラベルを記述します。アクションを開始するメニュー項目には、そのアクションを説明する動詞または動詞句を使用します。インターフェース内の何かを表示または非表示にする、または現在選択されている状態を示すメニュー項目のラベル付けについては、トグル項目に関するガイダンスを参照します。",
+        "source": "Apple Human Interface Guidelines",
+        "category": "interaction_patterns",
+        "subcategory": "menus",
+        "keywords": ["メニュー", "menu", "ラベル", "label", "簡潔", "concise", "動詞", "verb"],
+        "priority": "high"
+      },
+      {
+        "content": "メニュー項目が利用できない場合は、利用できないことを示す（例：グレー表示にする）。非表示にしない。メニューのすべての項目が利用できない場合でも、メニュー自体は利用可能なままであるべきであり、ユーザーが開いて含まれるコマンドについて知ることができるようにします。",
+        "source": "Apple Human Interface Guidelines",
+        "category": "interaction_patterns",
+        "subcategory": "menus",
+        "keywords": ["メニュー", "menu", "利用可能性", "availability", "グレー表示", "dimmed", "非表示にしない", "do not hide"],
+        "priority": "high"
+      },
+      {
+        "content": "アクションを完了する前に追加情報が必要な場合（通常は別のビューで）、メニュー項目のラベルに省略記号（...）を追加します。省略記号文字は、ユーザーが情報を入力したり、追加の選択を行ったりする必要があることを示します。",
+        "source": "Apple Human Interface Guidelines",
+        "category": "interaction_patterns",
+        "subcategory": "menus",
+        "keywords": ["メニュー", "menu", "省略記号", "ellipsis", "追加情報", "additional information"],
+        "priority": "medium"
+      },
+      {
+        "content": "重要または頻繁に使用されるメニュー項目を最初にリストすることを推奨します。ユーザーはメニューを上からスキャンし始める傾向があるため、優先度の高い項目を最初にリストすることで、ユーザーはメニュー全体を読まずに目的の項目を見つけられることが多いです。",
+        "source": "Apple Human Interface Guidelines",
+        "category": "interaction_patterns",
+        "subcategory": "menus",
+        "keywords": ["メニュー", "menu", "順序", "order", "優先度", "priority", "スキャン", "scan"],
+        "priority": "medium"
+      },
+      {
+        "content": "論理的に関連する項目をグループ化することを検討します（例：コピー、切り取り、貼り付けなどの編集コマンド）。ユーザーがそのようなグループを視覚的に区別できるように、区切り線を使用します。すべての論理的に関連するコマンドを、たとえすべてのコマンドが同じ重要性を持たない場合でも、同じグループに保持することを推奨します。",
+        "source": "Apple Human Interface Guidelines",
+        "category": "interaction_patterns",
+        "subcategory": "menus",
+        "keywords": ["メニュー", "menu", "グループ化", "grouping", "区切り線", "separators", "論理的関連性", "logical relevance"],
+        "priority": "high"
+      },
+      {
+        "content": "メニューの長さに注意します。長いメニューは、ユーザーが読むのに時間と注意を要し、目的のコマンドを見逃す可能性があります。メニューが長すぎる場合は、個別のメニューに分割するか、サブメニューを使用してリストを短縮することを検討します。",
+        "source": "Apple Human Interface Guidelines",
+        "category": "interaction_patterns",
+        "subcategory": "menus",
+        "keywords": ["メニュー", "menu", "メニューの長さ", "menu length", "サブメニュー", "submenus", "簡潔", "concise"],
+        "priority": "medium"
+      },
+      {
+        "content": "サブメニューは控えめに使用します。各サブメニューはインターフェースに複雑さを追加し、含まれる項目を隠します。同じグループ内の2つ以上のメニュー項目に用語が表示される場合にサブメニューを作成することを検討できます。",
+        "source": "Apple Human Interface Guidelines",
+        "category": "interaction_patterns",
+        "subcategory": "menus",
+        "keywords": ["メニュー", "menu", "サブメニュー", "submenus", "複雑さ", "complexity", "控えめ", "discreet"],
+        "priority": "medium"
+      },
+      {
+        "content": "MacまたはiPadの画面上部に表示され、アプリまたはゲームのトップレベルメニューを表示するメニューバー（macOS/iPadOS）は、常に同じメニュー項目を表示します。メニュー項目を常に表示することで、現在のコンテキストで利用できない場合でも、ユーザーはアプリがサポートするアクションを学習できます。操作できない場合は非表示にするのではなく、アクションを無効にします。メニュー項目のアクションを馴染みのあるアイコンで表現します。",
+        "source": "Apple Human Interface Guidelines",
+        "category": "interaction_patterns",
+        "subcategory": "menus",
+        "keywords": ["メニュー", "menu", "メニューバー", "menu bar", "macOS", "iPadOS", "常に表示", "always visible", "無効化", "disable"],
+        "priority": "high"
+      },
+      {
+        "content": "「About YourAppName」、「Settings」、「Quit YourAppName」などの標準項目を含むアプリケーションメニュー（macOS）を提供します。",
+        "source": "Apple Human Interface Guidelines",
+        "category": "interaction_patterns",
+        "subcategory": "menus",
+        "keywords": ["メニュー", "menu", "アプリケーションメニュー", "application menu", "macOS", "標準項目", "standard items"],
+        "priority": "medium"
+      },
+      {
+        "content": "表示/非表示項目は、タイトルが現在のビューの状態を反映する必要があります（例：「タブバーを表示/非表示」）。",
+        "source": "Apple Human Interface Guidelines",
+        "category": "interaction_patterns",
+        "subcategory": "menus",
+        "keywords": ["メニュー", "menu", "表示/非表示", "show/hide", "トグル", "toggle", "タイトル", "title"],
+        "priority": "low"
+      },
+      {
+        "content": "シンプルなコンテンツやタスクを提示し、親ビューの一部を表示したままにして、ユーザーが元のコンテキストを保持できるようにします。",
+        "source": "Apple Human Interface Guidelines",
+        "category": "interaction_patterns",
+        "subcategory": "sheets",
+        "keywords": ["シート", "sheet", "目的", "purpose", "コンテンツ", "content", "コンテキスト維持", "context preservation"],
+        "priority": "high"
+      },
+      {
+        "content": "複雑または長期にわたるユーザーフローの場合、全画面表示のモーダルビュー（iOS/iPadOS）、新しいウィンドウ、または全画面モード（macOS）、またはFull Space（visionOS）を検討します。",
+        "source": "Apple Human Interface Guidelines",
+        "category": "interaction_patterns",
+        "subcategory": "sheets",
+        "keywords": ["シート", "sheet", "複雑なフロー", "complex flows", "モーダルビュー", "modal view", "全画面", "full screen"],
+        "priority": "medium"
+      },
+      {
+        "content": "メインインターフェースから一度に1つのシートのみを表示します。シートが別のシートにつながる場合、新しいシートを表示する前に最初のシートを閉じます。",
+        "source": "Apple Human Interface Guidelines",
+        "category": "interaction_patterns",
+        "subcategory": "sheets",
+        "keywords": ["シート", "sheet", "スタッキング", "stacking", "単一", "single"],
+        "priority": "high"
+      },
+      {
+        "content": "親ビューの主要なタスクに影響を与える補足的な項目を提示する場合、visionOSの分割ビュー、macOSのパネル、またはiOS/iPadOSの非モーダルシートを検討します。",
+        "source": "Apple Human Interface Guidelines",
+        "category": "interaction_patterns",
+        "subcategory": "sheets",
+        "keywords": ["シート", "sheet", "非モーダルビュー", "non-modal view", "分割ビュー", "split view", "パネル", "panel"],
+        "priority": "medium"
+      },
+      {
+        "content": "サイズ変更可能なシート（iPhone）では、シートコンテンツの段階的な開示を可能にするために、中程度のデテントをサポートすることを検討します。",
+        "source": "Apple Human Interface Guidelines",
+        "category": "interaction_patterns",
+        "subcategory": "sheets",
+        "keywords": ["シート", "sheet", "サイズ変更可能", "resizable", "デテント", "detent", "段階的開示", "progressive disclosure"],
+        "priority": "medium"
+      },
+      {
+        "content": "サイズ変更可能なシートにはグラバーを含めます。グラバーは、ユーザーがシートをドラッグしてサイズを変更できることを示し、タップしてデテントを循環させることもできます。グラバーは、VoiceOverと連携して、ユーザーが画面を見ずにシートのサイズを変更できるようにします。",
+        "source": "Apple Human Interface Guidelines",
+        "category": "interaction_patterns",
+        "subcategory": "sheets",
+        "keywords": ["シート", "sheet", "グラバー", "grabber", "サイズ変更", "resize", "VoiceOver", "アクセシビリティ", "accessibility"],
+        "priority": "high"
+      },
+      {
+        "content": "シートを閉じるためにスワイプをサポートします。ユーザーは、閉じるボタンをタップする代わりに、垂直方向にスワイプしてシートを閉じると期待します。シートに未保存の変更がある状態でスワイプして閉じようとした場合、アクションシートを使用してアクションを確認させます。",
+        "source": "Apple Human Interface Guidelines",
+        "category": "interaction_patterns",
+        "subcategory": "sheets",
+        "keywords": ["シート", "sheet", "閉じる動作", "closing behavior", "スワイプ", "swipe", "未保存の変更", "unsaved changes", "アクションシート", "action sheet"],
+        "priority": "high"
+      },
+      {
+        "content": "「完了」または「閉じる」ボタンは通常、シートの右上隅（左から右へのレイアウトの場合）に配置し、「キャンセル」ボタンは、シートの左上隅に配置します。",
+        "source": "Apple Human Interface Guidelines",
+        "category": "interaction_patterns",
+        "subcategory": "sheets",
+        "keywords": ["シート", "sheet", "ボタン配置", "button placement", "完了", "Done", "閉じる", "Close", "キャンセル", "Cancel"],
+        "priority": "medium"
+      },
+      {
+        "content": "iPadOSアプリでは、ページまたはフォームシートのプレゼンテーションスタイルを推奨します。各スタイルはシートのデフォルトサイズを使用し、コンテンツを薄暗い背景ビューの中央に配置して、一貫したエクスペリエンスを提供します。",
+        "source": "Apple Human Interface Guidelines",
+        "category": "interaction_patterns",
+        "subcategory": "sheets",
+        "keywords": ["シート", "sheet", "iPadOSスタイル", "iPadOS style", "ページシート", "page sheet", "フォームシート", "form sheet"],
+        "priority": "low"
+      },
+      {
+        "content": "コンテンツに適した妥当なデフォルトサイズでシートを提示します。ユーザーは通常、シートのサイズを変更することを期待しないため、適切なサイズを使用することが重要です。ただし、場合によっては、ユーザーはサイズ変更可能なシートを好む場合があるため、サイズ変更をサポートすることは良い考えです。",
+        "source": "Apple Human Interface Guidelines",
+        "category": "interaction_patterns",
+        "subcategory": "sheets",
+        "keywords": ["シート", "sheet", "デフォルトサイズ", "default size", "サイズ変更", "resize"],
+        "priority": "medium"
+      },
+      {
+        "content": "ユーザーが選択できる、個別の値のスクロール可能なリストを1つ以上表示し、情報の入力を支援します。",
+        "source": "Apple Human Interface Guidelines",
+        "category": "interaction_patterns",
+        "subcategory": "pickers",
+        "keywords": ["ピッカー", "picker", "目的", "purpose", "値選択", "value selection", "スクロール可能", "scrollable list"],
+        "priority": "high"
+      },
+      {
+        "content": "中程度から長いリストの項目を提供するためにピッカーの使用を検討します。かなり短い選択肢のリストを表示する必要がある場合は、ピッカーの代わりにプルダウンボタンの使用を検討します。非常に大きな項目セットを提示する必要がある場合は、リストまたはテーブルの使用を検討します（速度向上のためにインデックス付き）。",
+        "source": "Apple Human Interface Guidelines",
+        "category": "interaction_patterns",
+        "subcategory": "pickers",
+        "keywords": ["ピッカー", "picker", "リストの長さ", "list length", "プルダウンボタン", "pull-down button", "リスト", "list", "テーブル", "table"],
+        "priority": "medium"
+      },
+      {
+        "content": "多くの値は最初は非表示になっているため、予測可能で論理的に順序付けられた値を使用します。これにより、ユーザーは項目を素早く移動できます。",
+        "source": "Apple Human Interface Guidelines",
+        "category": "interaction_patterns",
+        "subcategory": "pickers",
+        "keywords": ["ピッカー", "picker", "予測可能性", "predictability", "順序付け", "ordering"],
+        "priority": "high"
+      },
+      {
+        "content": "編集中のフィールドの下または近くに、文脈の中でピッカーを表示します。ピッカーは通常、ウィンドウの下部またはポップオーバーに表示されます。ビューを切り替えてピッカーを表示することは避けます。",
+        "source": "Apple Human Interface Guidelines",
+        "category": "interaction_patterns",
+        "subcategory": "pickers",
+        "keywords": ["ピッカー", "picker", "文脈に応じた表示", "contextual display", "ポップオーバー", "popover", "ビュー切り替え", "view switching"],
+        "priority": "medium"
+      },
+      {
+        "content": "日付ピッカーの分を指定する際に、粒度を減らすことを検討します（例：15分間隔）。",
+        "source": "Apple Human Interface Guidelines",
+        "category": "interaction_patterns",
+        "subcategory": "pickers",
+        "keywords": ["日付ピッカー", "date picker", "粒度", "granularity", "時間", "time"],
+        "priority": "low"
+      },
+      {
+        "content": "コンパクトスタイル（アプリのアクセントカラーで現在の値を表示するボタンで、モーダルビューで編集可能な日付と時刻のコンテンツを開く）、インラインスタイル（時刻のみの場合、値のホイールを表示する。日付と時刻の場合、インラインのカレンダービュー）、ホイールスタイル（日付または時刻をホイールインターフェースで表示する）など、複数の日付ピッカースタイルをサポートします。",
+        "source": "Apple Human Interface Guidelines",
+        "category": "interaction_patterns",
+        "subcategory": "pickers",
+        "keywords": ["日付ピッカー", "date picker", "スタイル", "style", "コンパクトスタイル", "compact style", "インラインスタイル", "inline style", "ホイールスタイル", "wheel style"],
+        "priority": "medium"
+      },
+      {
+        "content": "日付、時刻、両方、またはカウントダウンタイマー（ホイールスタイルのみ）を表示するように日付ピッカーのモードを設定できます。",
+        "source": "Apple Human Interface Guidelines",
+        "category": "interaction_patterns",
+        "subcategory": "pickers",
+        "keywords": ["日付ピッカー", "date picker", "モード", "mode", "日付", "date", "時刻", "time", "カウントダウンタイマー", "countdown timer"],
+        "priority": "low"
+      },
+      {
+        "content": "macOSスタイル（テキストスタイルとグラフィカルスタイル）とwatchOSのDigital Crownを使用したピッカーの使用を検討します。",
+        "source": "Apple Human Interface Guidelines",
+        "category": "interaction_patterns",
+        "subcategory": "pickers",
+        "keywords": ["日付ピッカー", "date picker", "macOS", "watchOS", "Digital Crown"],
+        "priority": "low"
+      },
+      {
+        "content": "最小値と最大値の間で調整できるコントロール（サム）を備えた水平トラック。",
+        "source": "Apple Human Interface Guidelines",
+        "category": "interaction_patterns",
+        "subcategory": "sliders",
+        "keywords": ["スライダー", "slider", "目的", "purpose", "コントロール", "control", "サム", "thumb"],
+        "priority": "high"
+      },
+      {
+        "content": "アプリのデザインに溶け込み、意図を伝えるために、スライダーの外観（トラックの色、サムの画像と色合い、左右のアイコン）をカスタマイズできます。",
+        "source": "Apple Human Interface Guidelines",
+        "category": "interaction_patterns",
+        "subcategory": "sliders",
+        "keywords": ["スライダー", "slider", "カスタマイズ", "customization", "外観", "appearance", "アイコン", "icon"],
+        "priority": "medium"
+      },
+      {
+        "content": "スライダーの最小側と最大側がすべてのアプリで一貫していることを期待します。最小値は先頭側、最大値は末尾側（水平スライダーの場合）、最小値は下部、最大値は上部（垂直スライダーの場合）。",
+        "source": "Apple Human Interface Guidelines",
+        "category": "interaction_patterns",
+        "subcategory": "sliders",
+        "keywords": ["スライダー", "slider", "方向", "direction", "一貫性", "consistency", "最小値", "min value", "最大値", "max value"],
+        "priority": "high"
+      },
+      {
+        "content": "特に広い値範囲を表すスライダーの場合、対応するテキストフィールドとステッパーで補完することを検討します。これにより、ユーザーは正確なスライダー値を確認し、特定の値を入力できます。",
+        "source": "Apple Human Interface Guidelines",
+        "category": "interaction_patterns",
+        "subcategory": "sliders",
+        "keywords": ["スライダー", "slider", "補完", "complement", "テキストフィールド", "text field", "ステッパー", "stepper", "正確な入力", "precise input"],
+        "priority": "high"
+      },
+      {
+        "content": "音量調整にはスライダーを使用しません。アプリで音量コントロールを提供する必要がある場合は、カスタマイズ可能で音量レベルスライダーとアクティブなオーディオ出力デバイスを変更するためのコントロールを含むボリュームビューを使用します。",
+        "source": "Apple Human Interface Guidelines",
+        "category": "interaction_patterns",
+        "subcategory": "sliders",
+        "keywords": ["スライダー", "slider", "音量調整", "volume control", "ボリュームビュー", "volume view"],
+        "priority": "high"
+      },
+      {
+        "content": "スライダーの値が変化する際にライブフィードバックを提供することを検討します。ライブフィードバックは、ユーザーにリアルタイムで結果を表示します。",
+        "source": "Apple Human Interface Guidelines",
+        "category": "interaction_patterns",
+        "subcategory": "sliders",
+        "keywords": ["スライダー", "slider", "ライブフィードバック", "live feedback", "リアルタイム", "real-time"],
+        "priority": "medium"
+      },
+      {
+        "content": "固定された開始点と終了点の間を移動する場合（例：不透明度レベルの設定）は、水平スライダーが理想的です。値が繰り返されるか、無限に続く場合は、円形スライダーを使用します（例：オブジェクトの回転）。",
+        "source": "Apple Human Interface Guidelines",
+        "category": "interaction_patterns",
+        "subcategory": "sliders",
+        "keywords": ["スライダー", "slider", "スタイル選択", "style selection", "水平スライダー", "horizontal slider", "円形スライダー", "circular slider"],
+        "priority": "medium"
+      },
+      {
+        "content": "スライダーを導入するためにラベルを使用することを検討します（文頭大文字、コロンで終わる）。",
+        "source": "Apple Human Interface Guidelines",
+        "category": "interaction_patterns",
+        "subcategory": "sliders",
+        "keywords": ["スライダー", "slider", "ラベル", "label"],
+        "priority": "low"
+      },
+      {
+        "content": "明瞭さと精度を高めるために目盛りを使用します。目盛りは、測定のスケールをユーザーが理解し、特定の値を簡単に見つけられるようにします。さらに明確にするために、目盛りにラベルを追加することを検討します（数字または単語）。",
+        "source": "Apple Human Interface Guidelines",
+        "category": "interaction_patterns",
+        "subcategory": "sliders",
+        "keywords": ["スライダー", "slider", "目盛り", "tick marks", "明瞭さ", "clarity", "精度", "precision"],
+        "priority": "medium"
+      },
+      {
+        "content": "水平スライダーを推奨します。ユーザーは上下よりも左右にジェスチャーする方が一般的により簡単です。",
+        "source": "Apple Human Interface Guidelines",
+        "category": "interaction_patterns",
+        "subcategory": "sliders",
+        "keywords": ["スライダー", "slider", "優先", "preference", "水平スライダー", "horizontal slider"],
+        "priority": "medium"
+      },
+      {
+        "content": "スライダーの機能を示すために、必要に応じてカスタムグリフを作成します（デフォルトはプラスとマイナス記号）。",
+        "source": "Apple Human Interface Guidelines",
+        "category": "interaction_patterns",
+        "subcategory": "sliders",
+        "keywords": ["スライダー", "slider", "カスタムグリフ", "custom glyph", "アイコン", "icon"],
+        "priority": "low"
+      },
+      {
+        "content": "増分値を増減するために使用する2セグメントのコントロール。それ自体は値を表示しません。",
+        "source": "Apple Human Interface Guidelines",
+        "category": "interaction_patterns",
+        "subcategory": "steppers",
+        "keywords": ["ステッパー", "stepper", "目的", "purpose", "増分値", "increment value", "コントロール", "control"],
+        "priority": "high"
+      },
+      {
+        "content": "ステッパー自体は値を表示しないため、ステッパーが影響する値を明確にします。",
+        "source": "Apple Human Interface Guidelines",
+        "category": "interaction_patterns",
+        "subcategory": "steppers",
+        "keywords": ["ステッパー", "stepper", "値の関連付け", "value association", "明確化", "clarification"],
+        "priority": "high"
+      },
+      {
+        "content": "大きな値の変更が予想される場合、ステッパーをテキストフィールドと組み合わせることを検討します。ステッパーは、数回のタップまたはクリックで小さな変更を行うのに適しています。",
+        "source": "Apple Human Interface Guidelines",
+        "category": "interaction_patterns",
+        "subcategory": "steppers",
+        "keywords": ["ステッパー", "stepper", "テキストフィールド", "text field", "組み合わせ", "combination", "大きな値", "large values"],
+        "priority": "high"
+      },
+      {
+        "content": "大きな値の範囲の場合、Shift-クリックをサポートして値を素早く変更できるようにすることを検討します（例：デフォルトの10倍の増分で変更する）。",
+        "source": "Apple Human Interface Guidelines",
+        "category": "interaction_patterns",
+        "subcategory": "steppers",
+        "keywords": ["ステッパー", "stepper", "Shift-クリック", "Shift-click", "高速変更", "fast change"],
+        "priority": "medium"
+      },
+      {
+        "content": "アプリがコンテンツの読み込みや長時間の操作中に停止していないことをユーザーに知らせる。一部のプログレスインジケーターは、タスクが完了するまでの推定時間も提供します。",
+        "source": "Apple Human Interface Guidelines",
+        "category": "interaction_patterns",
+        "subcategory": "progress_indicators",
+        "keywords": ["プログレスインジケーター", "progress indicator", "目的", "purpose", "読み込み", "loading", "推定時間", "estimated time"],
+        "priority": "high"
+      },
+      {
+        "content": "不確定型（プロセスが進行中であることを示すが、タスクにかかる時間を推定できない）よりも、確定型（進行状況を示し、推定を可能にする）のプログレスインジケーターを推奨します。",
+        "source": "Apple Human Interface Guidelines",
+        "category": "interaction_patterns",
+        "subcategory": "progress_indicators",
+        "keywords": ["プログレスインジケーター", "progress indicator", "確定型", "determinate", "不確定型", "indeterminate", "推奨", "recommendation"],
+        "priority": "high"
+      },
+      {
+        "content": "確定型プログレスインジケーターで進捗状況を報告する際は、可能な限り正確にします。タスク完了までの時間についてユーザーが確信を持てるように、進捗のペースを均一にすることを検討します。欺瞞的であると感じさせるような表示は避けます。",
+        "source": "Apple Human Interface Guidelines",
+        "category": "interaction_patterns",
+        "subcategory": "progress_indicators",
+        "keywords": ["プログレスインジケーター", "progress indicator", "正確性", "accuracy", "均一なペース", "uniform pace", "信頼", "trust"],
+        "priority": "high"
+      },
+      {
+        "content": "プログレスインジケーターを動かし続けることで、何かが継続して起こっていることをユーザーに知らせます。停止したインジケーターは、停止したプロセスやフリーズしたアプリと関連付けられる傾向があります。プロセスが何らかの理由で停止した場合は、問題とユーザーがそれについて何ができるかを理解するのに役立つフィードバックを提供します。",
+        "source": "Apple Human Interface Guidelines",
+        "category": "interaction_patterns",
+        "subcategory": "progress_indicators",
+        "keywords": ["プログレスインジケーター", "progress indicator", "動き", "motion", "継続", "continuous", "フィードバック", "feedback"],
+        "priority": "high"
+      },
+      {
+        "content": "不確定なプロセスがその期間を決定できる時点に達した場合、確定型プログレスバーに切り替えます。円形スタイルからバータイルへの切り替えは行いません。",
+        "source": "Apple Human Interface Guidelines",
+        "category": "interaction_patterns",
+        "subcategory": "progress_indicators",
+        "keywords": ["プログレスインジケーター", "progress indicator", "遷移", "transition", "不確定から確定", "indeterminate to determinate"],
+        "priority": "medium"
+      },
+      {
+        "content": "タスクの追加のコンテキストを提供する説明を簡潔かつ正確に表示します。「読み込み中」や「認証中」のような曖昧な用語は、ほとんど価値を追加しないため避けます。",
+        "source": "Apple Human Interface Guidelines",
+        "category": "interaction_patterns",
+        "subcategory": "progress_indicators",
+        "keywords": ["プログレスインジケーター", "progress indicator", "説明", "description", "簡潔", "concise", "正確", "accurate"],
+        "priority": "high"
+      },
+      {
+        "content": "プログレスインジケーターを一貫した場所に表示します。一貫した場所を選択することで、ユーザーはプラットフォーム間またはアプリ内およびアプリ間で操作のステータスを確実に確認できます。",
+        "source": "Apple Human Interface Guidelines",
+        "category": "interaction_patterns",
+        "subcategory": "progress_indicators",
+        "keywords": ["プログレスインジケーター", "progress indicator", "場所", "location", "一貫性", "consistency"],
+        "priority": "high"
+      },
+      {
+        "content": "ユーザーが負の副作用なしにプロセスを中断できる場合、キャンセルボタンを含めます。プロセスの中断が負の副作用を引き起こす可能性がある場合、キャンセルボタンに加えて一時停止ボタンを提供すると便利です。",
+        "source": "Apple Human Interface Guidelines",
+        "category": "interaction_patterns",
+        "subcategory": "progress_indicators",
+        "keywords": ["プログレスインジケーター", "progress indicator", "処理の中止", "cancel process", "キャンセルボタン", "cancel button", "一時停止ボタン", "pause button"],
+        "priority": "high"
+      },
+      {
+        "content": "プロセスを中止すると進行状況が失われる場合に、ユーザーにその負の結果を知らせます。キャンセルを確認するか、プロセスを再開するオプションを含むアラートを提供すると役立ちます。",
+        "source": "Apple Human Interface Guidelines",
+        "category": "interaction_patterns",
+        "subcategory": "progress_indicators",
+        "keywords": ["プログレスインジケーター", "progress indicator", "負の結果", "negative consequences", "通知", "notification", "アラート", "alert"],
+        "priority": "high"
+      },
+      {
+        "content": "ツールバーでプログレスバーを使用する場合（例：ページ読み込みの表示）、トラックの未充填部分を非表示にするように構成します。",
+        "source": "Apple Human Interface Guidelines",
+        "category": "interaction_patterns",
+        "subcategory": "progress_indicators",
+        "keywords": ["プログレスインジケーター", "progress indicator", "ツールバー", "toolbar", "未充填部分", "unfilled portion"],
+        "priority": "low"
+      },
+      {
+        "content": "ユーザーが即座にコンテンツを更新できることを高く評価する一方で、自動更新が定期的に行われることも期待します。すべての更新をユーザーに開始させる必要はありません。データを定期的に更新することで、データを最新の状態に保ちます。",
+        "source": "Apple Human Interface Guidelines",
+        "category": "interaction_patterns",
+        "subcategory": "progress_indicators",
+        "keywords": ["プログレスインジケーター", "progress indicator", "自動更新", "automatic update", "定期的な更新", "periodic update"],
+        "priority": "medium"
+      },
+      {
+        "content": "オプションで、更新コントロールに短いタイトルを含めることができます。ほとんどの場合、コントロールのアニメーションがコンテンツの読み込みを示しているため、これは不要です。タイトルを含める場合は、更新の実行方法を説明するために使用せず、更新されるコンテンツに関する価値のある情報を提供します。",
+        "source": "Apple Human Interface Guidelines",
+        "category": "interaction_patterns",
+        "subcategory": "progress_indicators",
+        "keywords": ["プログレスインジケーター", "progress indicator", "更新コントロール", "update control", "タイトル", "title"],
+        "priority": "low"
+      },
+      {
+        "content": "ユーザーが検索できる情報の種類を説明するプレースホルダーテキストを表示します（例：「番組、映画など」）。「検索」のような一般的な用語は、役に立つ情報を提供しないため避けます。",
+        "source": "Apple Human Interface Guidelines",
+        "category": "interaction_patterns",
+        "subcategory": "search_fields",
+        "keywords": ["検索フィールド", "search field", "プレースホルダーテキスト", "placeholder text", "説明", "description"],
+        "priority": "high"
+      },
+      {
+        "content": "可能であれば、ユーザーが入力するとすぐに検索を開始し、テキストがより具体的になるにつれて結果が連続的に絞り込まれるため、検索体験がより応答的に感じられます。",
+        "source": "Apple Human Interface Guidelines",
+        "category": "interaction_patterns",
+        "subcategory": "search_fields",
+        "keywords": ["検索フィールド", "search field", "即時検索", "immediate search", "応答性", "responsiveness"],
+        "priority": "high"
+      },
+      {
+        "content": "検索を開始する前、またはユーザーが入力している間に、推奨される検索語を表示することを検討します。これにより、検索自体がすぐに開始されなくても、一般的な検索を提案することで、ユーザーがより速く検索できます。",
+        "source": "Apple Human Interface Guidelines",
+        "category": "interaction_patterns",
+        "subcategory": "search_fields",
+        "keywords": ["検索フィールド", "search field", "提案", "suggestions", "検索語", "search term"],
+        "priority": "medium"
+      },
+      {
+        "content": "最も関連性の高い検索結果を最初に提供し、ユーザーが目的のものを探すためにスクロールする手間を最小限に抑えます。最も可能性の高い結果を優先するだけでなく、それらを分類してユーザーが目的のものを簡単に見つけられるようにすることを検討します。",
+        "source": "Apple Human Interface Guidelines",
+        "category": "interaction_patterns",
+        "subcategory": "search_fields",
+        "keywords": ["検索フィールド", "search field", "検索結果", "search results", "簡素化", "simplification", "関連性", "relevance"],
+        "priority": "high"
+      },
+      {
+        "content": "ユーザーが検索結果をフィルタリングできるようにすることを検討します。例えば、検索結果コンテンツ領域にスコープコントロールを含めることで、ユーザーが検索結果を素早く簡単にフィルタリングできるようにします。",
+        "source": "Apple Human Interface Guidelines",
+        "category": "interaction_patterns",
+        "subcategory": "search_fields",
+        "keywords": ["検索フィールド", "search field", "フィルタリング", "filtering", "スコープコントロール", "scope control"],
+        "priority": "medium"
+      },
+      {
+        "content": "明確に定義された検索カテゴリ間でフィルタリングするためにスコープコントロールを使用します（広範なスコープから狭いスコープへ）。デフォルトでは広範なスコープにし、ユーザーが必要に応じて絞り込めるようにします。",
+        "source": "Apple Human Interface Guidelines",
+        "category": "interaction_patterns",
+        "subcategory": "search_fields",
+        "keywords": ["検索フィールド", "search field", "スコープコントロール", "scope control", "カテゴリ", "category", "フィルタリング", "filtering"],
+        "priority": "medium"
+      },
+      {
+        "content": "一般的な検索語や項目でフィルタリングするためにトークンを使用します。トークンを定義すると、それが表す用語は視覚的な処理を受け、単一の項目として選択および編集できることを示します。トークンは、検索語を明確にしたり、検索を特定の属性セットに集中させたりできます。トークンを検索候補と組み合わせることを検討します。",
+        "source": "Apple Human Interface Guidelines",
+        "category": "interaction_patterns",
+        "subcategory": "search_fields",
+        "keywords": ["検索フィールド", "search field", "トークン", "tokens", "フィルタリング", "filtering", "検索候補", "search suggestions"],
+        "priority": "medium"
+      },
+      {
+        "content": "ユーザーが目的のものを素早く見つけられるように、検索フィールドをフォーカスした状態で起動することを検討します。これにより、キーボードが検索フィールドの上にすぐに表示され、検索を開始する準備が整います。または、発見と探索を促進するために、検索フィールドを非フォーカス状態で起動することもできます。",
+        "source": "Apple Human Interface Guidelines",
+        "category": "interaction_patterns",
+        "subcategory": "search_fields",
+        "keywords": ["検索フィールド", "search field", "フォーカス", "focus", "起動", "launch", "キーボード", "keyboard"],
+        "priority": "medium"
+      },
+      {
+        "content": "スペースがある場合は、検索を一番下に配置します。既存のツールバーに検索フィールドを追加するか、検索が唯一の項目である新しいツールバーとして追加できます。検索が優先される状況では、検索が一番下にあると、検索エクスペリエンスに簡単にアクセスできるため便利です。",
+        "source": "Apple Human Interface Guidelines",
+        "category": "interaction_patterns",
+        "subcategory": "search_fields",
+        "keywords": ["検索フィールド", "search field", "配置", "placement", "ツールバー", "toolbar"],
+        "priority": "low"
+      },
+      {
+        "content": "アプリケーション画面の下部に表示され、アプリのトップレベルセクション間を素早く切り替える機能を提供するタブバーは、アプリレベルで情報を整理します。",
+        "source": "Apple Human Interface Guidelines",
+        "category": "interaction_patterns",
+        "subcategory": "tab_bars_and_tab_views",
+        "keywords": ["タブバー", "tab bar", "目的", "purpose", "ナビゲーション", "navigation", "トップレベル", "top-level"],
+        "priority": "high"
+      },
+      {
+        "content": "タブバーは半透明で、背景に色合いがある場合があり、すべての画面の向きで同じ高さを維持し、キーボードが表示されている場合は非表示になります。",
+        "source": "Apple Human Interface Guidelines",
+        "category": "interaction_patterns",
+        "subcategory": "tab_bars_and_tab_views",
+        "keywords": ["タブバー", "tab bar", "プロパティ", "properties", "半透明", "translucent", "キーボード", "keyboard"],
+        "priority": "low"
+      },
+      {
+        "content": "タブバーは任意の数のタブを含めることができますが、表示されるタブの数はデバイスのサイズと向きによって異なります。水平方向のスペースが限られているために一部のタブが表示できない場合、最後の表示タブは「その他」タブになり、別の画面で追加のタブをリストで表示します。",
+        "source": "Apple Human Interface Guidelines",
+        "category": "interaction_patterns",
+        "subcategory": "tab_bars_and_tab_views",
+        "keywords": ["タブバー", "tab bar", "タブ数", "number of tabs", "デバイスサイズ", "device size", "向き", "orientation", "その他タブ", "more tab"],
+        "priority": "medium"
+      },
+      {
+        "content": "タブバーは厳密にナビゲーションのために使用します。タブバーボタンをアクションの実行に使用してはなりません。現在のビューの要素に作用するコントロールを提供する必要がある場合は、代わりにツールバーを使用します。タブバーとツールバーは同じビューに一緒に表示されることはありません。",
+        "source": "Apple Human Interface Guidelines",
+        "category": "interaction_patterns",
+        "subcategory": "tab_bars_and_tab_views",
+        "keywords": ["タブバー", "tab bar", "ナビゲーションのみ", "navigation only", "アクション", "action", "ツールバー", "toolbar"],
+        "priority": "high"
+      },
+      {
+        "content": "機能が利用できない場合でも、タブを削除したり無効にしたりしないでください。タブが一部のケースで利用可能で、他のケースでは利用できない場合、アプリのインターフェースは不安定で予測不能になります。すべてのタブが常に有効であることを確認し、タブのコンテンツが利用できない理由を説明します。",
+        "source": "Apple Human Interface Guidelines",
+        "category": "interaction_patterns",
+        "subcategory": "tab_bars_and_tab_views",
+        "keywords": ["タブバー", "tab bar", "利用可能性", "availability", "無効化しない", "do not disable", "予測可能性", "predictability"],
+        "priority": "high"
+      },
+      {
+        "content": "アプリの異なるセクションに移動する際に、タブバーが常に表示されていることを確認します。タブバーを非表示にすると、ユーザーはアプリのどの領域にいるのか忘れてしまう可能性があります。例外は、モーダルビューがタブバーを覆う場合です。",
+        "source": "Apple Human Interface Guidelines",
+        "category": "interaction_patterns",
+        "subcategory": "tab_bars_and_tab_views",
+        "keywords": ["タブバー", "tab bar", "視認性", "visibility", "常に表示", "always visible", "非表示", "hide"],
+        "priority": "high"
+      },
+      {
+        "content": "アプリのナビゲーションを助けるために必要な適切な数のタブを使用します。タブが少ない方がナビゲートしやすいことを念頭に置きます。利用可能な場合は、複雑な情報構造を持つアプリの代替として、サイドバーまたはサイドバーに適応するタブバーを検討します。",
+        "source": "Apple Human Interface Guidelines",
+        "category": "interaction_patterns",
+        "subcategory": "tab_bars_and_tab_views",
+        "keywords": ["タブバー", "tab bar", "最適なタブ数", "optimal number of tabs", "ナビゲーション", "navigation", "サイドバー", "sidebar"],
+        "priority": "medium"
+      },
+      {
+        "content": "「その他」タブは、コンテンツを隠し、追加のタップを必要とするため、可能な限り避けます。",
+        "source": "Apple Human Interface Guidelines",
+        "category": "interaction_patterns",
+        "subcategory": "tab_bars_and_tab_views",
+        "keywords": ["タブバー", "tab bar", "オーバーフロータブ", "overflow tab", "その他タブ", "more tab", "避ける", "avoid"],
+        "priority": "medium"
+      },
+      {
+        "content": "新しい情報がそのビューまたはモードに関連付けられていることを目立たないように伝えるために、バッジ（白いテキストと数字または感嘆符を含む赤い楕円形）を使用します。",
+        "source": "Apple Human Interface Guidelines",
+        "category": "interaction_patterns",
+        "subcategory": "tab_bars_and_tab_views",
+        "keywords": ["タブバー", "tab bar", "バッジ", "badge", "新情報", "new information", "通知", "notification"],
+        "priority": "medium"
+      },
+      {
+        "content": "常にアタッチされたビュー内でコンテキストを切り替えます。タブを選択すると、常にタブバーに直接アタッチされたビューに影響を与えるべきであり、画面上の別のビューには影響を与えません。",
+        "source": "Apple Human Interface Guidelines",
+        "category": "interaction_patterns",
+        "subcategory": "tab_bars_and_tab_views",
+        "keywords": ["タブバー", "tab bar", "コンテキスト切り替え", "context switching", "ビュー", "view"],
+        "priority": "high"
+      },
+      {
+        "content": "各タブのタイトルには簡潔な用語を使用します。有用なタブタイトルは、タブに含まれるコンテンツまたは機能の種類を明確に記述することでナビゲーションを助けます。可能な限り単語を使用します。",
+        "source": "Apple Human Interface Guidelines",
+        "category": "interaction_patterns",
+        "subcategory": "tab_bars_and_tab_views",
+        "keywords": ["タブバー", "tab bar", "タイトル", "title", "簡潔", "concise", "ナビゲーション", "navigation"],
+        "priority": "medium"
+      },
+      {
+        "content": "スケーラブルで視覚的に一貫したタブバーアイコンには、SF Symbolsの使用を検討します。プラットフォームとの一貫性のために、塗りつぶされたシンボルを推奨します。",
+        "source": "Apple Human Interface Guidelines",
+        "category": "interaction_patterns",
+        "subcategory": "tab_bars_and_tab_views",
+        "keywords": ["タブバー", "tab bar", "アイコン", "icon", "SF Symbols", "塗りつぶされたシンボル", "filled symbol", "一貫性", "consistency"],
+        "priority": "high"
+      },
+      {
+        "content": "多くのセクションを持つアプリでは、ユーザーがタブバーをカスタマイズできるようにすることを検討します。",
+        "source": "Apple Human Interface Guidelines",
+        "category": "interaction_patterns",
+        "subcategory": "tab_bars_and_tab_views",
+        "keywords": ["タブバー", "tab bar", "カスタマイズ", "customization"],
+        "priority": "low"
+      },
+      {
+        "content": "複雑な情報構造の場合、サイドバーまたはサイドバーに適応するタブバーを検討します。",
+        "source": "Apple Human Interface Guidelines",
+        "category": "interaction_patterns",
+        "subcategory": "tab_bars_and_tab_views",
+        "keywords": ["タブバー", "tab bar", "代替手段", "alternatives", "サイドバー", "sidebar"],
+        "priority": "medium"
+      },
+      {
+        "content": "同じ領域に複数の相互排他的なコンテンツペインを提示し、タブ付きコントロールを使用してユーザーがそれらを切り替えることができるようにするタブビューは、密接に関連するコンテンツ領域を提示するために使用します。",
+        "source": "Apple Human Interface Guidelines",
+        "category": "interaction_patterns",
+        "subcategory": "tab_bars_and_tab_views",
+        "keywords": ["タブビュー", "tab view", "目的", "purpose", "コンテンツペイン", "content pane", "タブ付きコントロール", "tabbed control"],
+        "priority": "high"
+      },
+      {
+        "content": "ペイン内のコントロールは、同じペイン内のコンテンツのみに影響を与えるべきです。",
+        "source": "Apple Human Interface Guidelines",
+        "category": "interaction_patterns",
+        "subcategory": "tab_bars_and_tab_views",
+        "keywords": ["タブビュー", "tab view", "ペインコントロール", "pane control", "影響範囲", "scope"],
+        "priority": "high"
+      },
+      {
+        "content": "ペインのコンテンツを記述するタブラベルを提供します。タブラベルには名詞または短い名詞句を使用し、タイトルスタイルの大文字を使用します。",
+        "source": "Apple Human Interface Guidelines",
+        "category": "interaction_patterns",
+        "subcategory": "tab_bars_and_tab_views",
+        "keywords": ["タブビュー", "tab view", "タブラベル", "tab label", "記述", "description", "タイトルスタイル", "title style"],
+        "priority": "medium"
+      },
+      {
+        "content": "タブ付きコントロールは、単一のクリックまたはタップで選択できるため、効率的です。ポップアップボタンは2回のクリックを必要とするため避けます。また、タブ付きコントロールはすべての選択肢を同時に画面に表示しますが、ポップアップボタンはユーザーがクリックして選択肢を見る必要があります。",
+        "source": "Apple Human Interface Guidelines",
+        "category": "interaction_patterns",
+        "subcategory": "tab_bars_and_tab_views",
+        "keywords": ["タブビュー", "tab view", "ポップアップボタンの回避", "avoid popup buttons", "効率性", "efficiency"],
+        "priority": "medium"
+      },
+      {
+        "content": "タブビューに6つ以上のタブを提供することを避けます。6つ以上のタブがあると、圧倒され、レイアウトの問題を引き起こす可能性があります。より多くのタブを提示する必要がある場合は、インターフェースを実装する別の方法を検討します。",
+        "source": "Apple Human Interface Guidelines",
+        "category": "interaction_patterns",
+        "subcategory": "tab_bars_and_tab_views",
+        "keywords": ["タブビュー", "tab view", "タブの制限", "tab limit", "圧倒", "overwhelming"],
+        "priority": "high"
+      },
+      {
+        "content": "一般的に、タブビューのすべての側面にウィンドウ本体領域の余白を残してタブビューをインセットします。このレイアウトはすっきりとし、タブビューのコンテンツに直接関連しない追加のコントロールのためのスペースを残します。",
+        "source": "Apple Human Interface Guidelines",
+        "category": "interaction_patterns",
+        "subcategory": "tab_bars_and_tab_views",
+        "keywords": ["タブビュー", "tab view", "インセット", "inset", "レイアウト", "layout", "余白", "margin"],
+        "priority": "low"
+      },
+      {
+        "content": "現在のビューのタイトル、戻る/進むなどのナビゲーションコントロール、検索フィールド、ボタンやメニューなどのアクション（バー項目）の3種類のコンテンツが含まれるツールバー。",
+        "source": "Apple Human Interface Guidelines",
+        "category": "interaction_patterns",
+        "subcategory": "toolbars",
+        "keywords": ["ツールバー", "toolbar", "コンテンツタイプ", "content type", "ナビゲーション", "navigation", "アクション", "action", "検索フィールド", "search field"],
+        "priority": "high"
+      },
+      {
+        "content": "項目を慎重に選択し、過密を避けます。ユーザーは各項目を区別してアクティブにできる必要があるため、ツールバーに多くの項目を配置しないでください。可変ビュー幅に対応するため、ツールバーが狭くなるにつれてオーバーフローメニューに移動する項目を定義します。",
+        "source": "Apple Human Interface Guidelines",
+        "category": "interaction_patterns",
+        "subcategory": "toolbars",
+        "keywords": ["ツールバー", "toolbar", "過密回避", "avoid overcrowding", "項目数", "number of items", "オーバーフローメニュー", "overflow menu"],
+        "priority": "high"
+      },
+      {
+        "content": "追加の、重要度の低いアクションを含めるために「その他」メニューを追加します。",
+        "source": "Apple Human Interface Guidelines",
+        "category": "interaction_patterns",
+        "subcategory": "toolbars",
+        "keywords": ["ツールバー", "toolbar", "その他メニュー", "more menu", "追加アクション", "additional actions"],
+        "priority": "medium"
+      },
+      {
+        "content": "iPadOSおよびmacOSアプリでは、ユーザーが最もよく使う項目を含めるようにツールバーをカスタマイズできるようにすることを検討します。ツールバーのカスタマイズは、多くの項目を提供するアプリや、誰もが必要としない高度な機能を含むアプリ、およびユーザーが長期間使用する傾向のあるアプリで特に有用です。",
+        "source": "Apple Human Interface Guidelines",
+        "category": "interaction_patterns",
+        "subcategory": "toolbars",
+        "keywords": ["ツールバー", "toolbar", "カスタマイズ", "customization", "iPadOS", "macOS", "パワーユーザー", "power users"],
+        "priority": "medium"
+      },
+      {
+        "content": "カスタムの背景や色合いの使用を減らします。これらはシステムが提供する背景効果と重なったり干渉したりする可能性があります。代わりに、コンテンツレイヤーを使用してツールバーの色と外観を決定し、必要に応じて`ScrollEdgeEffectStyle`を使用してコンテンツ領域とコントロール領域を区別します。",
+        "source": "Apple Human Interface Guidelines",
+        "category": "interaction_patterns",
+        "subcategory": "toolbars",
+        "keywords": ["ツールバー", "toolbar", "背景", "background", "色合い", "tint", "ScrollEdgeEffectStyle"],
+        "priority": "low"
+      },
+      {
+        "content": "ツールバーでは標準コンポーネント（ボタン、テキストフィールド、ヘッダー、フッター）の使用を推奨します。これらはデフォルトでバーの角と同心円状の角丸を持ちます。カスタムコンポーネントを作成する必要がある場合は、その角丸もバーの角と同心円状であることを確認します。",
+        "source": "Apple Human Interface Guidelines",
+        "category": "interaction_patterns",
+        "subcategory": "toolbars",
+        "keywords": ["ツールバー", "toolbar", "標準コンポーネント", "standard components", "角丸", "rounded corners", "カスタムコンポーネント", "custom components"],
+        "priority": "medium"
+      },
+      {
+        "content": "ツールバーでのセグメントコントロールの使用は避けます。セグメントコントロールはコンテキストを切り替える機能を持つが、ツールバーのアクションは現在のビューに固有のものであるためです。",
+        "source": "Apple Human Interface Guidelines",
+        "category": "interaction_patterns",
+        "subcategory": "toolbars",
+        "keywords": ["ツールバー", "toolbar", "セグメントコントロール", "segmented control", "避ける", "avoid"],
+        "priority": "high"
+      },
+      {
+        "content": "注意散漫のないエクスペリエンスのために、ツールバーを一時的に非表示にすることを検討します（例：全画面表示）。ただし、非表示になったインターフェース要素を確実に復元する方法を提供します。",
+        "source": "Apple Human Interface Guidelines",
+        "category": "interaction_patterns",
+        "subcategory": "toolbars",
+        "keywords": ["ツールバー", "toolbar", "非表示", "hide", "全画面表示", "full screen"],
+        "priority": "low"
+      },
+      {
+        "content": "各ウィンドウに役立つタイトルを提供し、ユーザーがアプリ内での自分の位置を確認し、複数の開いているウィンドウのコンテンツを区別できるようにします。簡潔なタイトルを記述し、15文字未満に保ちます。",
+        "source": "Apple Human Interface Guidelines",
+        "category": "interaction_patterns",
+        "subcategory": "toolbars",
+        "keywords": ["ツールバー", "toolbar", "ウィンドウタイトル", "window title", "簡潔", "concise", "位置確認", "orientation"],
+        "priority": "medium"
+      },
+      {
+        "content": "ツールバーの先頭エッジには、ユーザーが前のドキュメントに戻ったり、サイドバーを表示したり非表示にしたりする要素が表示され、その後にビュータイトルが続きます。これらの項目はカスタマイズできません。",
+        "source": "Apple Human Interface Guidelines",
+        "category": "interaction_patterns",
+        "subcategory": "toolbars",
+        "keywords": ["ツールバー", "toolbar", "先頭エッジ", "leading edge", "ナビゲーション", "navigation", "サイドバー", "sidebar"],
+        "priority": "medium"
+      },
+      {
+        "content": "一般的で有用なコントロールが中央領域に表示され、ビュータイトルが先頭エッジにない場合はここに表示できます。macOSおよびiPadOSでは、ユーザーがツールバーをカスタマイズできるようにした場合、ユーザーはここに項目を追加、削除、再配置できます。",
+        "source": "Apple Human Interface Guidelines",
+        "category": "interaction_patterns",
+        "subcategory": "toolbars",
+        "keywords": ["ツールバー", "toolbar", "中央領域", "center region", "カスタマイズ", "customization"],
+        "priority": "medium"
+      },
+      {
+        "content": "末尾エッジには、利用可能な状態を維持する必要がある重要な項目、近くのインスペクタを開くボタン、オプションの検索フィールド、「その他」メニュー、および主要なアクション（「完了」など）が含まれます。末尾エッジの項目は、すべてのウィンドウサイズで表示されたままです。",
+        "source": "Apple Human Interface Guidelines",
+        "category": "interaction_patterns",
+        "subcategory": "toolbars",
+        "keywords": ["ツールバー", "toolbar", "末尾エッジ", "trailing edge", "重要な項目", "important items", "検索フィールド", "search field", "その他メニュー", "more menu"],
+        "priority": "medium"
+      },
+      {
+        "content": "アクセシビリティの原則は「直感的」（馴染みのある一貫したインタラクションを使用）、「知覚可能」（情報を伝えるために単一の方法に依存しない）、「適応可能」（システムアクセシビリティ機能をサポート）です。",
+        "source": "Apple Human Interface Guidelines",
+        "category": "system_technologies",
+        "subcategory": "accessibility",
+        "keywords": ["アクセシビリティ", "accessibility", "原則", "principles", "直感的", "intuitive", "知覚可能", "perceivable", "適応可能", "adaptable"],
+        "priority": "high"
+      },
+      {
+        "content": "アプリ内のすべての情報が読みやすいように、前景のテキストとアイコンと背景色の間に十分なコントラストがあることを確認します。最小限の色のコントラスト基準を満たすよう努めます。",
+        "source": "Apple Human Interface Guidelines",
+        "category": "system_technologies",
+        "subcategory": "accessibility",
+        "keywords": ["アクセシビリティ", "accessibility", "色のコントラスト", "color contrast", "読みやすさ", "readability", "WCAG"],
+        "priority": "high"
+      },
+      {
+        "content": "機能の違いや状態の変化をユーザーが知覚できるように、色に加えて視覚的なインジケーター（明確な形状やアイコン）を提供します。",
+        "source": "Apple Human Interface Guidelines",
+        "category": "system_technologies",
+        "subcategory": "accessibility",
+        "keywords": ["アクセシビリティ", "accessibility", "冗長なエンコーディング", "redundant encoding", "色", "color", "視覚的インジケーター", "visual indicators"],
+        "priority": "high"
+      },
+      {
+        "content": "ユーザーがカラーテーマ（例：チャートの色、ゲームキャラクター）をカスタマイズできるようにすることを検討します。",
+        "source": "Apple Human Interface Guidelines",
+        "category": "system_technologies",
+        "subcategory": "accessibility",
+        "keywords": ["アクセシビリティ", "accessibility", "カスタマイズ", "customization", "カラーテーマ", "color theme"],
+        "priority": "medium"
+      },
+      {
+        "content": "メディア（ビデオまたは音声のみのコンテンツ）を体験するためのテキストベースの代替手段（キャプション、字幕）を提供し、そのテキストの視覚的な表示をユーザーがカスタマイズできるようにします。",
+        "source": "Apple Human Interface Guidelines",
+        "category": "system_technologies",
+        "subcategory": "accessibility",
+        "keywords": ["アクセシビリティ", "accessibility", "メディアアクセシビリティ", "media accessibility", "キャプション", "captions", "字幕", "subtitles"],
+        "priority": "high"
+      },
+      {
+        "content": "音声キューに加えてハプティクスを使用します。インターフェースが音声キューを通じて情報を伝える場合、音声を知覚できないユーザーや音声がオフになっているユーザーのために、その音と一致するハプティクスを組み合わせることを検討します。",
+        "source": "Apple Human Interface Guidelines",
+        "category": "system_technologies",
+        "subcategory": "accessibility",
+        "keywords": ["アクセシビリティ", "accessibility", "ハプティクス", "haptics", "音声キュー", "audio cues", "フィードバック", "feedback"],
+        "priority": "medium"
+      },
+      {
+        "content": "モビリティの観点から、十分なサイズのコントロールを提供します（少なくとも44x44 pt、visionOSでは60x60 pt）。アプリやゲームで頻繁に行うインタラクションには、可能な限りシンプルなジェスチャーを使用し、カスタムの多指および多手ジェスチャーは避けます。ジェスチャーの代替手段も提供します。",
+        "source": "Apple Human Interface Guidelines",
+        "category": "system_technologies",
+        "subcategory": "accessibility",
+        "keywords": ["アクセシビリティ", "accessibility", "モビリティ", "mobility", "コントロールサイズ", "control size", "ジェスチャー", "gestures", "代替手段", "alternative means"],
+        "priority": "high"
+      },
+      {
+        "content": "ユーザーがキーボードのみを使用してアプリをナビゲートし、操作できるようにします。ユーザーはフルキーボードアクセスをオンにして、物理キーボードを使用してアプリをナビゲートできます。",
+        "source": "Apple Human Interface Guidelines",
+        "category": "system_technologies",
+        "subcategory": "accessibility",
+        "keywords": ["アクセシビリティ", "accessibility", "キーボードナビゲーション", "keyboard navigation", "フルキーボードアクセス", "full keyboard access"],
+        "priority": "high"
+      },
+      {
+        "content": "アプリやゲームの複雑さを最小限に抑えることで、すべてのユーザーが恩恵を受けます。アクションをシンプルかつ直感的に保ち、ユーザーが覚えやすく一貫したインタラクションを使用してインターフェースをナビゲートできることを確認します。",
+        "source": "Apple Human Interface Guidelines",
+        "category": "system_technologies",
+        "subcategory": "accessibility",
+        "keywords": ["アクセシビリティ", "accessibility", "認知", "cognition", "複雑さの最小化", "minimize complexity", "直感的", "intuitive"],
+        "priority": "high"
+      },
+      {
+        "content": "快適な体験のためにモーションを減らします。アニメーションのスプリングを締め付けてバウンス効果を減らし、ユーザーのジェスチャーと直接アニメーションを追跡します。Z軸レイヤーでの奥行き変化のアニメーションを避け、X、Y、Z軸でのトランジションをフェードに置き換えます。ぼかしへの出入りをアニメーション化することを避け、インターフェース要素をユーザーの視野内に保ち、アニメーションオブジェクトの速度と強度を減らします。カメラとビデオのモーションを穏やかにし、着用者の頭にコンテンツを固定することを避け、大きく反復的なジェスチャーの必要性を最小限に抑えます。",
+        "source": "Apple Human Interface Guidelines",
+        "category": "system_technologies",
+        "subcategory": "accessibility",
+        "keywords": ["アクセシビリティ", "accessibility", "モーション", "motion", "アニメーション", "animation", "快適さ", "comfort", "視差", "parallax"],
+        "priority": "high"
+      },
+      {
+        "content": "VoiceOverのために、すべての主要なインターフェース要素に代替ラベルを提供し、意味のある画像を説明します。チャートやその他のインフォグラフィックを完全にアクセス可能にし、純粋に装飾的な画像をVoiceOverから除外します。情報階層をナビゲートするのに役立つタイトルと見出しを使用し、要素がどのようにグループ化され、順序付けされ、またはリンクされているかを指定します。表示されているコンテンツまたはレイアウトの変更が発生したときにVoiceOverに通知し、可能な場合はVoiceOverローターをサポートします。カスタムジェスチャーが常にアクセス可能であるとは限らないことに留意します。",
+        "source": "Apple Human Interface Guidelines",
+        "category": "system_technologies",
+        "subcategory": "accessibility",
+        "keywords": ["アクセシビリティ", "accessibility", "VoiceOver", "代替ラベル", "alt labels", "画像", "images", "チャート", "charts", "情報階層", "information hierarchy"],
+        "priority": "high"
+      },
+      {
+        "content": "テキストサイズの調整のためにDynamic Typeをサポートします。",
+        "source": "Apple Human Interface Guidelines",
+        "category": "system_technologies",
+        "subcategory": "accessibility",
+        "keywords": ["アクセシビリティ", "accessibility", "Dynamic Type", "テキストサイズ", "text size", "調整", "adjustment"],
+        "priority": "high"
+      },
+      {
+        "content": "さまざまな視点からコピーのトーンを検討します。明確で直接的で、敬意を払うトーンを使用し、学術的または見下すようなトーンは避けます。",
+        "source": "Apple Human Interface Guidelines",
+        "category": "system_technologies",
+        "subcategory": "inclusion_and_interface_copy",
+        "keywords": ["インクルージョン", "inclusion", "インターフェース記述", "interface copy", "トーン", "tone", "明確", "clear", "直接的", "direct", "敬意", "respectful"],
+        "priority": "high"
+      },
+      {
+        "content": "人に直接話しかけるには「あなた」と「あなたの」を使用します。「ユーザー」や「プレイヤー」のような間接的な言及は避けます。ソフトウェアや会社を表すには「私たち」や「私たちの」を予約します。",
+        "source": "Apple Human Interface Guidelines",
+        "category": "system_technologies",
+        "subcategory": "inclusion_and_interface_copy",
+        "keywords": ["インクルージョン", "inclusion", "インターフェース記述", "interface copy", "人への言及", "addressing people", "代名詞", "pronouns"],
+        "priority": "medium"
+      },
+      {
+        "content": "専門用語や技術用語は、定義せずに使用しない。口語表現を平易な言葉に置き換える（一部の口語表現には排他的な意味合いがある可能性がある）。",
+        "source": "Apple Human Interface Guidelines",
+        "category": "system_technologies",
+        "subcategory": "inclusion_and_interface_copy",
+        "keywords": ["インクルージョン", "inclusion", "インターフェース記述", "interface copy", "用語", "terminology", "専門用語", "jargon", "口語表現", "colloquialism"],
+        "priority": "high"
+      },
+      {
+        "content": "ユーモアを含める場合は慎重に検討します。ユーモアは非常に主観的であり、ある文化から別の文化への翻訳が難しい場合があります。混乱させたり、うんざりさせたり、侮辱したりするリスクがあります。",
+        "source": "Apple Human Interface Guidelines",
+        "category": "system_technologies",
+        "subcategory": "inclusion_and_interface_copy",
+        "keywords": ["インクルージョン", "inclusion", "インターフェース記述", "interface copy", "ユーモア", "humor", "文化的考慮事項", "cultural considerations"],
+        "priority": "medium"
+      },
+      {
+        "content": "障害を持つ人々を排除するような画像や言葉は避けます。障害を持つ人々について記述する際には、人中心のアプローチを取ります。",
+        "source": "Apple Human Interface Guidelines",
+        "category": "system_technologies",
+        "subcategory": "inclusion_and_interface_copy",
+        "keywords": ["インクルージョン", "inclusion", "インターフェース記述", "interface copy", "障害の表現", "disability representation", "人中心", "person-first"],
+        "priority": "high"
+      },
+      {
+        "content": "明確で分かりやすいインターフェースを提示します。アプリやゲームの使い方を学ぶ方法を組み込みます（オンボーディングフロー、スキップを許可する）。",
+        "source": "Apple Human Interface Guidelines",
+        "category": "system_technologies",
+        "subcategory": "inclusion_and_interface_copy",
+        "keywords": ["インクルージョン", "inclusion", "インターフェース記述", "interface copy", "親しみやすさ", "familiarity", "オンボーディング", "onboarding"],
+        "priority": "high"
+      },
+      {
+        "content": "記述フレームワークは「目的」（画面の最も重要なことを理解する）、「予測」（ユーザーのニーズや感情を予測する）、「文脈」（テキストが現在の状況に関連していることを確認する）、「共感」（ユーザーの感情を理解し、対処する）です。",
+        "source": "Apple Human Interface Guidelines",
+        "category": "system_technologies",
+        "subcategory": "inclusion_and_interface_copy",
+        "keywords": ["インクルージョン", "inclusion", "インターフェース記述", "interface copy", "記述フレームワーク", "copy framework", "目的", "purpose", "予測", "anticipation", "文脈", "context", "共感", "empathy"],
+        "priority": "high"
+      },
+      {
+        "content": "実際に必要なデータへのアクセスのみを要求します。機能が必要とする以上のデータ、またはユーザーが機能に関心を示す前にデータを要求すると、ユーザーがアプリを信頼しにくくなる可能性があります。許可要求を可能な限り具体的にすることで、ユーザーが自分のデータを正確に制御できるようにします。",
+        "source": "Apple Human Interface Guidelines",
+        "category": "system_technologies",
+        "subcategory": "privacy_and_account_management",
+        "keywords": ["プライバシー", "privacy", "アカウント管理", "account management", "データアクセス", "data access", "最小限", "minimum", "信頼", "trust"],
+        "priority": "high"
+      },
+      {
+        "content": "アプリがユーザーのデータをどのように収集し、使用するかについて透明性を持つ。ユーザーがデータの使用方法を正確に理解していない場合、アプリとデータを共有することに抵抗を感じる可能性が高い。Hide My EmailやMail Privacy Protectionなどのシステム機能を使用するユーザーの選択を常に尊重し、アプリの追跡に関する義務を理解します。",
+        "source": "Apple Human Interface Guidelines",
+        "category": "system_technologies",
+        "subcategory": "privacy_and_account_management",
+        "keywords": ["プライバシー", "privacy", "アカウント管理", "account management", "透明性", "transparency", "データ収集", "data collection", "追跡", "tracking"],
+        "priority": "high"
+      },
+      {
+        "content": "可能であれば、データをデバイス上で処理します（例：Apple Neural EngineやカスタムCreateMLモデルを活用して、リモートサーバーへの時間のかかる、潜在的にリスクのある往復を避ける）。",
+        "source": "Apple Human Interface Guidelines",
+        "category": "system_technologies",
+        "subcategory": "privacy_and_account_management",
+        "keywords": ["プライバシー", "privacy", "アカウント管理", "account management", "デバイス上処理", "on-device processing", "セキュリティ", "security"],
+        "priority": "high"
+      },
+      {
+        "content": "システム定義のプライバシー保護を採用し、セキュリティのベストプラクティスに従います（例：iOS 15以降では、CloudKitに依存して文字列、数値、日付などの追加のデータタイプを暗号化およびキー管理できる）。",
+        "source": "Apple Human Interface Guidelines",
+        "category": "system_technologies",
+        "subcategory": "privacy_and_account_management",
+        "keywords": ["プライバシー", "privacy", "アカウント管理", "account management", "システム保護", "system protection", "セキュリティ", "security", "CloudKit"],
+        "priority": "high"
+      },
+      {
+        "content": "アプリがデータまたはリソースへのアクセスを明確に必要とし、ユーザーがその機能に関心を示した場合にのみ許可を要求します。アプリが機能するためにデータまたはリソースが「必須」でない限り、起動時の要求は避けます。システムアラートの明確な目的文字列を記述し、要求を許可するためのインセンティブを提供しません。システムアラートの機能をミラーリングするカスタム画面を表示せず、カスタムの事前アラート画面に「閉じる」や「キャンセル」などの追加アクションを含めません。",
+        "source": "Apple Human Interface Guidelines",
+        "category": "system_technologies",
+        "subcategory": "privacy_and_account_management",
+        "keywords": ["プライバシー", "privacy", "アカウント管理", "account management", "許可要求", "permission request", "起動時", "launch time", "目的文字列", "purpose string", "インセンティブ", "incentives"],
+        "priority": "high"
+      },
+      {
+        "content": "アカウント作成の利点とサインアップ方法を説明します。可能な限りサインインを遅らせ、ユーザーにアプリの価値を理解する機会を与えます。アカウントが必要な場合は、サインインオプションを提供する前に、その理由を説明します。既存のアカウントを「Appleでサインイン」にリンクすることを検討し、「Appleでサインイン」が完了したらすぐにユーザーを新しいアカウントに歓迎します。",
+        "source": "Apple Human Interface Guidelines",
+        "category": "system_technologies",
+        "subcategory": "privacy_and_account_management",
+        "keywords": ["プライバシー", "privacy", "アカウント管理", "account management", "アカウント作成", "account creation", "サインイン", "sign-in", "Appleでサインイン", "Sign in with Apple", "オンボーディング", "onboarding"],
+        "priority": "high"
+      },
+      {
+        "content": "現在サインインしていることを示します（例：設定またはアカウントインターフェースに「Appleでサインインを使用中」と表示する）。要求された追加データが必須か推奨かを明確にし、「Appleでサインイン」を使用している場合、パスワードを尋ねません。プライベートリレーアドレスを尊重し、個人メールアドレスを尋ねて上書きしません。",
+        "source": "Apple Human Interface Guidelines",
+        "category": "system_technologies",
+        "subcategory": "privacy_and_account_management",
+        "keywords": ["プライバシー", "privacy", "アカウント管理", "account management", "サインイン状態", "sign-in status", "Appleでサインイン", "Sign in with Apple", "パスワード", "password", "プライベートリレー", "private relay"],
+        "priority": "high"
+      },
+      {
+        "content": "認証にはパスワードよりもパスキーを推奨します（iOS、iPadOS、macOS、visionOS）。認証方法を明確に識別し（例：「Face IDでサインイン」）、現在のコンテキストで利用可能な認証方法のみを参照します。生体認証のオプトインのためのアプリ内設定は避け（システムレベルの設定）、アカウント認証に「パスコード」という用語を使用しません。",
+        "source": "Apple Human Interface Guidelines",
+        "category": "system_technologies",
+        "subcategory": "privacy_and_account_management",
+        "keywords": ["プライバシー", "privacy", "アカウント管理", "account management", "認証", "authentication", "パスキー", "passkey", "生体認証", "biometrics", "Face ID"],
+        "priority": "high"
+      },
+      {
+        "content": "アプリ内またはウェブページへの直接リンクを通じて、アカウント削除を開始する明確な方法を提供します。アプリ内とウェブサイトで一貫した削除体験を提供し、将来のアカウント削除をスケジュールすることを検討し、即時削除のオプションも提供します。アカウント削除がいつ完了するかをユーザーに伝え、完了したら通知します。アプリ内購入をサポートしている場合、アカウント削除時の請求とキャンセルがどのように機能するかをユーザーが理解できるようにします。システムレベルでサインインしている場合、サインアウトオプションを表示しません。",
+        "source": "Apple Human Interface Guidelines",
+        "category": "system_technologies",
+        "subcategory": "privacy_and_account_management",
+        "keywords": ["プライバシー", "privacy", "アカウント管理", "account management", "アカウント削除", "account deletion", "透明性", "transparency", "ユーザーコントロール", "user control"],
+        "priority": "high"
+      },
+      {
+        "content": "アプリの軽量版であり、完全なインストールなしで迅速かつ集中的なタスクやデモへのアクセスを提供するApp Clipsは、ユーザーがフルアプリをインストールすることなく、タスクやデモを完了できるようにします。",
+        "source": "Apple Human Interface Guidelines",
+        "category": "system_technologies",
+        "subcategory": "app_clips",
+        "keywords": ["App Clips", "目的", "purpose", "軽量", "lightweight", "迅速", "quick", "タスク完了", "task completion"],
+        "priority": "high"
+      },
+      {
+        "content": "App Clipsでは、本質的な機能に焦点を当て、手元のタスクを達成するために必要なものに機能を限定します。高度または複雑な機能はフルアプリのために予約し、マーケティング目的や広告のためにApp Clipを使用しません。Webビューの使用は避け、アプリ品質の体験を提供するためにネイティブコンポーネントを使用します。",
+        "source": "Apple Human Interface Guidelines",
+        "category": "system_technologies",
+        "subcategory": "app_clips",
+        "keywords": ["App Clips", "機能", "features", "フォーカス", "focus", "複雑な機能", "complex features", "マーケティング", "marketing", "ネイティブコンポーネント", "native components"],
+        "priority": "high"
+      },
+      {
+        "content": "App Clipsでは、線形で、使いやすく、集中的なUIを設計し、画面数と入力フォームを最小限に抑えます。不要な情報を削除し、可能な限りユーザーインターフェースの複雑さを軽減します。",
+        "source": "Apple Human Interface Guidelines",
+        "category": "system_technologies",
+        "subcategory": "app_clips",
+        "keywords": ["App Clips", "UIデザイン", "UI design", "線形", "linear", "シンプル", "simple", "複雑さ軽減", "reduce complexity"],
+        "priority": "high"
+      },
+      {
+        "content": "App Clipsの起動時に最も関連性の高い部分を表示し、不要な手順をスキップし、ユーザーをすぐにコンテキストに最も適したApp Clipの部分に誘導します。ユーザーがApp Clipをすぐに使用できることを確認し、必要なすべてのアセットを含め、スプラッシュ画面を省略し、起動時にユーザーを待たせないようにします。",
+        "source": "Apple Human Interface Guidelines",
+        "category": "system_technologies",
+        "subcategory": "app_clips",
+        "keywords": ["App Clips", "起動", "launch", "即時性", "immediacy", "オンボーディング", "onboarding"],
+        "priority": "high"
+      },
+      {
+        "content": "迅速な起動のためにApp Clipを小さく保ちます。コードを削減し、未使用のアセットを削除し、追加データのダウンロードは避けます。",
+        "source": "Apple Human Interface Guidelines",
+        "category": "system_technologies",
+        "subcategory": "app_clips",
+        "keywords": ["App Clips", "サイズ", "size", "迅速な起動", "quick launch", "最適化", "optimization"],
+        "priority": "high"
+      },
+      {
+        "content": "App Clipを共有可能にします（例：メッセージアプリでリンクを共有する）。Apple Payをサポートして、迅速なチェックアウトを提供します。",
+        "source": "Apple Human Interface Guidelines",
+        "category": "system_technologies",
+        "subcategory": "app_clips",
+        "keywords": ["App Clips", "共有可能性", "shareability", "Apple Pay", "チェックアウト", "checkout"],
+        "priority": "medium"
+      },
+      {
+        "content": "App Clipsでは、アカウント作成をユーザーに要求することを避けます。必要な場合は、提供する情報の量を制限するか、「Appleでサインイン」を提供します。",
+        "source": "Apple Human Interface Guidelines",
+        "category": "system_technologies",
+        "subcategory": "app_clips",
+        "keywords": ["App Clips", "アカウント", "account", "アカウント作成", "account creation", "Appleでサインイン", "Sign in with Apple"],
+        "priority": "high"
+      },
+      {
+        "content": "フルアプリをインストールする際に、App Clipで提供されたものと類似した、集中した体験を提供します。ユーザーを遅らせる追加の手順を要求しません（例：App Clipからアプリに移行する際に再ログインを要求しない）。",
+        "source": "Apple Human Interface Guidelines",
+        "category": "system_technologies",
+        "subcategory": "app_clips",
+        "keywords": ["App Clips", "フルアプリ移行", "full app transition", "シームレス", "seamless", "ログイン", "login"],
+        "priority": "high"
+      },
+      {
+        "content": "App Clipsでは、保存するデータの量を制限します。ログイン情報などの機密データは安全にオフデバイスに保存します。システムがApp Clipをデバイスから削除し、すべてのデータを削除する可能性があることに留意します。",
+        "source": "Apple Human Interface Guidelines",
+        "category": "system_technologies",
+        "subcategory": "app_clips",
+        "keywords": ["App Clips", "データストレージ", "data storage", "機密データ", "sensitive data", "オフデバイス", "off-device"],
+        "priority": "high"
+      },
+      {
+        "content": "AR機能をARKitをサポートするデバイスでのみ提供します。AR機能がオプションである場合、サポートされていないデバイスでユーザーがこれらの機能を使用しようとしてもエラーを表示せず、代わりにその機能を提供しません。",
+        "source": "Apple Human Interface Guidelines",
+        "category": "system_technologies",
+        "subcategory": "augmented_reality",
+        "keywords": ["拡張現実", "augmented reality", "ARKit", "デバイス能力", "device capability", "サポート", "support"],
+        "priority": "high"
+      },
+      {
+        "content": "画面の可能な限り多くの部分を物理世界とアプリの仮想オブジェクトの表示に充てます。没入型体験を損なうコントロールや情報で画面を混雑させないでください。",
+        "source": "Apple Human Interface Guidelines",
+        "category": "system_technologies",
+        "subcategory": "augmented_reality",
+        "keywords": ["拡張現実", "augmented reality", "ディスプレイ使用", "display usage", "没入型体験", "immersive experience", "混雑", "clutter"],
+        "priority": "high"
+      },
+      {
+        "content": "現実的なオブジェクトを配置する際に、説得力のある錯覚を追求します。ARKitからの情報を使用して、オブジェクトを適切にスケーリングし、検出された実世界の表面に配置し、環境光の条件を反映し、実世界の表面に上から下への拡散的なオブジェクトシャドウをキャストし、カメラの位置が変化するにつれて視覚を更新します。アプリがシーンを毎秒60回更新し、オブジェクトがジャンプしたりちらついたりしないようにします。",
+        "source": "Apple Human Interface Guidelines",
+        "category": "system_technologies",
+        "subcategory": "augmented_reality",
+        "keywords": ["拡張現実", "augmented reality", "錯覚", "illusion", "ARKit", "スケーリング", "scaling", "環境光", "environmental lighting", "シャドウ", "shadows", "フレームレート", "frame rate"],
+        "priority": "high"
+      },
+      {
+        "content": "反射面を持つ仮想オブジェクトが環境をどのように表示するかを考慮します。ARKitの反射は近似であるため、AR体験が現実であるという錯覚を維持するために、これらの近似効果を控えめにする小さなまたは粗い反射面を推奨します。",
+        "source": "Apple Human Interface Guidelines",
+        "category": "system_technologies",
+        "subcategory": "augmented_reality",
+        "keywords": ["拡張現実", "augmented reality", "反射面", "reflective surfaces", "ARKit", "リアリズム", "realism"],
+        "priority": "medium"
+      },
+      {
+        "content": "没入型体験を強化するために、オーディオとハプティクスを使用します。効果音や振動は、仮想オブジェクトが物理的な表面や他の仮想オブジェクトと接触したことを確認するのに最適です。BGMもユーザーを仮想世界に包み込むのに役立ちます。",
+        "source": "Apple Human Interface Guidelines",
+        "category": "system_technologies",
+        "subcategory": "augmented_reality",
+        "keywords": ["拡張現実", "augmented reality", "オーディオ", "audio", "ハプティクス", "haptics", "没入感", "immersion"],
+        "priority": "medium"
+      },
+      {
+        "content": "アプリ体験に必要な情報のみを環境内に表示します。追加の情報やコントロールが必要な場合は、「スクリーン空間」（仮想世界またはデバイス画面上の固定された場所）に表示することを検討します。ユーザーがデバイスの持ち方を調整しなくてもコントロールにアクセスできるように、コントロールを配置することを検討します。また、基になるシーンを遮らないように、半透明の間接コントロールを使用することを検討します。",
+        "source": "Apple Human Interface Guidelines",
+        "category": "system_technologies",
+        "subcategory": "augmented_reality",
+        "keywords": ["拡張現実", "augmented reality", "テキスト最小化", "minimize text", "コントロール", "controls", "スクリーン空間", "screen space", "半透明", "translucent"],
+        "priority": "high"
+      },
+      {
+        "content": "アプリがさまざまな実世界環境で使用されることを想定します。AR体験が物理環境にどのように影響するかをユーザーが理解できるように、アプリの要件と期待を事前に明確に伝えます。異なる環境で使用するための異なる機能セットを提供することも検討できます。",
+        "source": "Apple Human Interface Guidelines",
+        "category": "system_technologies",
+        "subcategory": "augmented_reality",
+        "keywords": ["拡張現実", "augmented reality", "環境予測", "environmental prediction", "要件", "requirements", "期待", "expectations"],
+        "priority": "medium"
+      },
+      {
+        "content": "visionOSでは、無限のキャンバス、流動的な没入レベルを提供します。目（視線）と間接的なジェスチャー（タップ）、または直接的なジェスチャー（タッチ）を介したインタラクションをサポートします。快適さを優先します（視野内にコンテンツを表示し、圧倒的な動きを避け、間接的なジェスチャーをサポートし、過度な動きを避ける）。",
+        "source": "Apple Human Interface Guidelines",
+        "category": "system_technologies",
+        "subcategory": "augmented_reality",
+        "keywords": ["拡張現実", "augmented reality", "visionOS", "無限キャンバス", "infinite canvas", "没入レベル", "immersion level", "インタラクション", "interaction", "快適さ", "comfort"],
+        "priority": "high"
+      },
+      {
+        "content": "車内でiPhoneを使用するためのよりスマートで安全な方法であり、運転中の使用に最適化された簡素化されたインターフェースで互換性のあるアプリを表示するCarPlayは、CarPlayがアクティブな場合、iPhoneでのアプリのインタラクションを排除します。",
+        "source": "Apple Human Interface Guidelines",
+        "category": "system_technologies",
+        "subcategory": "carplay",
+        "keywords": ["CarPlay", "目的", "purpose", "安全", "safe", "簡素化", "simplified", "iPhoneインタラクション", "iPhone interaction"],
+        "priority": "high"
+      },
+      {
+        "content": "接続されたiPhoneが入力が必要なためにCarPlayからロックアウトされないようにします。アプリはiPhoneがアクセスできない場合でも機能する必要があります（例：運転中にバッグやトランクに入れている場合）。",
+        "source": "Apple Human Interface Guidelines",
+        "category": "system_technologies",
+        "subcategory": "carplay",
+        "keywords": ["CarPlay", "ロックされたiPhone", "locked iPhone", "機能性", "functionality"],
+        "priority": "high"
+      },
+      {
+        "content": "ユーザーが再生を開始するタイミングを選択できるようにします。アプリの目的が単一のオーディオソースを再生することである場合、または以前中断されたオーディオを再開する場合を除き、自動的に再生を開始することは避けます。また、オーディオセッションを実際にオーディオを再生する準備ができるまで開始しないようにします。",
+        "source": "Apple Human Interface Guidelines",
+        "category": "system_technologies",
+        "subcategory": "carplay",
+        "keywords": ["CarPlay", "再生", "playback", "自動再生", "auto-play", "オーディオセッション", "audio session"],
+        "priority": "medium"
+      },
+      {
+        "content": "オーディオが十分に読み込まれたらすぐに再生を開始します。ユーザーが選択を行った後、バッファリングやネットワークの状態によっては、オーディオの再生が開始されるまでに数秒かかる場合があります。",
+        "source": "Apple Human Interface Guidelines",
+        "category": "system_technologies",
+        "subcategory": "carplay",
+        "keywords": ["CarPlay", "読み込み", "loading", "再生開始", "start playback", "バッファリング", "buffering"],
+        "priority": "medium"
+      },
+      {
+        "content": "一時的な中断（例：電話）の後、適切である場合にのみオーディオ再生を再開します。Siriが開始した音楽プレイリストなどの永続的な中断は再開できません。再開可能な中断が発生した場合、アプリは中断が終了したときに再生を再開する必要があります。",
+        "source": "Apple Human Interface Guidelines",
+        "category": "system_technologies",
+        "subcategory": "carplay",
+        "keywords": ["CarPlay", "中断", "interruption", "オーディオ再生", "audio playback", "再開", "resume"],
+        "priority": "medium"
+      },
+      {
+        "content": "オーディオレベルを自動的に調整しますが、全体的な音量は変更しません。アプリは、優れたオーディオミックスを実現するために相対的で独立した音量レベルを調整できますが、最終的な出力音量はユーザーが制御する必要があります。",
+        "source": "Apple Human Interface Guidelines",
+        "category": "system_technologies",
+        "subcategory": "carplay",
+        "keywords": ["CarPlay", "音量レベル", "volume level", "自動調整", "auto-adjust", "ユーザー制御", "user control"],
+        "priority": "medium"
+      },
+      {
+        "content": "運転席から簡単にスキャンできるクリーンなレイアウトで、有用で価値の高い情報を提供します。不要な詳細や不必要な視覚的装飾で画面を混雑させないでください。",
+        "source": "Apple Human Interface Guidelines",
+        "category": "system_technologies",
+        "subcategory": "carplay",
+        "keywords": ["CarPlay", "情報表示", "information display", "クリーンレイアウト", "clean layout", "スキャン", "scan"],
+        "priority": "high"
+      },
+      {
+        "content": "アプリ全体で全体的な一貫した外観を維持します。一般的に、同様の機能を持つ要素は同様に見えるようにします。",
+        "source": "Apple Human Interface Guidelines",
+        "category": "system_technologies",
+        "subcategory": "carplay",
+        "keywords": ["CarPlay", "一貫性", "consistency", "外観", "appearance"],
+        "priority": "high"
+      },
+      {
+        "content": "主要なコンテンツが際立ち、操作可能であると感じられるようにします。大きな項目は小さな項目よりも重要に見える傾向があり、ユーザーがタップしやすいです。一般的に、最も重要なコンテンツとコントロールは画面の上半分に配置します。",
+        "source": "Apple Human Interface Guidelines",
+        "category": "system_technologies",
+        "subcategory": "carplay",
+        "keywords": ["CarPlay", "主要コンテンツ", "primary content", "視認性", "visibility", "配置", "placement"],
+        "priority": "high"
+      },
+      {
+        "content": "アプリのロゴと調和する限られたカラーパレットを推奨します。",
+        "source": "Apple Human Interface Guidelines",
+        "category": "system_technologies",
+        "subcategory": "carplay",
+        "keywords": ["CarPlay", "カラーパレット", "color palette", "ロゴ", "logo"],
+        "priority": "low"
+      },
+      {
+        "content": "インタラクティブな要素と非インタラクティブな要素に同じ色を使用することを避けます。同じ色を使用すると、ユーザーはどこをタップすればよいか分かりにくくなります。",
+        "source": "Apple Human Interface Guidelines",
+        "category": "system_technologies",
+        "subcategory": "carplay",
+        "keywords": ["CarPlay", "インタラクティブな色", "interactive color", "区別", "distinction"],
+        "priority": "high"
+      },
+      {
+        "content": "実際の車内でさまざまな照明条件下でアプリのカラーテーマをテストします。日中の直射日光や夜間の運転で色の明るさが体験にどのように影響するかを考慮します。必要に応じて調整を行い、ほとんどの使用ケースで可能な限り最高の視聴体験を提供します。",
+        "source": "Apple Human Interface Guidelines",
+        "category": "system_technologies",
+        "subcategory": "carplay",
+        "keywords": ["CarPlay", "テスト", "testing", "カラーテーマ", "color theme", "照明", "lighting"],
+        "priority": "high"
+      },
+      {
+        "content": "タイムリーな情報表示のためにウィジェットとライブアクティビティをサポートします。小型ウィジェット/ライブアクティビティは自動的に表示されます。CarPlayに最適化されていないことを示すこともできます。",
+        "source": "Apple Human Interface Guidelines",
+        "category": "system_technologies",
+        "subcategory": "carplay",
+        "keywords": ["CarPlay", "ウィジェット", "widgets", "ライブアクティビティ", "Live Activities", "情報表示", "information display"],
+        "priority": "medium"
+      },
+      {
+        "content": "CarPlayシミュレーター（スタンドアロンのMacアプリ）を使用して、特にロックされたiPhone、ランタイムシナリオ、オーディオ、Siri機能の正確なテストを行います。XcodeシミュレーターはUIビルド/テストには有用ですが、すべてのシナリオには対応していません。",
+        "source": "Apple Human Interface Guidelines",
+        "category": "system_technologies",
+        "subcategory": "carplay",
+        "keywords": ["CarPlay", "シミュレーター", "simulator", "テスト", "testing", "Xcode"],
+        "priority": "medium"
+      },
+      {
+        "content": "ユーザーのプライバシーを保護し、CareKitアプリが収集および保存する非常に機密性の高いデータを保護することが最も重要です。",
+        "source": "Apple Human Interface Guidelines",
+        "category": "system_technologies",
+        "subcategory": "carekit",
+        "keywords": ["CareKit", "プライバシー", "privacy", "機密データ", "sensitive data", "保護", "protection"],
+        "priority": "high"
+      },
+      {
+        "content": "アプリ提出プロセス中に、明確に記載されたプライバシーポリシーへのURLを提供する必要があります。これにより、ユーザーはアプリのApp Storeページにあるリンクをクリックしてポリシーを表示できます。",
+        "source": "Apple Human Interface Guidelines",
+        "category": "system_technologies",
+        "subcategory": "carekit",
+        "keywords": ["CareKit", "プライバシーポリシー", "privacy policy", "App Store", "URL"],
+        "priority": "high"
+      },
+      {
+        "content": "健康データへのアクセスは、必要な場合にのみ要求します。要求が現在のコンテキストに明確に関連している場合、アプリの意図をユーザーが理解するのに役立ちます。また、ユーザーは付与する許可を変更できるため、アプリがアクセスを必要とするたびに要求を行うことを推奨します。",
+        "source": "Apple Human Interface Guidelines",
+        "category": "system_technologies",
+        "subcategory": "carekit",
+        "keywords": ["CareKit", "データアクセス", "data access", "健康データ", "health data", "許可", "permission", "コンテキスト", "context"],
+        "priority": "high"
+      },
+      {
+        "content": "標準の許可画面に説明的なメッセージを追加して、アプリの意図を明確にします。ユーザーは、健康データへのアクセスを承認するよう求められたときに、システム提供の許可画面が表示されることを期待します。標準の許可画面の動作やコンテンツを複製するカスタム画面は避けます。",
+        "source": "Apple Human Interface Guidelines",
+        "category": "system_technologies",
+        "subcategory": "carekit",
+        "keywords": ["CareKit", "許可画面", "permission screen", "説明メッセージ", "explanatory message", "カスタム画面", "custom screen"],
+        "priority": "high"
+      },
+      {
+        "content": "健康データ共有は、システムのプライバシー設定を通じてのみ管理します。ユーザーが設定 > プライバシーで健康情報へのアクセスをグローバルに管理することを期待します。健康データの流れに影響を与える追加のアプリ内画面を構築してユーザーを混乱させないでください。",
+        "source": "Apple Human Interface Guidelines",
+        "category": "system_technologies",
+        "subcategory": "carekit",
+        "keywords": ["CareKit", "健康データ管理", "health data management", "プライバシー設定", "privacy settings", "アプリ内画面", "in-app screen"],
+        "priority": "high"
+      },
+      {
+        "content": "CareKitタスクスタイルには、シンプルな1ステップタスク向けの「シンプル」、追加のテキスト指示を含む「指示」、イベントをログに記録する「ログ」、多段階タスクのアクションまたは手順のリストを表示する「チェックリスト」、ボタンのグリッドを表示する「グリッド」があります。",
+        "source": "Apple Human Interface Guidelines",
+        "category": "system_technologies",
+        "subcategory": "carekit",
+        "keywords": ["CareKit", "タスクスタイル", "task style", "シンプル", "simple", "指示", "instruction", "ログ", "log", "チェックリスト", "checklist", "グリッド", "grid"],
+        "priority": "medium"
+      },
+      {
+        "content": "実績、リーダーボード、チャレンジ、アクティビティは、プレイヤーのエンゲージメントとゲームの視認性を高めるGame Centerの機能です。",
+        "source": "Apple Human Interface Guidelines",
+        "category": "system_technologies",
+        "subcategory": "game_center",
+        "keywords": ["Game Center", "機能", "features", "実績", "achievements", "リーダーボード", "leaderboards", "チャレンジ", "challenges", "アクティビティ", "activity"],
+        "priority": "high"
+      },
+      {
+        "content": "ゲームのメインメニューまたは設定領域にGame Centerのアクセスポイントを表示します。アクティブなゲームプレイ中や一時的なスプラッシュ画面、シネマティックフロー、ゲームのメインメニュー画面の前に表示されるチュートリアル中には表示しません。",
+        "source": "Apple Human Interface Guidelines",
+        "category": "system_technologies",
+        "subcategory": "game_center",
+        "keywords": ["Game Center", "アクセスポイント", "access point", "レイアウト", "layout", "ゲームプレイ中", "in-game"],
+        "priority": "medium"
+      },
+      {
+        "content": "アクセスポイントの近くにコントロールを配置しないようにします。アクセスポイントには折りたたみバージョンと展開バージョンがあるため、重要なUIやコントロールと重ならないか確認し、それに応じてレイアウトを調整します。",
+        "source": "Apple Human Interface Guidelines",
+        "category": "system_technologies",
+        "subcategory": "game_center",
+        "keywords": ["Game Center", "レイアウト", "layout", "コントロール", "controls", "重なり", "overlap"],
+        "priority": "medium"
+      },
+      {
+        "content": "ゲームオーバーレイまたはダッシュボードが表示されている間は、ゲームを一時停止することを検討します。ゲームを一時停止することで、プレイヤーはゲームが自分なしで進行していると感じることなく、Game Centerの情報を確認できます。",
+        "source": "Apple Human Interface Guidelines",
+        "category": "system_technologies",
+        "subcategory": "game_center",
+        "keywords": ["Game Center", "一時停止", "pause", "ゲームオーバーレイ", "game overlay"],
+        "priority": "medium"
+      },
+      {
+        "content": "カスタムリンクでGame Center機能を参照する場合は、Apple Design Resourcesの公式アートワークを使用します。このアートワークの外観を維持し、寸法や視覚効果を調整しないようにします。",
+        "source": "Apple Human Interface Guidelines",
+        "category": "system_technologies",
+        "subcategory": "game_center",
+        "keywords": ["Game Center", "アートワーク", "artwork", "Apple Design Resources", "カスタムリンク", "custom link"],
+        "priority": "high"
+      },
+      {
+        "content": "カスタムリンクで正しい用語を使用します。",
+        "source": "Apple Human Interface Guidelines",
+        "category": "system_technologies",
+        "subcategory": "game_center",
+        "keywords": ["Game Center", "用語", "terminology", "カスタムリンク", "custom link"],
+        "priority": "medium"
+      },
+      {
+        "content": "Game Centerの4つの実績状態（ロック、進行中、非表示、完了）に合わせます。システムは実績を完了ステータスでグループ化します。",
+        "source": "Apple Human Interface Guidelines",
+        "category": "system_technologies",
+        "subcategory": "game_center",
+        "keywords": ["Game Center", "実績", "achievements", "実績状態", "achievement states", "ロック", "locked", "進行中", "in progress", "非表示", "hidden", "完了", "completed"],
+        "priority": "high"
+      },
+      {
+        "content": "実績の表示順序をアップロード前に決定します（例：ゲームの最も一般的なパスに対応する順序）。",
+        "source": "Apple Human Interface Guidelines",
+        "category": "system_technologies",
+        "subcategory": "game_center",
+        "keywords": ["Game Center", "実績", "achievements", "表示順序", "display order"],
+        "priority": "medium"
+      },
+      {
+        "content": "実績の説明は簡潔にします。実績カードはタイトルと説明をそれぞれ2行に制限します。タイトルまたは説明が2行を超えて折り返されると、カードはテキストを切り捨てます。実績タイトルにはタイトルスタイルの大文字を、説明には文頭大文字を使用します。",
+        "source": "Apple Human Interface Guidelines",
+        "category": "system_technologies",
+        "subcategory": "game_center",
+        "keywords": ["Game Center", "実績", "achievements", "説明", "description", "簡潔", "concise", "切り捨て", "truncation"],
+        "priority": "high"
+      },
+      {
+        "content": "進行中の実績には進捗状況を示します（システムは「あなたはThe CoastのGreat Lakes Freighterを完了するまで半分以上進んでいます。頑張ってください！」のような励ましのメッセージを表示する）。",
+        "source": "Apple Human Interface Guidelines",
+        "category": "system_technologies",
+        "subcategory": "game_center",
+        "keywords": ["Game Center", "実績", "achievements", "進捗状況", "progress", "フィードバック", "feedback"],
+        "priority": "medium"
+      },
+      {
+        "content": "プレイヤーに報酬を感じさせる豊かで高品質な画像を実績のために設計します。同じアセットを複数の実績を表すために再利用することは避け、実績にアセットを提供しない場合、カードはプレースホルダー画像を表示します。システムは実績画像に円形のマスクを適用するため、コンテンツを中央に配置します。",
+        "source": "Apple Human Interface Guidelines",
+        "category": "system_technologies",
+        "subcategory": "game_center",
+        "keywords": ["Game Center", "実績", "achievements", "画像", "images", "品質", "quality", "マスク", "mask"],
+        "priority": "high"
+      },
+      {
+        "content": "クラシックとリカーリングの2種類のリーダーボードをサポートします。複数のリーダーボードのためにリーダーボードセットを活用し、プレイヤーが目的のボードを見つけやすくする組織システムとしてテーマやゲームプレイ体験でリーダーボードセットをグループ化することを検討します。",
+        "source": "Apple Human Interface Guidelines",
+        "category": "system_technologies",
+        "subcategory": "game_center",
+        "keywords": ["Game Center", "リーダーボード", "leaderboards", "クラシック", "classic", "リカーリング", "recurring", "リーダーボードセット", "leaderboard sets"],
+        "priority": "medium"
+      },
+      {
+        "content": "ゲームの視認性（トッププレイゲームチャート、推奨事項）を最大化するために、Game Centerを可能な限り起動時に近いタイミングで初期化します。",
+        "source": "Apple Human Interface Guidelines",
+        "category": "system_technologies",
+        "subcategory": "game_center",
+        "keywords": ["Game Center", "初期化", "initialization", "視認性", "visibility", "エンゲージメント", "engagement"],
+        "priority": "high"
+      },
+      {
+        "content": "人々、システム、社会への直接的および間接的な影響を考慮して、AI機能を責任を持って設計および開発します。生成AIでは、入力のわずかな変更が非常に異なる結果を生み出すことが多いことを認識し、包括的で、慎重に設計され、プライバシーを保護するAI体験を構築することを中心に設計プロセスを方向付けます。",
+        "source": "Apple Human Interface Guidelines",
+        "category": "system_technologies",
+        "subcategory": "generative_ai",
+        "keywords": ["生成AI", "generative AI", "責任", "responsibility", "影響", "impact", "プライバシー", "privacy", "包括的", "inclusive"],
+        "priority": "high"
+      },
+      {
+        "content": "ユーザーがコントロールできるようにします。AIはコンテンツを操作および作成できますが、ユーザーの主体性を尊重し、意思決定と全体的な体験をユーザーが担当することを保証します。ユーザーが望まない新しいコンテンツを却下したり、同意しないコンテンツの変換やその他のアクションを元に戻したり、再試行したりする機能を提供します。",
+        "source": "Apple Human Interface Guidelines",
+        "category": "system_technologies",
+        "subcategory": "generative_ai",
+        "keywords": ["生成AI", "generative AI", "ユーザーコントロール", "user control", "主体性", "agency", "却下", "reject", "元に戻す", "undo"],
+        "priority": "high"
+      },
+      {
+        "content": "AIがいつどこで使用されているかを明確に識別します。",
+        "source": "Apple Human Interface Guidelines",
+        "category": "system_technologies",
+        "subcategory": "generative_ai",
+        "keywords": ["生成AI", "generative AI", "AI識別", "AI identification", "透明性", "transparency"],
+        "priority": "high"
+      },
+      {
+        "content": "すべてのユーザーに包括的な体験を保証します。AIモデルはデータから学習し、最も一般的な情報を好む傾向があるため、有害で意図しない偏見や固定観念が生じる可能性があります。AI機能を設計する際は、仮定や個人的な属性が意図する機能にどのように影響するかを慎重に検討し、多様なユーザーに対して機能をテストし、固定観念を特定して修正し、包括的な結果を確保します。",
+        "source": "Apple Human Interface Guidelines",
+        "category": "system_technologies",
+        "subcategory": "generative_ai",
+        "keywords": ["生成AI", "generative AI", "包括性", "inclusivity", "偏見", "bias", "固定観念", "stereotypes", "テスト", "testing"],
+        "priority": "high"
+      },
+      {
+        "content": "生成AIは強力なツールですが、すべての状況に適したソリューションではありません。時間節約、コミュニケーションの改善、創造性の向上など、明確で具体的な価値を提供する場所で生成機能を提供します。",
+        "source": "Apple Human Interface Guidelines",
+        "category": "system_technologies",
+        "subcategory": "generative_ai",
+        "keywords": ["生成AI", "generative AI", "有用性", "usefulness", "価値提供", "value proposition", "時間節約", "time-saving"],
+        "priority": "medium"
+      },
+      {
+        "content": "生成機能が利用できない場合や、ユーザーが使用しないことを選択した場合でも、優れた体験を確保します。可能な場合は、ユーザーが常にアプリやゲームを楽しめるように、非AIフォールバックを提供することを検討します。",
+        "source": "Apple Human Interface Guidelines",
+        "category": "system_technologies",
+        "subcategory": "generative_ai",
+        "keywords": ["生成AI", "generative AI", "フォールバック", "fallback", "非AI", "non-AI", "体験", "experience"],
+        "priority": "medium"
+      },
+      {
+        "content": "アプリがAIをいつどこで使用しているかをユーザーに知らせることで、期待値を設定し、ユーザーがAI搭載機能を使用するかどうかを意識的に選択する機会を与えます。ユーザーが人間とやり取りしている、または人間が作成したコンテンツを見ていると誤解させるようなことは決してしません。開示のアプローチが、アプリを提供する地域の規制に準拠していることを確認します。",
+        "source": "Apple Human Interface Guidelines",
+        "category": "system_technologies",
+        "subcategory": "generative_ai",
+        "keywords": ["生成AI", "generative AI", "AI使用箇所の伝達", "communicating AI usage", "期待値", "expectations", "規制", "regulations", "透明性", "transparency"],
+        "priority": "high"
+      },
+      {
+        "content": "HealthKitストアからFast Healthcare Interoperability Resources (FHIR) を読み取り、個別の医療記録（病状、処置、結果）へのアクセスを提供するHealthKitは、機密性の高い性質上、臨床記録には追加のセットアップ要件があります。",
+        "source": "Apple Human Interface Guidelines",
+        "category": "system_technologies",
+        "subcategory": "healthkit",
+        "keywords": ["HealthKit", "目的", "purpose", "FHIR", "医療記録", "medical records", "プライバシー", "privacy"],
+        "priority": "high"
+      },
+      {
+        "content": "アプリのHealthKit機能を有効にし、「臨床健康記録」チェックボックスを選択します。アプリの「健康記録使用」文字列を提供します。",
+        "source": "Apple Human Interface Guidelines",
+        "category": "system_technologies",
+        "subcategory": "healthkit",
+        "keywords": ["HealthKit", "機能", "features", "臨床健康記録", "clinical health records", "使用文字列", "usage string"],
+        "priority": "medium"
+      },
+      {
+        "content": "各記録タイプ（`HKClinicalTypeIdentifier`）の読み取り許可を要求します。臨床記録タイプと通常のHealthKitタイプを同じメソッド呼び出しで要求できます。臨床記録タイプは別の許可シートに表示されます。",
+        "source": "Apple Human Interface Guidelines",
+        "category": "system_technologies",
+        "subcategory": "healthkit",
+        "keywords": ["HealthKit", "許可", "permission", "記録タイプ", "record type", "許可シート", "permission sheet"],
+        "priority": "high"
+      },
+      {
+        "content": "App Store提出時に有効なプライバシーポリシーURLが必要である。これは許可シートのリンクとして表示されます。",
+        "source": "Apple Human Interface Guidelines",
+        "category": "system_technologies",
+        "subcategory": "healthkit",
+        "keywords": ["HealthKit", "プライバシーポリシー", "privacy policy", "App Store", "URL"],
+        "priority": "high"
+      },
+      {
+        "content": "HealthKitクエリを使用して個別の記録にアクセスします。述語（例：`predicateForClinicalRecords`）でクエリをさらに絞り込むことができます。各記録のFHIR JSONデータを解析し、処理する必要があります。",
+        "source": "Apple Human Interface Guidelines",
+        "category": "system_technologies",
+        "subcategory": "healthkit",
+        "keywords": ["HealthKit", "クエリ", "query", "FHIR", "データ解析", "data parsing"],
+        "priority": "medium"
+      },
+      {
+        "content": "Xcodeのシミュレーターは、アプリの構築とテストに使用できるサンプルアカウントを提供します。",
+        "source": "Apple Human Interface Guidelines",
+        "category": "system_technologies",
+        "subcategory": "healthkit",
+        "keywords": ["HealthKit", "シミュレーター", "simulator", "Xcode", "テスト", "testing"],
+        "priority": "low"
+      },
+      {
+        "content": "ユーザーがアクセサリを設定、命名、整理し、きめ細かなアクセサリの設定と制御を可能にし、カスタムアクセサリ機能へのアクセスを提供し、強力なハンズフリーオートメーションを作成し、サポートを提供するHomeKitは、アクセサリの関連するHomeKit詳細（例：アクセサリのゾーンや部屋）を簡単に見つけられるようにします。設定画面の奥深くに隠さないでください。",
+        "source": "Apple Human Interface Guidelines",
+        "category": "system_technologies",
+        "subcategory": "homekit",
+        "keywords": ["HomeKit", "機能", "features", "発見", "discovery", "アクセサリ", "accessories", "設定", "setup"],
+        "priority": "high"
+      },
+      {
+        "content": "重複するホーム設定を提示したり、ユーザーにホームの一部または全体を再度設定するよう求めたりしないようにします。",
+        "source": "Apple Human Interface Guidelines",
+        "category": "system_technologies",
+        "subcategory": "homekit",
+        "keywords": ["HomeKit", "重複設定", "duplicate settings", "設定", "settings"],
+        "priority": "high"
+      },
+      {
+        "content": "サービス名には説明的な名前（例：「ガレージドアオープナー」、「シーリングファンライト」）を使用し、「サービス」という言葉は使用しません。ユーザーはSiriにサービス名を話しかけてコントロールします。",
+        "source": "Apple Human Interface Guidelines",
+        "category": "system_technologies",
+        "subcategory": "homekit",
+        "keywords": ["HomeKit", "用語", "terminology", "サービス名", "service name", "Siri", "音声コントロール", "voice control"],
+        "priority": "high"
+      },
+      {
+        "content": "HomeKit APIでは「シーン」の代わりに「アクションセット」という用語を使用します。",
+        "source": "Apple Human Interface Guidelines",
+        "category": "system_technologies",
+        "subcategory": "homekit",
+        "keywords": ["HomeKit", "シーン", "scenes", "アクションセット", "action sets", "API"],
+        "priority": "low"
+      },
+      {
+        "content": "Homeデータへのアクセスが必要な理由を説明するコンテキストを提供します（目的文字列）。アカウントや個人情報の作成をユーザーに要求しない。代わりに、必要な情報はHomeKitに委ねます。アプリが追加サービスを提供し、アカウントが必要な場合は、アカウント設定をオプションにし、最初のHomeKit設定後に提供します。",
+        "source": "Apple Human Interface Guidelines",
+        "category": "system_technologies",
+        "subcategory": "homekit",
+        "keywords": ["HomeKit", "プライバシー", "privacy", "アクセス", "access", "目的文字列", "purpose string", "アカウント", "account"],
+        "priority": "high"
+      },
+      {
+        "content": "アクセサリに適したサービス名を提案します。Siri音声コントロールに最適でない名前が検出された場合、うまく機能することが分かっている代替案を推奨します。会社名やモデル番号をサービス名として使用することは避けます。",
+        "source": "Apple Human Interface Guidelines",
+        "category": "system_technologies",
+        "subcategory": "homekit",
+        "keywords": ["HomeKit", "命名提案", "naming suggestions", "Siri", "音声コントロール", "voice control"],
+        "priority": "medium"
+      },
+      {
+        "content": "サービス名には英数字、スペース、アポストロフィのみを使用します。英字または数字で開始および終了し、絵文字を含めません。",
+        "source": "Apple Human Interface Guidelines",
+        "category": "system_technologies",
+        "subcategory": "homekit",
+        "keywords": ["HomeKit", "命名規則", "naming conventions", "サービス名", "service name", "絵文字", "emoji"],
+        "priority": "high"
+      },
+      {
+        "content": "ユーザーがサービス名に場所情報を含めることを避けるように助けます（例：「キッチンの照明」）。これにより、Siriコントロールで予測不能な結果が生じる可能性があります。アプリは、場所情報を重複するサービス名を検出し、ユーザーがそれを修正するのを助けることができます。",
+        "source": "Apple Human Interface Guidelines",
+        "category": "system_technologies",
+        "subcategory": "homekit",
+        "keywords": ["HomeKit", "場所情報", "location information", "Siri", "音声コントロール", "voice control", "重複", "duplication"],
+        "priority": "high"
+      },
+      {
+        "content": "設定後、より複雑なSiriコマンドについてユーザーに教えることを検討します。ユーザーは、SiriとHomePodでアクセサリを制御するために使用できる幅広い自然言語フレーズを知らない可能性があります。",
+        "source": "Apple Human Interface Guidelines",
+        "category": "system_technologies",
+        "subcategory": "homekit",
+        "keywords": ["HomeKit", "Siriコマンド", "Siri commands", "教育", "education", "自然言語", "natural language"],
+        "priority": "medium"
+      },
+      {
+        "content": "Apple製品名は、Apple商標リストに示されているとおりに正確に使用します（単数形のみ、所有格にしない）。Apple、Apple Home、HomeKit、その他のApple商標を翻訳しません。カテゴリ記述子を使用せず、Appleからのスポンサーシップ、パートナーシップ、または承認を示唆しません。アプリ内に法的情報が表示される場所では、Apple、HomeKit、およびその他のすべてのApple商標に正しいクレジットラインを付記します。Appleデバイスとオペレーティングシステムは、技術仕様または互換性記述でのみ参照します。",
+        "source": "Apple Human Interface Guidelines",
+        "category": "system_technologies",
+        "subcategory": "homekit",
+        "keywords": ["HomeKit", "Apple商標", "Apple trademarks", "法的情報", "legal information", "ブランディング", "branding"],
+        "priority": "high"
+      },
+      {
+        "content": "iPhoneがISO18013-5準拠のモバイルIDを、追加のハードウェアなしでシームレスかつ安全に読み取れるようにするID Verifierは、顧客は年齢または身元を確認するために必要な最小限のデータのみを提供します。情報はデバイス間で暗号化されるため、顧客はiPhoneを表示したり手渡したりする必要がありません。",
+        "source": "Apple Human Interface Guidelines",
+        "category": "system_technologies",
+        "subcategory": "id_verifier",
+        "keywords": ["ID Verifier", "目的", "purpose", "モバイルID", "mobile ID", "プライバシー", "privacy", "セキュリティ", "security", "暗号化", "encryption"],
+        "priority": "high"
+      },
+      {
+        "content": "ID Verifierのモードには、「ディスプレイのみ」（アプリはiOSシステムUIを使用して、氏名、年齢、ID写真、年齢N以上データを対面での視覚的確認のためにのみ表示できる。アプリはID情報を読み取ったり保存したりしない）と、「データ転送」（アプリは、法的検証要件を満たすために、生年月日や住所などの追加データ要素にアクセスできる）があります。",
+        "source": "Apple Human Interface Guidelines",
+        "category": "system_technologies",
+        "subcategory": "id_verifier",
+        "keywords": ["ID Verifier", "モード", "modes", "ディスプレイのみ", "display-only", "データ転送", "data transfer", "法的要件", "legal requirements"],
+        "priority": "high"
+      }
+    ]
+  }
+  
