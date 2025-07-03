@@ -1,4 +1,4 @@
--- ハイブリッド検索関数（ベクトル検索 + 全文検索）
+-- ハイブリッド検索関数（英語設定版）
 
 CREATE OR REPLACE FUNCTION hybrid_search(
   query_text TEXT,
@@ -73,7 +73,7 @@ AS $$
   LIMIT match_count;
 $$;
 
--- カテゴリ別ハイブリッド検索関数
+-- カテゴリ別ハイブリッド検索関数（英語設定版）
 CREATE OR REPLACE FUNCTION hybrid_search_by_category(
   query_text TEXT,
   query_embedding VECTOR(768),
@@ -150,41 +150,7 @@ AS $$
   LIMIT match_count;
 $$;
 
--- キーワード検索関数
-CREATE OR REPLACE FUNCTION search_by_keywords(
-  keywords TEXT[],
-  match_count INT DEFAULT 10
-)
-RETURNS TABLE(
-  id BIGINT,
-  content TEXT,
-  source VARCHAR(100),
-  category VARCHAR(50),
-  subcategory VARCHAR(100),
-  matched_keywords TEXT[],
-  metadata JSONB
-)
-LANGUAGE SQL
-STABLE
-AS $$
-  SELECT 
-    dg.id,
-    dg.content,
-    dg.source,
-    dg.category,
-    dg.subcategory,
-    array_agg(kw) FILTER (WHERE kw = ANY(keywords)) AS matched_keywords,
-    dg.metadata
-  FROM design_guidelines dg,
-       unnest(dg.keywords) AS kw
-  WHERE dg.keywords && keywords
-  GROUP BY dg.id, dg.content, dg.source, dg.category, dg.subcategory, dg.metadata
-  ORDER BY array_length(array_agg(kw) FILTER (WHERE kw = ANY(keywords)), 1) DESC
-  LIMIT match_count;
-$$;
-
--- インデックス作成後の統計情報更新（パフォーマンス最適化）
--- 注意: 本関数は手動実行が必要
+-- 統計情報更新関数
 CREATE OR REPLACE FUNCTION refresh_search_statistics()
 RETURNS VOID
 LANGUAGE SQL

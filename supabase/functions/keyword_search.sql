@@ -1,4 +1,3 @@
--- supabase/functions/keyword_search.sql
 -- キーワード検索関数
 
 -- キーワードベース検索関数
