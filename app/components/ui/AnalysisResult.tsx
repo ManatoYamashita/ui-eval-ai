@@ -1,6 +1,9 @@
 'use client';
 
 import React, { useState } from 'react';
+import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
+import rehypeRaw from 'rehype-raw';
 import type { AnalysisResult, ImprovementSuggestion } from '../../types/analysis';
 
 interface AnalysisResultProps {
@@ -98,10 +101,13 @@ export default function AnalysisResult({ result, onRetry }: AnalysisResultProps)
         isExpanded={expandedSections.has('current')}
         onToggle={() => toggleSection('current')}
       >
-        <div className="prose prose-gray max-w-none">
-          <p className="text-gray-700 leading-relaxed">
+        <div className="prose prose-gray max-w-none text-gray-700 leading-relaxed">
+          <ReactMarkdown
+            remarkPlugins={[remarkGfm]}
+            rehypePlugins={[rehypeRaw]}
+          >
             {result.analysis.current_issues}
-          </p>
+          </ReactMarkdown>
         </div>
       </AnalysisSection>
 
@@ -157,11 +163,19 @@ export default function AnalysisResult({ result, onRetry }: AnalysisResultProps)
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div>
             <h4 className="font-semibold text-gray-900 mb-2">ユーザビリティ向上</h4>
-            <p className="text-gray-700">{result.analysis.predicted_impact.usability_improvement}</p>
+            <div className="prose prose-sm max-w-none text-gray-700">
+              <ReactMarkdown remarkPlugins={[remarkGfm]} rehypePlugins={[rehypeRaw]}>
+                {result.analysis.predicted_impact.usability_improvement}
+              </ReactMarkdown>
+            </div>
           </div>
           <div>
             <h4 className="font-semibold text-gray-900 mb-2">コンバージョン影響</h4>
-            <p className="text-gray-700">{result.analysis.predicted_impact.conversion_impact}</p>
+            <div className="prose prose-sm max-w-none text-gray-700">
+              <ReactMarkdown remarkPlugins={[remarkGfm]} rehypePlugins={[rehypeRaw]}>
+                {result.analysis.predicted_impact.conversion_impact}
+              </ReactMarkdown>
+            </div>
           </div>
         </div>
       </AnalysisSection>
@@ -181,7 +195,11 @@ export default function AnalysisResult({ result, onRetry }: AnalysisResultProps)
                   関連度: {Math.round(guideline.relevance_score * 100)}%
                 </span>
               </div>
-              <p className="text-gray-700 text-sm">{guideline.content}</p>
+              <div className="prose prose-sm max-w-none text-gray-700">
+                <ReactMarkdown remarkPlugins={[remarkGfm]} rehypePlugins={[rehypeRaw]}>
+                  {guideline.content}
+                </ReactMarkdown>
+              </div>
             </div>
           ))}
         </div>
@@ -246,12 +264,20 @@ function ImprovementCard({ improvement, className }: ImprovementCardProps) {
         <div className="px-4 pb-4 space-y-3">
           <div>
             <h5 className="font-medium text-gray-800 mb-1">問題点</h5>
-            <p className="text-gray-700 text-sm">{improvement.problem}</p>
+            <div className="prose prose-sm max-w-none text-gray-700">
+              <ReactMarkdown remarkPlugins={[remarkGfm]} rehypePlugins={[rehypeRaw]}>
+                {improvement.problem}
+              </ReactMarkdown>
+            </div>
           </div>
           
           <div>
             <h5 className="font-medium text-gray-800 mb-1">解決策</h5>
-            <p className="text-gray-700 text-sm">{improvement.solution}</p>
+            <div className="prose prose-sm max-w-none text-gray-700">
+              <ReactMarkdown remarkPlugins={[remarkGfm]} rehypePlugins={[rehypeRaw]}>
+                {improvement.solution}
+              </ReactMarkdown>
+            </div>
           </div>
           
           <div>
@@ -263,7 +289,11 @@ function ImprovementCard({ improvement, className }: ImprovementCardProps) {
           
           <div>
             <h5 className="font-medium text-gray-800 mb-1">根拠</h5>
-            <p className="text-gray-600 text-sm">{improvement.guideline_reference}</p>
+            <div className="prose prose-sm max-w-none text-gray-600">
+              <ReactMarkdown remarkPlugins={[remarkGfm]} rehypePlugins={[rehypeRaw]}>
+                {improvement.guideline_reference}
+              </ReactMarkdown>
+            </div>
           </div>
         </div>
       )}

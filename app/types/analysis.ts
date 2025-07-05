@@ -5,22 +5,22 @@ export type Priority = 'high' | 'medium' | 'low';
 export interface ImprovementSuggestion {
   priority: Priority;
   title: string;
-  problem: string;
-  solution: string;
+  problem: string; // Supports Markdown formatting
+  solution: string; // Supports Markdown formatting
   implementation: string;  // TailwindCSS code example
-  guideline_reference: string;
+  guideline_reference: string; // Supports Markdown formatting
 }
 
 export interface PredictedImpact {
   accessibility_score: number;
-  usability_improvement: string;
-  conversion_impact: string;
+  usability_improvement: string; // Supports Markdown formatting
+  conversion_impact: string; // Supports Markdown formatting
 }
 
 export interface AnalysisResult {
   success: boolean;
   analysis: {
-    current_issues: string;
+    current_issues: string; // Supports Markdown formatting
     improvements: ImprovementSuggestion[];
     predicted_impact: PredictedImpact;
   };
@@ -31,7 +31,7 @@ export interface AnalysisResult {
 
 export interface GuidelineReference {
   source: string;
-  content: string;
+  content: string; // Supports Markdown formatting
   relevance_score: number;
 }
 

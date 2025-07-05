@@ -44,17 +44,34 @@ export async function performHybridSearch(
     } = options;
 
     // クエリの埋め込み生成
-    const queryEmbedding = await generateEmbedding(query);
+    let queryEmbedding: number[];
+    try {
+      queryEmbedding = await generateEmbedding(query);
+    } catch (embeddingError) {
+      console.error('❌ Embedding generation failed:', embeddingError);
+      console.log('🔄 Falling back to text-only search due to embedding failure...');
+      return performTextOnlySearch(query, options);
+    }
 
     // まず基本的なハイブリッド検索を試行
     console.log('🔍 Trying basic hybrid search first...');
-    const { data: basicSearchResults, error: basicError } = await typedSupabaseAdmin
-      .rpc('hybrid_search', {
-        query_text: query,
-        query_embedding: queryEmbedding,
-        match_threshold: threshold,
-        match_count: limit
-      });
+    let basicSearchResults = null;
+    let basicError = null;
+    
+    try {
+      const { data, error } = await typedSupabaseAdmin
+        .rpc('hybrid_search', {
+          query_text: query,
+          query_embedding: queryEmbedding,
+          match_threshold: threshold,
+          match_count: limit
+        });
+      basicSearchResults = data;
+      basicError = error;
+    } catch (rpcError) {
+      console.error('❌ RPC call failed for hybrid_search:', rpcError);
+      basicError = rpcError;
+    }
 
     if (!basicError && basicSearchResults && basicSearchResults.length > 0) {
       const processingTime = Date.now() - startTime;
@@ -70,14 +87,24 @@ export async function performHybridSearch(
 
     // 基本検索が失敗した場合、カテゴリ別検索を試行
     console.log('🔍 Trying category-based hybrid search...');
-    const { data: categorySearchResults, error: categoryError } = await typedSupabaseAdmin
-      .rpc('hybrid_search_by_category', {
-        query_text: query,
-        query_embedding: queryEmbedding,
-        target_categories: categories,
-        match_threshold: threshold,
-        match_count: limit
-      });
+    let categorySearchResults = null;
+    let categoryError = null;
+    
+    try {
+      const { data, error } = await typedSupabaseAdmin
+        .rpc('hybrid_search_by_category', {
+          query_text: query,
+          query_embedding: queryEmbedding,
+          target_categories: categories,
+          match_threshold: threshold,
+          match_count: limit
+        });
+      categorySearchResults = data;
+      categoryError = error;
+    } catch (rpcError) {
+      console.error('❌ RPC call failed for hybrid_search_by_category:', rpcError);
+      categoryError = rpcError;
+    }
 
     if (!categoryError && categorySearchResults) {
       const processingTime = Date.now() - startTime;
@@ -99,6 +126,20 @@ export async function performHybridSearch(
       console.error('Category hybrid search error:', categoryError);
     }
 
+    // データベース関数が存在しない場合のエラーメッセージをチェック
+    const isDBFunctionError = (error: any) => {
+      return error && (
+        error.message?.includes('Could not find the function') ||
+        error.message?.includes('function') && error.message?.includes('does not exist') ||
+        error.code === 'PGRST202'
+      );
+    };
+
+    if (isDBFunctionError(basicError) || isDBFunctionError(categoryError)) {
+      console.log('🔄 Database functions not found, falling back to text-only search...');
+      return performTextOnlySearch(query, options);
+    }
+
     throw new Error('Both hybrid search methods failed');
 
   } catch (error) {
@@ -111,12 +152,17 @@ export async function performHybridSearch(
     }
     
     // データベース関数エラーの場合もフォールバック
-    if (error instanceof Error && error.message.includes('Could not find the function')) {
+    if (error instanceof Error && (
+      error.message.includes('Could not find the function') ||
+      error.message.includes('Both hybrid search methods failed')
+    )) {
       console.log('🔄 Database function not found, falling back to text-only search...');
       return performTextOnlySearch(query, options);
     }
     
-    throw new Error('Failed to perform hybrid search');
+    // 最終的なフォールバック
+    console.log('🔄 Unexpected error, falling back to text-only search...');
+    return performTextOnlySearch(query, options);
   }
 }
 
