@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import rehypeRaw from 'rehype-raw';
-import type { AnalysisResult, ImprovementSuggestion } from '../../types/analysis';
+import type { AnalysisResult } from '../../types/analysis';
 
 interface AnalysisResultProps {
   result: AnalysisResult;
@@ -13,8 +13,9 @@ interface AnalysisResultProps {
 
 export default function AnalysisResult({ result, onRetry }: AnalysisResultProps) {
   const [expandedSections, setExpandedSections] = useState<Set<string>>(new Set(['current']));
-  const [selectedPriority, setSelectedPriority] = useState<'all' | 'high' | 'medium' | 'low'>('all');
-
+  // 参照ガイドライン表示用の状態（内部的に保持）
+  const [showGuidelinesInternal] = useState(false);
+  
   const toggleSection = (section: string) => {
     const newExpanded = new Set(expandedSections);
     if (newExpanded.has(section)) {
@@ -25,21 +26,8 @@ export default function AnalysisResult({ result, onRetry }: AnalysisResultProps)
     setExpandedSections(newExpanded);
   };
 
-  const filteredImprovements = result.analysis.improvements.filter(improvement => 
-    selectedPriority === 'all' || improvement.priority === selectedPriority
-  );
-
-  const priorityColors = {
-    high: 'border-red-200 bg-red-50',
-    medium: 'border-yellow-200 bg-yellow-50', 
-    low: 'border-green-200 bg-green-50'
-  };
-
-  const priorityIcons = {
-    high: '🔴',
-    medium: '🟡',
-    low: '🟢'
-  };
+  // 評価スコアの計算（100% - 改善提案数）
+  const designScore = Math.max(0, 100 - result.analysis.improvements.length);
 
   if (!result.success) {
     return (
@@ -73,24 +61,18 @@ export default function AnalysisResult({ result, onRetry }: AnalysisResultProps)
         </div>
         
         {/* 統計情報 */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div className="text-center p-3 bg-blue-50 rounded-lg">
             <div className="text-2xl font-bold text-blue-600">
               {result.analysis.improvements.length}
             </div>
-            <div className="text-sm text-blue-800">改善提案</div>
+            <div className="text-sm text-blue-800">改善点</div>
           </div>
           <div className="text-center p-3 bg-green-50 rounded-lg">
             <div className="text-2xl font-bold text-green-600">
-              {result.analysis.predicted_impact.accessibility_score || 'N/A'}
+              {designScore}%
             </div>
-            <div className="text-sm text-green-800">予測スコア</div>
-          </div>
-          <div className="text-center p-3 bg-purple-50 rounded-lg">
-            <div className="text-2xl font-bold text-purple-600">
-              {result.guidelines_used.length}
-            </div>
-            <div className="text-sm text-purple-800">参照ガイドライン</div>
+            <div className="text-sm text-green-800">評価</div>
           </div>
         </div>
       </div>
@@ -111,99 +93,32 @@ export default function AnalysisResult({ result, onRetry }: AnalysisResultProps)
         </div>
       </AnalysisSection>
 
-      {/* 改善提案 */}
-      <AnalysisSection
-        title="💡 改善提案"
-        isExpanded={expandedSections.has('improvements')}
-        onToggle={() => toggleSection('improvements')}
-      >
-        {/* 優先度フィルター */}
-        <div className="mb-6">
-          <div className="flex flex-wrap gap-2">
-            {(['all', 'high', 'medium', 'low'] as const).map((priority) => (
-              <button
-                key={priority}
-                onClick={() => setSelectedPriority(priority)}
-                className={`px-3 py-1 rounded-full text-sm font-medium transition-colors ${
-                  selectedPriority === priority
-                    ? 'bg-blue-600 text-white'
-                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-                }`}
-              >
-                {priority === 'all' ? 'すべて' : `${priorityIcons[priority]} ${priority === 'high' ? '高' : priority === 'medium' ? '中' : '低'}優先度`}
-              </button>
+      {/* 参照ガイドライン（内部的に表示可能） */}
+      {showGuidelinesInternal && (
+        <AnalysisSection
+          title="📚 参照ガイドライン"
+          isExpanded={expandedSections.has('guidelines')}
+          onToggle={() => toggleSection('guidelines')}
+        >
+          <div className="space-y-3">
+            {result.guidelines_used.map((guideline, index) => (
+              <div key={index} className="bg-gray-50 rounded-lg p-4">
+                <div className="flex items-center justify-between mb-2">
+                  <h4 className="font-semibold text-gray-900">{guideline.source}</h4>
+                  <span className="text-sm text-gray-500">
+                    関連度: {Math.round(guideline.relevance_score * 100)}%
+                  </span>
+                </div>
+                <div className="prose prose-sm max-w-none text-gray-700">
+                  <ReactMarkdown remarkPlugins={[remarkGfm]} rehypePlugins={[rehypeRaw]}>
+                    {guideline.content}
+                  </ReactMarkdown>
+                </div>
+              </div>
             ))}
           </div>
-        </div>
-
-        {/* 改善提案リスト */}
-        <div className="space-y-4">
-          {filteredImprovements.map((improvement, index) => (
-            <ImprovementCard
-              key={index}
-              improvement={improvement}
-              className={priorityColors[improvement.priority]}
-            />
-          ))}
-          
-          {filteredImprovements.length === 0 && (
-            <div className="text-center py-8 text-gray-500">
-              選択した優先度の改善提案はありません
-            </div>
-          )}
-        </div>
-      </AnalysisSection>
-
-      {/* 改善効果予測 */}
-      <AnalysisSection
-        title="📊 改善効果予測"
-        isExpanded={expandedSections.has('impact')}
-        onToggle={() => toggleSection('impact')}
-      >
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div>
-            <h4 className="font-semibold text-gray-900 mb-2">ユーザビリティ向上</h4>
-            <div className="prose prose-sm max-w-none text-gray-700">
-              <ReactMarkdown remarkPlugins={[remarkGfm]} rehypePlugins={[rehypeRaw]}>
-                {result.analysis.predicted_impact.usability_improvement}
-              </ReactMarkdown>
-            </div>
-          </div>
-          <div>
-            <h4 className="font-semibold text-gray-900 mb-2">コンバージョン影響</h4>
-            <div className="prose prose-sm max-w-none text-gray-700">
-              <ReactMarkdown remarkPlugins={[remarkGfm]} rehypePlugins={[rehypeRaw]}>
-                {result.analysis.predicted_impact.conversion_impact}
-              </ReactMarkdown>
-            </div>
-          </div>
-        </div>
-      </AnalysisSection>
-
-      {/* 参照ガイドライン */}
-      <AnalysisSection
-        title="📚 参照ガイドライン"
-        isExpanded={expandedSections.has('guidelines')}
-        onToggle={() => toggleSection('guidelines')}
-      >
-        <div className="space-y-3">
-          {result.guidelines_used.map((guideline, index) => (
-            <div key={index} className="bg-gray-50 rounded-lg p-4">
-              <div className="flex items-center justify-between mb-2">
-                <h4 className="font-semibold text-gray-900">{guideline.source}</h4>
-                <span className="text-sm text-gray-500">
-                  関連度: {Math.round(guideline.relevance_score * 100)}%
-                </span>
-              </div>
-              <div className="prose prose-sm max-w-none text-gray-700">
-                <ReactMarkdown remarkPlugins={[remarkGfm]} rehypePlugins={[rehypeRaw]}>
-                  {guideline.content}
-                </ReactMarkdown>
-              </div>
-            </div>
-          ))}
-        </div>
-      </AnalysisSection>
+        </AnalysisSection>
+      )}
     </div>
   );
 }
@@ -235,74 +150,4 @@ function AnalysisSection({ title, children, isExpanded, onToggle }: AnalysisSect
       )}
     </div>
   );
-}
-
-interface ImprovementCardProps {
-  improvement: ImprovementSuggestion;
-  className?: string;
-}
-
-function ImprovementCard({ improvement, className }: ImprovementCardProps) {
-  const [isExpanded, setIsExpanded] = useState(false);
-
-  return (
-    <div className={`border rounded-lg overflow-hidden ${className}`}>
-      <button
-        onClick={() => setIsExpanded(!isExpanded)}
-        className="w-full flex items-center justify-between p-4 text-left hover:bg-opacity-75 transition-all"
-      >
-        <div className="flex items-center space-x-3">
-          <span className="text-lg">{priorityIcons[improvement.priority]}</span>
-          <h4 className="font-semibold text-gray-900">{improvement.title}</h4>
-        </div>
-        <div className={`transform transition-transform ${isExpanded ? 'rotate-180' : ''}`}>
-          ⌄
-        </div>
-      </button>
-      
-      {isExpanded && (
-        <div className="px-4 pb-4 space-y-3">
-          <div>
-            <h5 className="font-medium text-gray-800 mb-1">問題点</h5>
-            <div className="prose prose-sm max-w-none text-gray-700">
-              <ReactMarkdown remarkPlugins={[remarkGfm]} rehypePlugins={[rehypeRaw]}>
-                {improvement.problem}
-              </ReactMarkdown>
-            </div>
-          </div>
-          
-          <div>
-            <h5 className="font-medium text-gray-800 mb-1">解決策</h5>
-            <div className="prose prose-sm max-w-none text-gray-700">
-              <ReactMarkdown remarkPlugins={[remarkGfm]} rehypePlugins={[rehypeRaw]}>
-                {improvement.solution}
-              </ReactMarkdown>
-            </div>
-          </div>
-          
-          <div>
-            <h5 className="font-medium text-gray-800 mb-1">実装例</h5>
-            <div className="bg-gray-900 text-gray-100 p-3 rounded text-sm font-mono overflow-x-auto">
-              {improvement.implementation}
-            </div>
-          </div>
-          
-          <div>
-            <h5 className="font-medium text-gray-800 mb-1">根拠</h5>
-            <div className="prose prose-sm max-w-none text-gray-600">
-              <ReactMarkdown remarkPlugins={[remarkGfm]} rehypePlugins={[rehypeRaw]}>
-                {improvement.guideline_reference}
-              </ReactMarkdown>
-            </div>
-          </div>
-        </div>
-      )}
-    </div>
-  );
-}
-
-const priorityIcons = {
-  high: '🔴',
-  medium: '🟡',
-  low: '🟢'
-} as const; 
+} 
