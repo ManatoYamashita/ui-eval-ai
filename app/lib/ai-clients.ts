@@ -1,18 +1,34 @@
 import { GoogleGenAI } from '@google/genai';
 
-// 環境変数の検証
-const GOOGLE_GENAI_API_KEY = process.env.GOOGLE_GENAI_API_KEY;
-
-if (!GOOGLE_GENAI_API_KEY) {
-  console.error('❌ GOOGLE_GENAI_API_KEY environment variable is missing');
-  console.error('💡 Please set GOOGLE_GENAI_API_KEY in your .env.local file');
-  throw new Error('GOOGLE_GENAI_API_KEY environment variable is required');
+// 環境変数取得のヘルパー関数
+function getEnvVar(name: string): string | undefined {
+  // Next.jsの環境変数アクセス（サーバーサイドのみ）
+  return typeof window === 'undefined' 
+    ? (globalThis as { process?: { env: Record<string, string | undefined> } }).process?.env?.[name]
+    : undefined;
 }
 
-// Google GenAI クライアント初期化
-export const genai = new GoogleGenAI({
-  apiKey: GOOGLE_GENAI_API_KEY,
-});
+// 遅延評価でAIクライアントを初期化
+function getGeminiClient(): GoogleGenAI {
+  const GOOGLE_GENAI_API_KEY = getEnvVar('GOOGLE_GENAI_API_KEY');
+  
+  if (!GOOGLE_GENAI_API_KEY) {
+    console.error('❌ GOOGLE_GENAI_API_KEY environment variable is missing');
+    console.error('💡 Please set GOOGLE_GENAI_API_KEY in your .env.local file');
+    throw new Error('GOOGLE_GENAI_API_KEY environment variable is required');
+  }
+
+  return new GoogleGenAI({
+    apiKey: GOOGLE_GENAI_API_KEY,
+  });
+}
+
+// Google GenAI クライアント取得（必要時に初期化）
+export const genai = {
+  get models() {
+    return getGeminiClient().models;
+  }
+};
 
 // テキスト埋め込み生成（Gemini Embedding）
 export async function generateEmbedding(text: string): Promise<number[]> {

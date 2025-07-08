@@ -1,27 +1,51 @@
 import { createClient } from '@supabase/supabase-js';
 
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
-const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
-const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
-
-if (!supabaseUrl || !supabaseAnonKey) {
-  throw new Error('Missing Supabase environment variables');
+// 環境変数取得のヘルパー関数
+function getEnvVar(name: string): string | undefined {
+  return typeof window === 'undefined' 
+    ? (globalThis as { process?: { env: Record<string, string | undefined> } }).process?.env?.[name]
+    : undefined;
 }
 
-// クライアントサイド用（認証・基本操作）
-export const supabase = createClient(supabaseUrl, supabaseAnonKey);
+// 遅延評価でSupabaseクライアントを初期化
+function createSupabaseClients() {
+  const supabaseUrl = getEnvVar('NEXT_PUBLIC_SUPABASE_URL');
+  const supabaseAnonKey = getEnvVar('NEXT_PUBLIC_SUPABASE_ANON_KEY');
+  const supabaseServiceKey = getEnvVar('SUPABASE_SERVICE_ROLE_KEY');
 
-// サーバーサイド用（管理者権限・サービス操作）
-export const supabaseAdmin = createClient(
-  supabaseUrl,
-  supabaseServiceKey || supabaseAnonKey,
-  {
-    auth: {
-      autoRefreshToken: false,
-      persistSession: false
-    }
+  if (!supabaseUrl || !supabaseAnonKey) {
+    throw new Error('Missing Supabase environment variables');
   }
-);
+
+  return {
+    client: createClient(supabaseUrl, supabaseAnonKey),
+    admin: createClient(
+      supabaseUrl,
+      supabaseServiceKey || supabaseAnonKey,
+      {
+        auth: {
+          autoRefreshToken: false,
+          persistSession: false
+        }
+      }
+    )
+  };
+}
+
+// 遅延評価されるSupabaseクライアント
+export const supabase = new Proxy({} as ReturnType<typeof createClient>, {
+  get(target, prop) {
+    const clients = createSupabaseClients();
+    return clients.client[prop as keyof typeof clients.client];
+  }
+});
+
+export const supabaseAdmin = new Proxy({} as ReturnType<typeof createClient>, {
+  get(target, prop) {
+    const clients = createSupabaseClients();
+    return clients.admin[prop as keyof typeof clients.admin];
+  }
+});
 
 // データベース型定義
 export interface Database {
