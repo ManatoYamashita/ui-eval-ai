@@ -105,17 +105,42 @@ git config user.email "work@example.com"
 3. **CHECK**: PRでレビュー実施
 4. **ACTION**: 知見をルールファイルに反映、Issueをclose
 
-#### gh CLIの活用
+#### GitHub操作のフォールバック戦略
+
+**優先順位1: GitHub MCP使用**
+- GitHub MCPが利用可能な場合は、MCPを優先して使用
+
+**優先順位2: GitHub CLI使用**
+GitHub MCPが使用できない場合は、GitHub CLIを代替手段として使用：
+
 ```bash
+# GitHub CLIの認証確認
+gh auth status
+
+# 認証が必要な場合
+gh auth login --git-protocol ssh --hostname github.com
+
+# 環境変数を使用したトークン認証（対話式を避ける場合）
+GITHUB_TOKEN=your_token gh issue create --title "タイトル" --body "詳細"
+
 # Issue一覧
 gh issue list
 
 # Issue作成
 gh issue create --title "タイトル" --body "詳細"
 
+# Issue更新（コメント追加）
+gh issue comment [issue_number] --body "進捗コメント"
+
+# Issue完了
+gh issue close [issue_number] --comment "完了コメント"
+
 # PR作成
 gh pr create --title "タイトル" --body "詳細"
 ```
+
+**優先順位3: Web UI案内**
+両方が使用できない場合は、ユーザーにGitHub Web UIでの手動操作を案内
 
 ### ブランチ戦略
 
