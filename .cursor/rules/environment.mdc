@@ -1,0 +1,78 @@
+---
+description: このファイルはプロジェクトの覚えておくべき環境変数について記述しています。
+globs: 
+alwaysApply: false
+---
+# environment.mdc
+
+## 開発環境設定
+
+### 基本開発環境
+- **OS**: macOS 15.5 (Sonoma)
+- **Hardware**: MacBook Pro (14インチ, M3, Nov 2023)
+- **Node.js**: 最新のLTS版
+- **Package Manager**: npm
+- **IDE**: Cursor (VS Code + AI拡張)
+
+### 必須開発ツール
+- **TypeScript**: 厳密モード有効
+- **ESLint**: コード品質チェック
+- **Prettier**: コード整形
+- **Tailwind CSS**: ユーティリティファーストCSS
+
+## 環境変数管理
+
+### 基本原則
+- **APIキー、データベース接続情報、その他の機密データは、すべて環境変数を通じて管理し、決してコードベースに直接ハードコードしない**
+- `.env.local`ファイルを使用してローカル開発環境の設定を管理
+- 本番環境では、プラットフォーム固有の環境変数設定を使用
+
+### 必須環境変数
+```bash
+# Supabase設定
+NEXT_PUBLIC_SUPABASE_URL=your_supabase_url
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
+SUPABASE_SERVICE_ROLE_KEY=your_supabase_service_role_key
+
+# AI API設定
+OPENAI_API_KEY=your_openai_api_key
+ANTHROPIC_API_KEY=your_anthropic_api_key
+
+# Next.js設定
+NEXTAUTH_URL=http://localhost:3000
+NEXTAUTH_SECRET=your_nextauth_secret
+```
+
+### 環境変数の分類
+- **NEXT_PUBLIC_**: クライアントサイドで使用可能な公開環境変数
+- **サーバーサイド専用**: APIキーなどの機密情報
+
+### セキュリティ対策
+- `.env.local`ファイルは`.gitignore`に追加し、バージョン管理から除外
+- サンプルファイル（`.env.example`）を作成し、必要な環境変数名のみを記載
+- 定期的なAPIキーのローテーション
+
+## データベース設定
+
+### Supabase設定
+- **データベース**: PostgreSQL with Vector Extension
+- **認証**: Supabase Auth
+- **ストレージ**: Supabase Storage（画像アップロード用）
+- **検索機能**: ハイブリッド検索（pgvector + 全文検索）
+
+### 接続設定
+- Row Level Security (RLS) を有効化
+- 適切なポリシー設定によるアクセス制御
+- データベース移行スクリプトの管理
+
+## 開発ワークフロー
+
+### コード品質確保
+- **静的解析ツール**: ESLint、Prettierを導入し、CI/CDパイプラインに組み込む
+- **静的型チェック**: TypeScriptの厳密モードを常に有効
+- **構造化ロギング**: デバッグ、監視、問題追跡のための適切なロギング実装
+
+### 動作確認環境
+- **ローカル開発**: `npm run dev`でNext.js開発サーバー起動
+- **本番ビルド**: `npm run build`で本番環境向けビルド
+- **静的解析**: `npm run lint`でコード品質チェック
