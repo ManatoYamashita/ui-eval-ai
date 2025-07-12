@@ -36,12 +36,15 @@ export default function RootLayout({
     <html lang="ja">
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        suppressHydrationWarning={true}
       >
-        <StagewiseToolbar
-          config={{
-            plugins: [ReactPlugin],
-          }}
-        />
+        {process.env.NODE_ENV === "development" && (
+          <StagewiseToolbar
+            config={{
+              plugins: [ReactPlugin],
+            }}
+          />
+        )}
         {children}
       </body>
     </html>
