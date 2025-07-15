@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import FileUpload from './components/ui/FileUpload';
 import LoadingSpinner from './components/ui/LoadingSpinner';
+import ProgressBar from './components/ui/ProgressBar';
 import AnalysisResult from './components/ui/AnalysisResult';
 import type { AnalysisResult as AnalysisResultType } from './types/analysis';
 
@@ -13,7 +14,7 @@ export default function Home() {
   const [analysisResult, setAnalysisResult] = useState<AnalysisResultType | null>(null);
   const [error, setError] = useState<string | null>(null);
 
-  const handleFileSelect = (file: File) => {
+  const handleFileSelect = (file: File | null) => {
     setSelectedFile(file);
     setAnalysisResult(null);
     setError(null);
@@ -94,16 +95,11 @@ export default function Home() {
               <h2 className="text-xl font-semibold text-gray-900 mb-4">
                 1. デザイン画像をアップロード
               </h2>
-                             <FileUpload
-                 onFileSelect={handleFileSelect}
-                 isUploading={isAnalyzing}
-               />
-              {selectedFile && (
-                <div className="mt-4 text-sm text-gray-600">
-                  選択されたファイル: {selectedFile.name} 
-                  ({Math.round(selectedFile.size / 1024)}KB)
-                </div>
-              )}
+              <FileUpload
+                onFileSelect={handleFileSelect}
+                selectedFile={selectedFile}
+                isUploading={isAnalyzing}
+              />
             </div>
 
             {/* プロンプト入力 */}
@@ -168,16 +164,19 @@ export default function Home() {
                           disabled:bg-gray-300 disabled:cursor-not-allowed 
                           transition-colors min-w-[200px]"
               >
-                {isAnalyzing ? (
-                  <div className="flex items-center justify-center">
-                    <LoadingSpinner size="sm" />
-                    <span className="ml-2">分析中...</span>
-                  </div>
-                ) : (
-                  '🔍 デザインを分析する'
-                )}
+                {isAnalyzing ? '🔍 分析中...' : '🔍 デザインを分析する'}
               </button>
             </div>
+
+            {/* プログレスバー */}
+            {isAnalyzing && (
+              <div className="bg-white rounded-lg shadow-sm border p-6">
+                <ProgressBar
+                  isActive={isAnalyzing}
+                  label="AIがデザインを分析しています..."
+                />
+              </div>
+            )}
 
             {/* 利用上の注意 */}
             <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
@@ -212,7 +211,11 @@ export default function Home() {
             </div>
 
             {/* 分析結果 */}
-            <AnalysisResult result={analysisResult} onRetry={handleRetry} />
+            <AnalysisResult 
+              result={analysisResult} 
+              selectedFile={selectedFile}
+              onRetry={handleRetry} 
+            />
           </div>
         )}
       </div>
