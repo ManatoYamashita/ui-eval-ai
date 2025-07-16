@@ -23,14 +23,14 @@ export default function AnalysisResult({ result, onRetry, analyzedImage }: Analy
   const [imagePreview, setImagePreview] = useState<string | null>(null);
 
   useEffect(() => {
-    if (!selectedFile) return;
+    if (!analyzedImage?.file) return;
 
     const reader = new FileReader();
     reader.onloadend = () => {
       setImagePreview(reader.result as string);
     };
-    reader.readAsDataURL(selectedFile);
-  }, [selectedFile]);
+    reader.readAsDataURL(analyzedImage.file);
+  }, [analyzedImage]);
   
   const toggleSection = (section: string) => {
     const newExpanded = new Set(expandedSections);

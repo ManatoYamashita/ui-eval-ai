@@ -9,7 +9,6 @@ interface FileUploadProps {
   isUploading?: boolean;
   accept?: string;
   maxSize?: number; // MB
-  selectedFile?: File | null;
   previewUrl?: string | null;
 }
 
@@ -19,7 +18,6 @@ export default function FileUpload({
   isUploading = false,
   accept = 'image/jpeg,image/png,image/gif',
   maxSize = 10,
-  selectedFile,
   previewUrl
 }: FileUploadProps) {
   const [dragActive, setDragActive] = useState(false);
@@ -132,56 +130,6 @@ export default function FileUpload({
                 </svg>
               </button>
             )}
-          </div>
-        ) : selectedFile && previewUrl ? (
-          /* 画像プレビュー表示 */
-          <div className="flex flex-col items-center space-y-4">
-            <div className="relative">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src={previewUrl}
-                alt="プレビュー"
-                className="max-w-full max-h-64 object-contain rounded-lg shadow-sm"
-              />
-              <div className="absolute top-2 right-2 bg-black bg-opacity-50 text-white px-2 py-1 rounded text-xs">
-                {selectedFile.name}
-              </div>
-            </div>
-            <div className="text-sm text-gray-600">
-              {selectedFile.name} ({Math.round(selectedFile.size / 1024)}KB)
-            </div>
-            <button
-              onClick={(e) => {
-                e.stopPropagation();
-                onFileSelect(null as File | null); // リセット用
-              }}
-              className="px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors text-sm"
-            >
-              別の画像を選択
-            </button>
-          </div>
-        ) : (
-          /* ファイル選択UI */
-          <div className="flex flex-col items-center space-y-2">
-            <svg 
-              className="w-12 h-12 text-gray-400"
-              fill="none" 
-              stroke="currentColor" 
-              viewBox="0 0 24 24"
-            >
-              <path 
-                strokeLinecap="round" 
-                strokeLinejoin="round" 
-                strokeWidth={2} 
-                d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" 
-              />
-            </svg>
-            <p className="text-lg font-medium text-gray-700">
-              画像をドラッグ&ドロップまたはクリックして選択
-            </p>
-            <p className="text-sm text-gray-500">
-              JPEG、PNG、GIF（最大{maxSize}MB）
-            </p>
           </div>
         </div>
       ) : (
