@@ -10,9 +10,13 @@ interface AnalysisResultProps {
   result: AnalysisResult;
   selectedFile?: File | null;
   onRetry?: () => void;
+  analyzedImage?: {
+    file: File;
+    url: string;
+  } | null;
 }
 
-export default function AnalysisResult({ result, selectedFile, onRetry }: AnalysisResultProps) {
+export default function AnalysisResult({ result, onRetry, analyzedImage }: AnalysisResultProps) {
   const [expandedSections, setExpandedSections] = useState<Set<string>>(new Set(['current']));
   // 参照ガイドライン表示用の状態（内部的に保持）
   const [showGuidelinesInternal] = useState(false);
@@ -63,6 +67,24 @@ export default function AnalysisResult({ result, selectedFile, onRetry }: Analys
 
   return (
     <div className="space-y-6">
+      {/* 分析対象画像表示 */}
+      {analyzedImage && (
+        <div className="bg-white border border-gray-200 rounded-lg p-6">
+          <h3 className="text-lg font-semibold text-gray-900 mb-4">📸 分析対象画像</h3>
+          <div className="flex flex-col items-center space-y-3">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src={analyzedImage.url}
+              alt="分析対象画像"
+              className="max-w-full max-h-96 object-contain rounded-lg shadow-sm border"
+            />
+            <div className="text-sm text-gray-600">
+              {analyzedImage.file.name} ({Math.round(analyzedImage.file.size / 1024)}KB)
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* ヘッダー情報 */}
       <div className="bg-white border border-gray-200 rounded-lg p-6">
         <div className="flex items-center justify-between mb-4">

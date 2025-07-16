@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import FileUpload from './components/ui/FileUpload';
 import LoadingSpinner from './components/ui/LoadingSpinner';
 import ProgressBar from './components/ui/ProgressBar';
@@ -9,15 +9,55 @@ import type { AnalysisResult as AnalysisResultType } from './types/analysis';
 
 export default function Home() {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const [prompt, setPrompt] = useState('');
   const [isAnalyzing, setIsAnalyzing] = useState(false);
+  const [progress, setProgress] = useState(0);
+  const [progressMessage, setProgressMessage] = useState('');
   const [analysisResult, setAnalysisResult] = useState<AnalysisResultType | null>(null);
   const [error, setError] = useState<string | null>(null);
+
+  // 画像プレビューURLの管理
+  useEffect(() => {
+    if (selectedFile) {
+      const url = URL.createObjectURL(selectedFile);
+      setPreviewUrl(url);
+      
+      // クリーンアップ
+      return () => {
+        URL.revokeObjectURL(url);
+      };
+    } else {
+      setPreviewUrl(null);
+    }
+  }, [selectedFile]);
+
+  // プログレスバーのシミュレーション
+  const simulateProgress = () => {
+    setProgress(0);
+    setProgressMessage('画像を解析中...');
+    
+    const progressSteps = [
+      { progress: 20, message: '画像を処理中...' },
+      { progress: 40, message: 'AI分析を開始...' },
+      { progress: 60, message: 'デザインガイドラインを参照中...' },
+      { progress: 80, message: '改善提案を生成中...' },
+      { progress: 95, message: '結果をまとめています...' }
+    ];
+
+    progressSteps.forEach((step, index) => {
+      setTimeout(() => {
+        setProgress(step.progress);
+        setProgressMessage(step.message);
+      }, (index + 1) * 1000);
+    });
+  };
 
   const handleFileSelect = (file: File | null) => {
     setSelectedFile(file);
     setAnalysisResult(null);
     setError(null);
+    setProgress(0);
   };
 
   const handleAnalyze = async () => {
@@ -29,6 +69,7 @@ export default function Home() {
     setIsAnalyzing(true);
     setError(null);
     setAnalysisResult(null);
+    simulateProgress();
 
     try {
       const formData = new FormData();
@@ -47,7 +88,14 @@ export default function Home() {
         throw new Error(result.error || `HTTP error! status: ${response.status}`);
       }
 
-      setAnalysisResult(result);
+      // 完了時のプログレス
+      setProgress(100);
+      setProgressMessage('分析完了！');
+      
+      setTimeout(() => {
+        setAnalysisResult(result);
+      }, 500);
+
     } catch (error) {
       console.error('Analysis error:', error);
       setError(error instanceof Error ? error.message : '分析中にエラーが発生しました');
@@ -64,9 +112,12 @@ export default function Home() {
 
   const handleReset = () => {
     setSelectedFile(null);
+    setPreviewUrl(null);
     setPrompt('');
     setAnalysisResult(null);
     setError(null);
+    setProgress(0);
+    setProgressMessage('');
   };
 
   return (
@@ -97,8 +148,9 @@ export default function Home() {
               </h2>
               <FileUpload
                 onFileSelect={handleFileSelect}
-                selectedFile={selectedFile}
                 isUploading={isAnalyzing}
+                selectedFile={selectedFile}
+                previewUrl={previewUrl}
               />
             </div>
 
@@ -143,6 +195,17 @@ export default function Home() {
                 </div>
               </div>
             </div>
+
+            {/* プログレスバー */}
+            {isAnalyzing && (
+              <div className="bg-white rounded-lg shadow-sm border p-6">
+                <ProgressBar 
+                  progress={progress} 
+                  message={progressMessage}
+                  showPercentage={true}
+                />
+              </div>
+            )}
 
             {/* エラー表示 */}
             {error && (
@@ -213,8 +276,11 @@ export default function Home() {
             {/* 分析結果 */}
             <AnalysisResult 
               result={analysisResult} 
-              selectedFile={selectedFile}
-              onRetry={handleRetry} 
+              onRetry={handleRetry}
+              analyzedImage={selectedFile && previewUrl ? {
+                file: selectedFile,
+                url: previewUrl
+              } : null}
             />
           </div>
         )}
