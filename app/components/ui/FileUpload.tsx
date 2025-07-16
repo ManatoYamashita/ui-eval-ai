@@ -107,6 +107,7 @@ export default function FileUpload({
           /* 画像プレビュー表示 */
           <div className="flex flex-col items-center space-y-4">
             <div className="relative">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
                 src={previewUrl}
                 alt="プレビュー"
@@ -122,7 +123,7 @@ export default function FileUpload({
             <button
               onClick={(e) => {
                 e.stopPropagation();
-                onFileSelect(null as any); // リセット用
+                onFileSelect(null as File | null); // リセット用
               }}
               className="px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors text-sm"
             >

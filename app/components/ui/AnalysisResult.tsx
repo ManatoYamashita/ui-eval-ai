@@ -60,6 +60,7 @@ export default function AnalysisResult({ result, onRetry, analyzedImage }: Analy
         <div className="bg-white border border-gray-200 rounded-lg p-6">
           <h3 className="text-lg font-semibold text-gray-900 mb-4">📸 分析対象画像</h3>
           <div className="flex flex-col items-center space-y-3">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src={analyzedImage.url}
               alt="分析対象画像"
