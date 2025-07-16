@@ -40,15 +40,15 @@ alwaysApply: true
 
 ### 現在のルールファイル構成
 - `general.mdc` - 一般ルール・運用方針
-- `environment.mdc` - 開発環境ルール
-- `implementation.mdc` - 実装ルール  
-- `github.mdc` - GitHubルール
+- `dev.mdc` - UI Evaluation AI プロジェクト固有ルール
+- `environment.mdc` - 開発環境設定、ツール設定、依存関係管理
+- `ai-development.mdc` - AI開発パートナーとの協力ワークフロー
 
 ### 各ルールファイルの責任範囲
 - **general.mdc**: プロジェクト全体の方針、ルール運用方法
-- **environment.mdc**: 開発環境設定、ツール設定、依存関係管理
-- **implementation.mdc**: コーディング規約、アーキテクチャパターン
-- **github.mdc**: Git運用、PR・Issue管理、リリースフロー
+- **dev.mdc**: UI Evaluation AI プロジェクト固有の開発ルール・品質基準
+- **environment.mdc**: 開発環境設定、ツール設定、依存関係管理、Google Cloud設定
+- **ai-development.mdc**: AI開発パートナーとの協力ワークフロー、段階的実装手順
 
 ## 作業フローの標準化
 

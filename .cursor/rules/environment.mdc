@@ -1,0 +1,228 @@
+---
+alwaysApply: false
+---
+
+# environment.mdc
+
+## 開発環境設定ルール
+
+### 基本技術スタック
+- **Node.js**: v18以上を使用
+- **Package Manager**: npm を使用（yarnやpnpmは避ける）
+- **OS**: MacBook Pro (14インチ, M3, Nov 2023, OS: 15.5) をベースとする
+
+### 環境変数管理
+- APIキー、データベース接続情報、その他の機密データは**すべて環境変数を通じて管理**
+- 決してコードベースに直接ハードコードしない
+- `.env.local.example` ファイルを作成してテンプレートを提供
+
+### 依存関係管理
+- `package.json` のバージョン指定は適切なセマンティックバージョニングを使用
+- 不要な依存関係は定期的に削除
+- セキュリティ脆弱性は `npm audit` で定期確認
+
+## Google Cloud Console API設定
+
+### 基本設定手順
+1. [Google Cloud Console](https://console.cloud.google.com/) にアクセス
+2. 正しいプロジェクトが選択されていることを確認
+3. **APIs & Services** → **Credentials** で APIキーを管理
+
+### APIキー設定のベストプラクティス
+
+#### 開発環境での推奨設定
+**Application restrictions**: `None` を選択
+- 開発時のエラー「API_KEY_HTTP_REFERRER_BLOCKED」を回避
+- 設定変更は5-10分程度で反映
+
+#### 本番環境での推奨設定
+**Application restrictions**: `HTTP referrers (web sites)` を選択
+```
+# 本番環境設定例
+https://your-domain.vercel.app/*
+https://*.vercel.app/*
+https://*-your-project.vercel.app/*
+```
+
+#### API制限の設定
+**API restrictions**: `Restrict key` を選択
+- `Generative Language API` のみ有効化
+- 必要最小限のAPIのみ許可
+
+### 環境変数設定
+```bash
+# 開発環境
+GOOGLE_AI_API_KEY=development_key_with_localhost_restrictions
+
+# 本番環境  
+GOOGLE_AI_API_KEY=production_key_with_domain_restrictions
+```
+
+## API設定確認・テスト
+
+### 設定確認方法
+```bash
+# APIキーのテスト
+curl -X POST \
+  'https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=YOUR_API_KEY' \
+  -H 'Content-Type: application/json' \
+  -d '{
+    "contents": [{
+      "parts": [{"text": "Test message"}]
+    }]
+  }'
+```
+
+### トラブルシューティング
+
+#### API_KEY_HTTP_REFERRER_BLOCKED エラー
+**原因**: Google Cloud ConsoleでAPIキーに制限が設定されている
+**解決策**:
+1. Google Cloud Console → APIs & Services → Credentials
+2. 該当APIキーの Application restrictions を `None` に変更
+3. 5-10分待機後に再試行
+
+#### プロジェクトでAPIが有効化されていない
+**解決策**:
+1. Google Cloud Console → APIs & Services → Library
+2. "Generative Language API" を検索
+3. "ENABLE" ボタンをクリック
+
+### 正常動作時のログ例
+```
+🖼️ Starting Gemini image analysis...
+📝 Prompt length: 525
+🖼️ Image data size: 240476 characters
+✅ Gemini analysis successful
+🔍 Generating embedding for text: test button text layout...
+✅ Embedding generated successfully
+📚 Found 5 relevant guidelines
+```
+
+## セキュリティ・監視
+
+### 使用量監視
+- Google Cloud Console → APIs & Services → Quotas でアラート設定
+- 異常な使用量増加の早期発見
+
+### セキュリティ設定
+- APIキーの定期的なローテーション
+- 最小権限の原則に従ったAPI制限
+- 本番環境では必ずドメイン制限を設定
+
+## 参考リンク
+- [Google AI API Documentation](https://ai.google.dev/docs)
+- [API Key Best Practices](https://cloud.google.com/docs/authentication/api-keys)
+- [Generative Language API](https://developers.generativeai.google/api)
+# environment.mdc
+
+## 開発環境設定ルール
+
+### 基本技術スタック
+- **Node.js**: v18以上を使用
+- **Package Manager**: npm を使用（yarnやpnpmは避ける）
+- **OS**: MacBook Pro (14インチ, M3, Nov 2023, OS: 15.5) をベースとする
+
+### 環境変数管理
+- APIキー、データベース接続情報、その他の機密データは**すべて環境変数を通じて管理**
+- 決してコードベースに直接ハードコードしない
+- `.env.local.example` ファイルを作成してテンプレートを提供
+
+### 依存関係管理
+- `package.json` のバージョン指定は適切なセマンティックバージョニングを使用
+- 不要な依存関係は定期的に削除
+- セキュリティ脆弱性は `npm audit` で定期確認
+
+## Google Cloud Console API設定
+
+### 基本設定手順
+1. [Google Cloud Console](https://console.cloud.google.com/) にアクセス
+2. 正しいプロジェクトが選択されていることを確認
+3. **APIs & Services** → **Credentials** で APIキーを管理
+
+### APIキー設定のベストプラクティス
+
+#### 開発環境での推奨設定
+**Application restrictions**: `None` を選択
+- 開発時のエラー「API_KEY_HTTP_REFERRER_BLOCKED」を回避
+- 設定変更は5-10分程度で反映
+
+#### 本番環境での推奨設定
+**Application restrictions**: `HTTP referrers (web sites)` を選択
+```
+# 本番環境設定例
+https://your-domain.vercel.app/*
+https://*.vercel.app/*
+https://*-your-project.vercel.app/*
+```
+
+#### API制限の設定
+**API restrictions**: `Restrict key` を選択
+- `Generative Language API` のみ有効化
+- 必要最小限のAPIのみ許可
+
+### 環境変数設定
+```bash
+# 開発環境
+GOOGLE_AI_API_KEY=development_key_with_localhost_restrictions
+
+# 本番環境  
+GOOGLE_AI_API_KEY=production_key_with_domain_restrictions
+```
+
+## API設定確認・テスト
+
+### 設定確認方法
+```bash
+# APIキーのテスト
+curl -X POST \
+  'https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=YOUR_API_KEY' \
+  -H 'Content-Type: application/json' \
+  -d '{
+    "contents": [{
+      "parts": [{"text": "Test message"}]
+    }]
+  }'
+```
+
+### トラブルシューティング
+
+#### API_KEY_HTTP_REFERRER_BLOCKED エラー
+**原因**: Google Cloud ConsoleでAPIキーに制限が設定されている
+**解決策**:
+1. Google Cloud Console → APIs & Services → Credentials
+2. 該当APIキーの Application restrictions を `None` に変更
+3. 5-10分待機後に再試行
+
+#### プロジェクトでAPIが有効化されていない
+**解決策**:
+1. Google Cloud Console → APIs & Services → Library
+2. "Generative Language API" を検索
+3. "ENABLE" ボタンをクリック
+
+### 正常動作時のログ例
+```
+🖼️ Starting Gemini image analysis...
+📝 Prompt length: 525
+🖼️ Image data size: 240476 characters
+✅ Gemini analysis successful
+🔍 Generating embedding for text: test button text layout...
+✅ Embedding generated successfully
+📚 Found 5 relevant guidelines
+```
+
+## セキュリティ・監視
+
+### 使用量監視
+- Google Cloud Console → APIs & Services → Quotas でアラート設定
+- 異常な使用量増加の早期発見
+
+### セキュリティ設定
+- APIキーの定期的なローテーション
+- 最小権限の原則に従ったAPI制限
+- 本番環境では必ずドメイン制限を設定
+
+## 参考リンク
+- [Google AI API Documentation](https://ai.google.dev/docs)
+- [API Key Best Practices](https://cloud.google.com/docs/authentication/api-keys)
+- [Generative Language API](https://developers.generativeai.google/api)

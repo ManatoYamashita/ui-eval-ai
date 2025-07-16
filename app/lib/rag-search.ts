@@ -127,11 +127,11 @@ export async function performHybridSearch(
     }
 
     // データベース関数が存在しない場合のエラーメッセージをチェック
-    const isDBFunctionError = (error: any) => {
-      return error && (
-        error.message?.includes('Could not find the function') ||
-        error.message?.includes('function') && error.message?.includes('does not exist') ||
-        error.code === 'PGRST202'
+    const isDBFunctionError = (error: unknown) => {
+      return error && typeof error === 'object' && error !== null && (
+        ('message' in error && typeof error.message === 'string' && error.message.includes('Could not find the function')) ||
+        ('message' in error && typeof error.message === 'string' && error.message.includes('function') && error.message.includes('does not exist')) ||
+        ('code' in error && error.code === 'PGRST202')
       );
     };
 
