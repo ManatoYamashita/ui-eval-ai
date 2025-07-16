@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import rehypeRaw from 'rehype-raw';
@@ -8,6 +8,7 @@ import type { AnalysisResult } from '../../types/analysis';
 
 interface AnalysisResultProps {
   result: AnalysisResult;
+  selectedFile?: File | null;
   onRetry?: () => void;
   analyzedImage?: {
     file: File;
@@ -19,6 +20,17 @@ export default function AnalysisResult({ result, onRetry, analyzedImage }: Analy
   const [expandedSections, setExpandedSections] = useState<Set<string>>(new Set(['current']));
   // 参照ガイドライン表示用の状態（内部的に保持）
   const [showGuidelinesInternal] = useState(false);
+  const [imagePreview, setImagePreview] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (!selectedFile) return;
+
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      setImagePreview(reader.result as string);
+    };
+    reader.readAsDataURL(selectedFile);
+  }, [selectedFile]);
   
   const toggleSection = (section: string) => {
     const newExpanded = new Set(expandedSections);
@@ -81,6 +93,20 @@ export default function AnalysisResult({ result, onRetry, analyzedImage }: Analy
             処理時間: {Math.round(result.processing_time / 1000)}秒
           </div>
         </div>
+        
+        {/* 分析した画像のプレビュー */}
+        {imagePreview && (
+          <div className="mb-6">
+            <h3 className="text-lg font-semibold text-gray-800 mb-3">分析した画像</h3>
+            <div className="bg-gray-50 rounded-lg p-4">
+              <img
+                src={imagePreview}
+                alt="分析した画像"
+                className="w-full h-auto max-h-96 object-contain rounded-lg shadow-md"
+              />
+            </div>
+          </div>
+        )}
         
         {/* 統計情報 */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">

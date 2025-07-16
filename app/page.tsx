@@ -227,16 +227,19 @@ export default function Home() {
                           disabled:bg-gray-300 disabled:cursor-not-allowed 
                           transition-colors min-w-[200px]"
               >
-                {isAnalyzing ? (
-                  <div className="flex items-center justify-center">
-                    <LoadingSpinner size="sm" />
-                    <span className="ml-2">分析中...</span>
-                  </div>
-                ) : (
-                  '🔍 デザインを分析する'
-                )}
+                {isAnalyzing ? '🔍 分析中...' : '🔍 デザインを分析する'}
               </button>
             </div>
+
+            {/* プログレスバー */}
+            {isAnalyzing && (
+              <div className="bg-white rounded-lg shadow-sm border p-6">
+                <ProgressBar
+                  isActive={isAnalyzing}
+                  label="AIがデザインを分析しています..."
+                />
+              </div>
+            )}
 
             {/* 利用上の注意 */}
             <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
