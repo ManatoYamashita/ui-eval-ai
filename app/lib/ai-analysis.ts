@@ -416,8 +416,23 @@ async function detectUIElements(base64Image: string): Promise<UIElement[]> {
     const detectionPrompt = generateElementDetectionPrompt();
     const result = await analyzeImageWithGemini(base64Image, detectionPrompt, 2000);
     
-    // JSON応答をパース
-    const cleanedResult = result.replace(/```json\n?|\n?```/g, '').trim();
+    // JSON応答をクリーンアップ
+    let cleanedResult = result.replace(/```json\n?|\n?```/g, '').trim();
+    
+    // 日本語レスポンスをチェックして適切にハンドリング
+    if (cleanedResult.includes('はい') || cleanedResult.includes('です') || cleanedResult.includes('ます')) {
+      console.log('🔄 Non-JSON response detected, using fallback elements');
+      throw new Error('Non-JSON response received');
+    }
+    
+    // JSON の開始位置を探す
+    const jsonStart = cleanedResult.indexOf('{');
+    const jsonEnd = cleanedResult.lastIndexOf('}');
+    
+    if (jsonStart !== -1 && jsonEnd !== -1 && jsonEnd > jsonStart) {
+      cleanedResult = cleanedResult.substring(jsonStart, jsonEnd + 1);
+    }
+    
     const detected = JSON.parse(cleanedResult);
     
     return detected.elements || [];

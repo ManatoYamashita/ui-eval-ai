@@ -5,38 +5,51 @@ import LoadingSpinner from './LoadingSpinner';
 
 interface FileUploadProps {
   onFileSelect: (file: File) => void;
-  selectedFile?: File | null;
+  selectedFiles?: File[];
   isUploading?: boolean;
   accept?: string;
   maxSize?: number; // MB
-  previewUrl?: string | null;
+  onAddImage?: () => void;
+  onRemoveImage?: (index: number) => void;
+  maxFiles?: number;
 }
 
 export default function FileUpload({
   onFileSelect,
-  selectedFile,
+  selectedFiles = [],
   isUploading = false,
   accept = 'image/jpeg,image/png,image/gif',
   maxSize = 10,
-  previewUrl
+  onAddImage,
+  onRemoveImage,
+  maxFiles = 5
 }: FileUploadProps) {
   const [dragActive, setDragActive] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [preview, setPreview] = useState<string | null>(null);
+  const [previews, setPreviews] = useState<string[]>([]);
 
   useEffect(() => {
-    if (!selectedFile) {
-      setPreview(null);
+    if (selectedFiles.length === 0) {
+      setPreviews([]);
       return;
     }
 
-    // FileReaderを使用してプレビューを生成
-    const reader = new FileReader();
-    reader.onloadend = () => {
-      setPreview(reader.result as string);
+    // 複数ファイルのプレビューを生成
+    const generatePreviews = async () => {
+      const newPreviews: string[] = [];
+      for (const file of selectedFiles) {
+        const reader = new FileReader();
+        const previewUrl = await new Promise<string>((resolve) => {
+          reader.onloadend = () => resolve(reader.result as string);
+          reader.readAsDataURL(file);
+        });
+        newPreviews.push(previewUrl);
+      }
+      setPreviews(newPreviews);
     };
-    reader.readAsDataURL(selectedFile);
-  }, [selectedFile]);
+
+    generatePreviews();
+  }, [selectedFiles]);
 
   const validateFile = useCallback((file: File): boolean => {
     const allowedTypes = ['image/jpeg', 'image/png', 'image/gif'];
@@ -91,46 +104,70 @@ export default function FileUpload({
     }
   }, [onFileSelect, validateFile]);
 
-  const handleRemove = useCallback(() => {
-    setPreview(null);
+  const handleRemove = useCallback((index: number) => {
     setError(null);
-    // nullを渡すと親コンポーネントでリセットできる
-    onFileSelect(null as any);
-  }, [onFileSelect]);
+    if (onRemoveImage) {
+      onRemoveImage(index);
+    }
+  }, [onRemoveImage]);
 
   return (
-    <div className="w-full">
-      {preview && selectedFile ? (
-        // プレビュー表示
-        <div className="bg-gray-50 rounded-lg p-4">
-          <div className="relative">
-            <img
-              src={preview}
-              alt="プレビュー"
-              className="w-full h-auto max-h-96 object-contain rounded-lg shadow-md"
-            />
-            {!isUploading && (
-              <button
-                onClick={handleRemove}
-                className="absolute top-2 right-2 bg-red-500 hover:bg-red-600 text-white rounded-full p-2 shadow-lg transition-colors"
-                aria-label="画像を削除"
-              >
-                <svg
-                  className="w-5 h-5"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M6 18L18 6M6 6l12 12"
+    <div className="w-full space-y-4">
+      {selectedFiles.length > 0 ? (
+        // 複数画像プレビュー表示
+        <div className="space-y-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {previews.map((preview, index) => (
+              <div key={index} className="bg-gray-50 rounded-lg p-4">
+                <div className="relative">
+                  <img
+                    src={preview}
+                    alt={`プレビュー ${index + 1}`}
+                    className="w-full h-auto max-h-64 object-contain rounded-lg shadow-md"
                   />
-                </svg>
-              </button>
-            )}
+                  {!isUploading && (
+                    <button
+                      onClick={() => handleRemove(index)}
+                      className="absolute top-2 right-2 bg-red-500 hover:bg-red-600 text-white rounded-full p-2 shadow-lg transition-colors"
+                      aria-label={`画像${index + 1}を削除`}
+                    >
+                      <svg
+                        className="w-4 h-4"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M6 18L18 6M6 6l12 12"
+                        />
+                      </svg>
+                    </button>
+                  )}
+                </div>
+                <div className="mt-2 text-sm text-gray-600 text-center">
+                  {selectedFiles[index]?.name} ({Math.round(selectedFiles[index]?.size / 1024)}KB)
+                </div>
+              </div>
+            ))}
           </div>
+          
+          {/* 追加画像ボタン */}
+          {selectedFiles.length < maxFiles && !isUploading && (
+            <div className="flex justify-center">
+              <button
+                onClick={onAddImage}
+                className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+              >
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+                </svg>
+                画像を追加 ({selectedFiles.length}/{maxFiles})
+              </button>
+            </div>
+          )}
         </div>
       ) : (
         // アップロードエリア
@@ -179,6 +216,9 @@ export default function FileUpload({
               </p>
               <p className="text-sm text-gray-500">
                 JPEG、PNG、GIF（最大{maxSize}MB）
+              </p>
+              <p className="text-xs text-gray-400 mt-1">
+                最大{maxFiles}枚まで追加可能
               </p>
             </div>
           )}

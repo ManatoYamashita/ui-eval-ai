@@ -4,33 +4,47 @@ import React, { useState, useEffect } from 'react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import rehypeRaw from 'rehype-raw';
+import DonutChart from './DonutChart';
 import type { AnalysisResult } from '../../types/analysis';
 
 interface AnalysisResultProps {
   result: AnalysisResult;
   selectedFile?: File | null;
   onRetry?: () => void;
-  analyzedImage?: {
+  analyzedImages?: {
     file: File;
     url: string;
-  } | null;
+  }[] | null;
 }
 
-export default function AnalysisResult({ result, onRetry, analyzedImage }: AnalysisResultProps) {
+export default function AnalysisResult({ result, onRetry, analyzedImages }: AnalysisResultProps) {
   const [expandedSections, setExpandedSections] = useState<Set<string>>(new Set(['current']));
   // 参照ガイドライン表示用の状態（内部的に保持）
   const [showGuidelinesInternal] = useState(false);
-  const [imagePreview, setImagePreview] = useState<string | null>(null);
+  const [imagePreviews, setImagePreviews] = useState<string[]>([]);
 
   useEffect(() => {
-    if (!analyzedImage?.file) return;
+    if (!analyzedImages || analyzedImages.length === 0) {
+      setImagePreviews([]);
+      return;
+    }
 
-    const reader = new FileReader();
-    reader.onloadend = () => {
-      setImagePreview(reader.result as string);
+    // 複数画像のプレビューを生成
+    const generatePreviews = async () => {
+      const previews: string[] = [];
+      for (const imageData of analyzedImages) {
+        const reader = new FileReader();
+        const previewUrl = await new Promise<string>((resolve) => {
+          reader.onloadend = () => resolve(reader.result as string);
+          reader.readAsDataURL(imageData.file);
+        });
+        previews.push(previewUrl);
+      }
+      setImagePreviews(previews);
     };
-    reader.readAsDataURL(analyzedImage.file);
-  }, [analyzedImage]);
+
+    generatePreviews();
+  }, [analyzedImages]);
   
   const toggleSection = (section: string) => {
     const newExpanded = new Set(expandedSections);
@@ -68,19 +82,28 @@ export default function AnalysisResult({ result, onRetry, analyzedImage }: Analy
   return (
     <div className="space-y-6">
       {/* 分析対象画像表示 */}
-      {analyzedImage && (
+      {analyzedImages && analyzedImages.length > 0 && (
         <div className="bg-white border border-gray-200 rounded-lg p-6">
-          <h3 className="text-lg font-semibold text-gray-900 mb-4">📸 分析対象画像</h3>
-          <div className="flex flex-col items-center space-y-3">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src={analyzedImage.url}
-              alt="分析対象画像"
-              className="max-w-full max-h-96 object-contain rounded-lg shadow-sm border"
-            />
-            <div className="text-sm text-gray-600">
-              {analyzedImage.file.name} ({Math.round(analyzedImage.file.size / 1024)}KB)
-            </div>
+          <h3 className="text-lg font-semibold text-gray-900 mb-4">
+            📸 分析対象画像 {analyzedImages.length > 1 ? `(${analyzedImages.length}枚)` : ''}
+          </h3>
+          <div className={`grid gap-4 ${
+            analyzedImages.length === 1 ? 'grid-cols-1' : 
+            analyzedImages.length === 2 ? 'grid-cols-1 md:grid-cols-2' :
+            'grid-cols-1 md:grid-cols-2 lg:grid-cols-3'
+          }`}>
+            {analyzedImages.map((imageData, index) => (
+              <div key={index} className="flex flex-col items-center space-y-3">
+                <img
+                  src={imageData.url}
+                  alt={`分析対象画像 ${index + 1}`}
+                  className="max-w-full max-h-64 object-contain rounded-lg shadow-sm border"
+                />
+                <div className="text-sm text-gray-600 text-center">
+                  {imageData.file.name} ({Math.round(imageData.file.size / 1024)}KB)
+                </div>
+              </div>
+            ))}
           </div>
         </div>
       )}
@@ -94,14 +117,16 @@ export default function AnalysisResult({ result, onRetry, analyzedImage }: Analy
           </div>
         </div>
         
-        {/* 分析した画像のプレビュー */}
-        {imagePreview && (
+        {/* 分析した画像のプレビュー（メイン画像のみ表示） */}
+        {imagePreviews.length > 0 && (
           <div className="mb-6">
-            <h3 className="text-lg font-semibold text-gray-800 mb-3">分析した画像</h3>
+            <h3 className="text-lg font-semibold text-gray-800 mb-3">
+              メイン分析画像 {imagePreviews.length > 1 ? `(${imagePreviews.length}枚中1枚目)` : ''}
+            </h3>
             <div className="bg-gray-50 rounded-lg p-4">
               <img
-                src={imagePreview}
-                alt="分析した画像"
+                src={imagePreviews[0]}
+                alt="メイン分析画像"
                 className="w-full h-auto max-h-96 object-contain rounded-lg shadow-md"
               />
             </div>
@@ -109,18 +134,28 @@ export default function AnalysisResult({ result, onRetry, analyzedImage }: Analy
         )}
         
         {/* 統計情報 */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div className="text-center p-3 bg-blue-50 rounded-lg">
-            <div className="text-2xl font-bold text-blue-600">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="text-center p-4 bg-blue-50 rounded-lg">
+            <div className="text-3xl font-bold text-blue-600 mb-2">
               {result.analysis.improvements.length}
             </div>
-            <div className="text-sm text-blue-800">改善点</div>
-          </div>
-          <div className="text-center p-3 bg-green-50 rounded-lg">
-            <div className="text-2xl font-bold text-green-600">
-              {designScore}%
+            <div className="text-sm text-blue-800 font-medium">改善点</div>
+            <div className="text-xs text-blue-600 mt-1">
+              {result.analysis.improvements.length === 0 ? '完璧です！' :
+               result.analysis.improvements.length <= 3 ? '良好なデザインです' :
+               result.analysis.improvements.length <= 6 ? '改善の余地があります' :
+               '大幅な改善が必要です'}
             </div>
-            <div className="text-sm text-green-800">評価</div>
+          </div>
+          
+          <div className="flex justify-center p-4 bg-gradient-to-br from-gray-50 to-gray-100 rounded-lg">
+            <DonutChart 
+              percentage={designScore}
+              size={140}
+              strokeWidth={10}
+              animationDuration={2000}
+              label="総合評価"
+            />
           </div>
         </div>
       </div>

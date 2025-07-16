@@ -23,23 +23,23 @@ export interface AnalysisContext {
  */
 export function generateElementDetectionPrompt(): string {
   return `
-UI/UXデザイン画像を分析し、以下のJSON形式で要素を識別してください：
+Analyze the UI/UX design image and identify elements in the following JSON format:
 
 {
   "elements": [
-    {"type": "button", "confidence": 0.95, "description": "プライマリボタン"},
-    {"type": "text", "confidence": 0.90, "description": "見出し"}
+    {"type": "button", "confidence": 0.95, "description": "Primary button"},
+    {"type": "text", "confidence": 0.90, "description": "Heading text"}
   ],
   "layout_type": "landing_page",
   "potential_issues": ["small_targets", "low_contrast"],
   "priorities": ["accessibility", "usability"]
 }
 
-検出要素: button, form, input, nav, text, image, icon, card, modal
-問題: small_targets, low_contrast, crowded_layout, poor_hierarchy
-優先度: accessibility, usability, visual_design
+Element types: button, form, input, nav, text, image, icon, card, modal
+Issues: small_targets, low_contrast, crowded_layout, poor_hierarchy
+Priorities: accessibility, usability, visual_design
 
-JSONのみ返答してください。
+Return only valid JSON without any additional text or explanation.
 `.trim();
 }
 
