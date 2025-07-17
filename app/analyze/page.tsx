@@ -34,6 +34,13 @@ function AnalyzePageContent() {
     setIsAnalyzing(true);
     setError(null);
     
+    // プロンプトの検証
+    if (!prompt || prompt.trim().length === 0) {
+      setError('質問内容が見つかりません。最初からやり直してください。');
+      setIsAnalyzing(false);
+      return;
+    }
+    
     // 実際の処理ステップに基づいたプログレス更新
     updateProgress(5, '処理を開始しています...');
 
@@ -43,7 +50,21 @@ function AnalyzePageContent() {
       for (let i = 0; i < imageCount; i++) {
         const imageData = sessionStorage.getItem(`uploadedImage_${i}`);
         if (imageData) {
-          imageDataList.push(JSON.parse(imageData));
+          try {
+            const parsedData = JSON.parse(imageData);
+            console.log(`Image ${i} data:`, parsedData); // デバッグ用
+            
+            // データの有効性をチェック
+            if (parsedData && typeof parsedData === 'object' && parsedData.dataUrl) {
+              imageDataList.push(parsedData);
+            } else {
+              console.error(`Invalid image data format for index ${i}:`, parsedData);
+              throw new Error(`画像データ${i}の形式が無効です`);
+            }
+          } catch (parseError) {
+            console.error(`Failed to parse image data for index ${i}:`, parseError);
+            throw new Error(`画像データ${i}の解析に失敗しました`);
+          }
         }
       }
 
@@ -51,13 +72,45 @@ function AnalyzePageContent() {
         throw new Error('画像データが見つかりません');
       }
 
+      // データの構造をチェック
+      console.log('First image data structure:', imageDataList[0]);
+      if (!imageDataList[0].dataUrl) {
+        throw new Error('画像データの形式が正しくありません。dataUrlプロパティが見つかりません。');
+      }
+
       updateProgress(10, '画像を準備中...');
       
       const formData = new FormData();
       
+      // Base64からBlobに変換するヘルパー関数
+      const dataURLtoBlob = (dataURL: string): Blob => {
+        if (!dataURL || typeof dataURL !== 'string') {
+          throw new Error(`Invalid dataURL: ${dataURL}`);
+        }
+        
+        if (!dataURL.includes(',')) {
+          throw new Error(`Invalid dataURL format: ${dataURL.substring(0, 100)}...`);
+        }
+        
+        const arr = dataURL.split(',');
+        const mimeMatch = arr[0].match(/:(.*?);/);
+        if (!mimeMatch) {
+          throw new Error(`Cannot extract MIME type from: ${arr[0]}`);
+        }
+        
+        const mime = mimeMatch[1];
+        const bstr = atob(arr[1]);
+        let n = bstr.length;
+        const u8arr = new Uint8Array(n);
+        while (n--) {
+          u8arr[n] = bstr.charCodeAt(n);
+        }
+        return new Blob([u8arr], { type: mime });
+      };
+      
       // 最初の画像をメイン分析対象として使用
-      const firstImageBlob = await fetch(imageDataList[0].url).then(r => r.blob());
-      const firstImageFile = new File([firstImageBlob], imageDataList[0].name, { type: firstImageBlob.type });
+      const firstImageBlob = dataURLtoBlob(imageDataList[0].dataUrl);
+      const firstImageFile = new File([firstImageBlob], imageDataList[0].name, { type: imageDataList[0].type });
       formData.append('image', firstImageFile);
       formData.append('prompt', prompt);
       formData.append('mode', 'comprehensive');
@@ -65,8 +118,8 @@ function AnalyzePageContent() {
       // 追加画像があれば参考情報として送信
       if (imageDataList.length > 1) {
         for (let i = 1; i < imageDataList.length; i++) {
-          const additionalImageBlob = await fetch(imageDataList[i].url).then(r => r.blob());
-          const additionalImageFile = new File([additionalImageBlob], imageDataList[i].name, { type: additionalImageBlob.type });
+          const additionalImageBlob = dataURLtoBlob(imageDataList[i].dataUrl);
+          const additionalImageFile = new File([additionalImageBlob], imageDataList[i].name, { type: imageDataList[i].type });
           formData.append(`additional_image_${i - 1}`, additionalImageFile);
         }
       }

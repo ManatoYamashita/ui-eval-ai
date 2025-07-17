@@ -4,6 +4,7 @@ export interface UIElement {
   type: string;
   confidence: number;
   description?: string;
+  imageIndex?: number;
 }
 
 export interface AnalysisContext {
@@ -15,7 +16,9 @@ export interface AnalysisContext {
     height: number;
     aspectRatio: number;
     fileName: string;
-  };
+    imageIndex?: number;
+  }[];
+  isComparative?: boolean;
 }
 
 /**
@@ -44,15 +47,21 @@ Return only valid JSON without any additional text or explanation.
 }
 
 /**
- * 包括的デザイン分析用プロンプト生成
+ * 包括的デザイン分析用プロンプト生成（複数画像対応）
  */
 export function generateComprehensiveAnalysisPrompt(context: AnalysisContext): string {
   const {
     userPrompt,
     detectedElements,
     relevantGuidelines,
-    imageMetadata
+    imageMetadata,
+    isComparative = false
   } = context;
+
+  // 比較分析の場合は専用プロンプトを使用
+  if (isComparative && imageMetadata && imageMetadata.length > 1) {
+    return generateComparativeAnalysisPrompt(context);
+  }
 
   const elementsText = detectedElements
     .map(el => `- ${el.type} (信頼度: ${el.confidence})`)
@@ -60,12 +69,12 @@ export function generateComprehensiveAnalysisPrompt(context: AnalysisContext): s
 
   const guidelinesText = formatGuidelinesForPrompt(relevantGuidelines);
   
-  const imageInfo = imageMetadata 
+  const imageInfo = imageMetadata && imageMetadata.length > 0
     ? `
 【画像情報】
-- サイズ: ${imageMetadata.width}x${imageMetadata.height}px
-- アスペクト比: ${imageMetadata.aspectRatio.toFixed(2)}
-- ファイル名: ${imageMetadata.fileName}
+- サイズ: ${imageMetadata[0].width}x${imageMetadata[0].height}px
+- アスペクト比: ${imageMetadata[0].aspectRatio.toFixed(2)}
+- ファイル名: ${imageMetadata[0].fileName}
 `
     : '';
 
@@ -132,6 +141,115 @@ ${guidelinesText}
 3. TailwindCSSクラスは実際に使用可能なものを記載する
 4. 優先度は影響度とアクセシビリティの観点から判断する
 5. 日本語で分かりやすく説明する
+`.trim();
+}
+
+/**
+ * 複数画像比較分析用プロンプト生成
+ */
+export function generateComparativeAnalysisPrompt(context: AnalysisContext): string {
+  const {
+    userPrompt,
+    detectedElements,
+    relevantGuidelines,
+    imageMetadata = []
+  } = context;
+
+  const guidelinesText = formatGuidelinesForPrompt(relevantGuidelines);
+  
+  // 画像ごとの要素情報
+  const imageElementsText = imageMetadata.map((meta, index) => {
+    const imageElements = detectedElements.filter(el => el.imageIndex === index);
+    const elementsText = imageElements
+      .map(el => `  - ${el.type} (信頼度: ${el.confidence})`)
+      .join('\n');
+    
+    return `
+**画像${index + 1}: ${meta.fileName}**
+- サイズ: ${meta.width}x${meta.height}px
+- アスペクト比: ${meta.aspectRatio.toFixed(2)}
+- 検出要素:
+${elementsText}`;
+  }).join('\n');
+
+  return `
+あなたはUI/UXデザインの専門家です。提供された複数の画像を比較分析し、どちらがユーザビリティ・アクセシビリティの観点で優れているかを判定してください。
+
+【ユーザーの質問・要望】
+${userPrompt}
+
+【比較対象画像の情報】
+${imageElementsText}
+
+【参考ガイドライン】
+${guidelinesText}
+
+【出力形式】
+以下のMarkdown形式で回答してください：
+
+## 🔍 比較分析結果
+
+### 📊 総合評価
+**推奨: 画像[X]**
+- **理由**: [主要な判定理由を簡潔に]
+
+### 🎯 比較項目別評価
+
+#### 1. アクセシビリティ (WCAG準拠)
+- **画像1**: [評価] - [具体的な理由]
+- **画像2**: [評価] - [具体的な理由]
+- **勝者**: 画像[X] - [判定根拠となるガイドライン名]
+
+#### 2. ユーザビリティ (使いやすさ)
+- **画像1**: [評価] - [具体的な理由]
+- **画像2**: [評価] - [具体的な理由] 
+- **勝者**: 画像[X] - [判定根拠となるガイドライン名]
+
+#### 3. 視覚的階層・レイアウト
+- **画像1**: [評価] - [具体的な理由]
+- **画像2**: [評価] - [具体的な理由]
+- **勝者**: 画像[X] - [判定根拠となるガイドライン名]
+
+#### 4. 操作性・インタラクション
+- **画像1**: [評価] - [具体的な理由]
+- **画像2**: [評価] - [具体的な理由]
+- **勝者**: 画像[X] - [判定根拠となるガイドライン名]
+
+### 💡 各画像の改善提案
+
+#### 画像1の改善点
+**🔴 重要な改善点**
+- **問題**: [具体的問題点]
+- **根拠**: [ガイドライン名]
+- **改善案**: [具体的解決策]
+
+**🟡 推奨改善点**
+- **問題**: [具体的問題点]
+- **根拠**: [ガイドライン名]
+- **改善案**: [具体的解決策]
+
+#### 画像2の改善点
+**🔴 重要な改善点**
+- **問題**: [具体的問題点]
+- **根拠**: [ガイドライン名]
+- **改善案**: [具体的解決策]
+
+**🟡 推奨改善点**
+- **問題**: [具体的問題点]
+- **根拠**: [ガイドライン名]
+- **改善案**: [具体的解決策]
+
+### 📈 予測される効果
+- **推奨デザインの採用効果**: [期待される効果]
+- **ユーザビリティ向上度**: [具体的な改善予測]
+- **アクセシビリティ向上度**: [具体的な改善予測]
+
+【回答の指針】
+1. 客観的な評価基準（WCAG、HIG、ユーザビリティ原則）に基づいて判定する
+2. 具体的なガイドライン名と該当箇所を明記する
+3. 感情的・主観的評価ではなく、データと原則に基づいた分析を行う
+4. 両方の画像の良い点・悪い点を公平に評価する
+5. 改善提案は実装可能で具体的な内容にする
 `.trim();
 }
 

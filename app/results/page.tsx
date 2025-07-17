@@ -21,7 +21,7 @@ export default function ResultsPage() {
     }
 
     // 画像データを取得
-    const imageDataList: { name: string; url: string; size: number; type: string }[] = [];
+    const imageDataList: { name: string; dataUrl: string; size: number; type: string }[] = [];
     let i = 0;
     while (true) {
       const imageData = sessionStorage.getItem(`uploadedImage_${i}`);
@@ -30,20 +30,56 @@ export default function ResultsPage() {
       i++;
     }
 
-    // 画像データをFile形式に変換
+    // Base64データからFile形式に変換
     const convertImages = async () => {
       const convertedImages = [];
+      
+      // Base64からBlobに変換するヘルパー関数
+      const dataURLtoBlob = (dataURL: string): Blob => {
+        if (!dataURL || typeof dataURL !== 'string') {
+          console.error('Invalid dataURL:', dataURL);
+          throw new Error(`Invalid dataURL: ${dataURL}`);
+        }
+        
+        if (!dataURL.includes(',')) {
+          console.error('Invalid dataURL format:', dataURL.substring(0, 100));
+          throw new Error(`Invalid dataURL format`);
+        }
+        
+        const arr = dataURL.split(',');
+        const mimeMatch = arr[0].match(/:(.*?);/);
+        if (!mimeMatch) {
+          console.error('Cannot extract MIME type from:', arr[0]);
+          throw new Error(`Cannot extract MIME type`);
+        }
+        
+        const mime = mimeMatch[1];
+        const bstr = atob(arr[1]);
+        let n = bstr.length;
+        const u8arr = new Uint8Array(n);
+        while (n--) {
+          u8arr[n] = bstr.charCodeAt(n);
+        }
+        return new Blob([u8arr], { type: mime });
+      };
+      
       for (const imageData of imageDataList) {
         try {
-          const response = await fetch(imageData.url);
-          const blob = await response.blob();
-          const file = new File([blob], imageData.name, { type: blob.type });
+          console.log('Converting image data:', imageData);
+          if (!imageData.dataUrl) {
+            console.error('Missing dataUrl in image data:', imageData);
+            continue;
+          }
+          
+          const blob = dataURLtoBlob(imageData.dataUrl);
+          const file = new File([blob], imageData.name, { type: imageData.type });
+          const url = URL.createObjectURL(blob);
           convertedImages.push({
             file,
-            url: imageData.url
+            url
           });
         } catch (error) {
-          console.error('Error converting image:', error);
+          console.error('Error converting image:', error, imageData);
         }
       }
       setAnalyzedImages(convertedImages);

@@ -378,6 +378,12 @@ export async function searchByKeywords(
         return performManualKeywordSearch(keywords, limit);
       }
       
+      // ネットワークエラーの場合は特別な処理
+      if (error.message.includes('fetch failed') || error.message.includes('TypeError: fetch failed')) {
+        console.error('🌐 Database connection failed - network error');
+        throw new Error('Database connection failed: Network connectivity issue');
+      }
+      
       throw new Error(`Keyword search failed: ${error.message}`);
     }
 
@@ -405,6 +411,13 @@ export async function searchByKeywords(
       return await performManualKeywordSearch(keywords, limit);
     } catch (fallbackError) {
       console.error('Manual keyword search also failed:', fallbackError);
+      
+      // ネットワークエラーの場合は空の結果を返してアプリを継続
+      if (fallbackError instanceof Error && (fallbackError.message.includes('fetch failed') || fallbackError.message.includes('network'))) {
+        console.log('🌐 All search methods failed due to network issues - returning empty results');
+        return [];
+      }
+      
       throw new Error('Failed to perform keyword search');
     }
   }
@@ -588,9 +601,20 @@ export async function searchRelevantGuidelines(
   } catch (error) {
     console.error('Guidelines search error:', error);
     
+    // ネットワークエラーの場合は空の結果を返してアプリを継続
+    if (error instanceof Error && (error.message.includes('fetch failed') || error.message.includes('network'))) {
+      console.log('🌐 Network issues detected - returning empty guidelines for analysis continuation');
+      return [];
+    }
+    
     // 最終フォールバック: 基本的な検索結果を返す
     console.log('🔄 Using final fallback: basic category search...');
-    return await performFinalFallbackSearch(detectedElements, userPrompt);
+    try {
+      return await performFinalFallbackSearch(detectedElements, userPrompt);
+    } catch (fallbackError) {
+      console.error('Final fallback also failed:', fallbackError);
+      return []; // 空の結果でもアプリを継続
+    }
   }
 }
 

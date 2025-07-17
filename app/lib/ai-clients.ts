@@ -116,6 +116,19 @@ export async function analyzeImageWithGemini(
   } catch (error: unknown) {
     console.error('❌ Gemini analysis error:', error);
     
+    // ネットワークエラーの詳細診断
+    if (error instanceof TypeError && error.message.includes('fetch failed')) {
+      console.error('🌐 Network Error Details:');
+      console.error('- This appears to be a network connectivity issue');
+      console.error('- Possible causes:');
+      console.error('  1. Internet connection problems');
+      console.error('  2. Google AI API service unavailable');
+      console.error('  3. Firewall blocking the request');
+      console.error('  4. API endpoint temporarily down');
+      console.error('');
+      throw new Error('Network connection failed. Please check your internet connection and try again.');
+    }
+    
     // APIキー制限エラーの詳細ログ
     if (error && typeof error === 'object' && 'status' in error && error.status === 403) {
       console.error('🚫 API Key Error Details:');
@@ -130,10 +143,104 @@ export async function analyzeImageWithGemini(
       console.error('4. Under "Application restrictions", select "None"');
       console.error('5. Save the changes and wait a few minutes');
       console.error('');
+      throw new Error('API key restriction error. Please check Google Cloud Console settings.');
     }
     
     const errorMessage = error instanceof Error ? error.message : 'Unknown error';
     throw new Error(`Failed to analyze image with Gemini: ${errorMessage}`);
+  }
+}
+
+// Gemini Vision複数画像比較分析
+export async function analyzeMultipleImagesWithGemini(
+  processedImages: Array<{base64Data: string; width: number; height: number}>,
+  prompt: string,
+  maxTokens: number = 4000
+): Promise<string> {
+  try {
+    console.log(`🖼️ Starting Gemini multiple image analysis for ${processedImages.length} images...`);
+    console.log('📝 Prompt length:', prompt.length);
+    
+    // 複数画像をpartsに追加
+    const parts = [];
+    
+    // まず画像を順番に追加
+    processedImages.forEach((img, index) => {
+      parts.push({
+        inlineData: {
+          mimeType: 'image/jpeg',
+          data: img.base64Data
+        }
+      });
+      console.log(`🖼️ Image ${index + 1} added: ${img.width}x${img.height}px`);
+    });
+    
+    // 最後にプロンプトを追加
+    parts.push({
+      text: `
+${prompt}
+
+**画像の順序**: 上記の画像は順番に「画像1」、「画像2」${processedImages.length > 2 ? `、「画像3」等` : ''}として参照してください。
+各画像を明確に識別し、比較分析を行ってください。
+      `
+    });
+    
+    const response = await genai.models.generateContent({
+      model: 'gemini-1.5-flash',
+      contents: [{
+        parts: parts
+      }],
+      config: {
+        maxOutputTokens: maxTokens,
+        temperature: 0.7,
+        topP: 0.8,
+        topK: 40
+      }
+    });
+
+    const result = response.text || '';
+    console.log('✅ Gemini multiple image analysis completed, response length:', result.length);
+    
+    return result;
+  } catch (error: unknown) {
+    console.error('❌ Gemini multiple image analysis error:', error);
+    
+    // ネットワークエラーの詳細診断
+    if (error instanceof TypeError && error.message.includes('fetch failed')) {
+      console.error('🌐 Network Error in multi-image analysis - trying individual analysis...');
+    }
+    
+    // フォールバック: 個別分析
+    console.log('🔄 Falling back to individual image analysis...');
+    try {
+      const individualAnalyses = await Promise.all(
+        processedImages.map(async (img, index) => {
+          const individualPrompt = `
+Image ${index + 1} Analysis:
+${prompt}
+
+Please analyze this image individually, noting it as "Image ${index + 1}".
+          `;
+          return await analyzeImageWithGemini(img.base64Data, individualPrompt, Math.floor(maxTokens / processedImages.length));
+        })
+      );
+      
+      return `
+## 複数画像分析結果（個別分析モード）
+
+${individualAnalyses.map((analysis, index) => `
+### 画像${index + 1}の分析
+${analysis}
+`).join('\n')}
+
+## 比較まとめ
+複数画像の同時分析でエラーが発生したため、個別分析結果を提供しています。
+上記の各画像の分析結果を比較して、ユーザビリティとアクセシビリティの観点から判断してください。
+      `;
+    } catch (fallbackError) {
+      console.error('❌ Fallback analysis also failed:', fallbackError);
+      throw new Error('Multiple image analysis failed completely');
+    }
   }
 }
 

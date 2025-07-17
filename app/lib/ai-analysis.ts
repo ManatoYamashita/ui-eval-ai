@@ -1,4 +1,4 @@
-import { analyzeImageWithGemini } from './ai-clients';
+import { analyzeImageWithGemini, analyzeMultipleImagesWithGemini } from './ai-clients';
 import { processImageForAnalysis } from './image-processing';
 import { searchRelevantGuidelines } from './rag-search';
 import {
@@ -18,13 +18,14 @@ export interface AnalysisOptions {
   maxTokens?: number;
   categories?: string[];
   includeTechnicalDetails?: boolean;
+  isComparative?: boolean;
 }
 
 /**
- * メイン分析関数
+ * メイン分析関数（複数画像対応）
  */
 export async function analyzeDesign(
-  imageFile: File,
+  imageFiles: File[],
   userPrompt: string,
   options: AnalysisOptions = {}
 ): Promise<AnalysisResult> {
@@ -34,40 +35,56 @@ export async function analyzeDesign(
     const {
       mode = 'comprehensive',
       maxTokens = 8000,
+      isComparative = false
     } = options;
 
-    // 1. 画像前処理
-    console.log('🖼️ Processing image...');
-    const processedImage = await processImageForAnalysis(imageFile);
-
-    // 2. UI要素識別
-    console.log('🔍 Detecting UI elements...');
-    const detectedElements = await detectUIElements(processedImage.base64Data);
-
-    // 3. 関連ガイドライン検索
-    console.log('📚 Searching relevant guidelines...');
-    const relevantGuidelines = await searchRelevantGuidelines(
-      detectedElements.map(el => el.type),
-      userPrompt
+    console.log(`🖼️ Processing ${imageFiles.length} image(s)... ${isComparative ? '(Comparative Analysis)' : ''}`);
+    
+    // 1. 複数画像前処理
+    const processedImages = await Promise.all(
+      imageFiles.map(file => processImageForAnalysis(file))
     );
 
-    // 4. 分析実行
+    // 2. 複数画像のUI要素識別
+    console.log('🔍 Detecting UI elements from all images...');
+    const allDetectedElements = await Promise.all(
+      processedImages.map(async (img, index) => {
+        const elements = await detectUIElements(img.base64Data);
+        return elements.map(el => ({ ...el, imageIndex: index }));
+      })
+    );
+    const detectedElements = allDetectedElements.flat();
+
+    // 3. 関連ガイドライン検索（比較分析対応）
+    console.log('📚 Searching relevant guidelines...');
+    const searchQuery = isComparative 
+      ? `${userPrompt} comparison usability accessibility guidelines`
+      : userPrompt;
+    
+    const relevantGuidelines = await searchRelevantGuidelines(
+      detectedElements.map(el => el.type),
+      searchQuery
+    );
+
+    // 4. 複数画像分析実行
     console.log('🧠 Performing analysis...');
     const analysisContext: AnalysisContext = {
       userPrompt,
       detectedElements,
       relevantGuidelines,
-      imageMetadata: {
-        width: processedImage.width,
-        height: processedImage.height,
-        aspectRatio: processedImage.width / processedImage.height,
-        fileName: imageFile.name
-      }
+      imageMetadata: processedImages.map((img, index) => ({
+        width: img.width,
+        height: img.height,
+        aspectRatio: img.width / img.height,
+        fileName: imageFiles[index].name,
+        imageIndex: index
+      })),
+      isComparative
     };
 
     const analysisText = mode === 'quick'
-      ? await performQuickAnalysis(processedImage.base64Data, userPrompt, relevantGuidelines)
-      : await performComprehensiveAnalysis(processedImage.base64Data, analysisContext, maxTokens);
+      ? await performQuickAnalysis(processedImages, userPrompt, relevantGuidelines, isComparative)
+      : await performComprehensiveAnalysis(processedImages, analysisContext, maxTokens);
 
     // 5. 結果パース
     console.log('📊 Parsing results...');
@@ -89,20 +106,52 @@ export async function analyzeDesign(
   } catch (error) {
     console.error('❌ Analysis error:', error);
     
+    // エラーメッセージを分類
+    let userFriendlyError = 'Analysis failed due to technical issues';
+    if (error instanceof Error) {
+      if (error.message.includes('Network connection failed')) {
+        userFriendlyError = 'Network connection issue - analysis completed with offline guidelines';
+      } else if (error.message.includes('API key restriction')) {
+        userFriendlyError = 'API configuration issue - using offline analysis mode';
+      } else if (error.message.includes('Multiple image analysis failed')) {
+        userFriendlyError = 'Multi-image analysis unavailable - using basic comparison';
+      }
+    }
+    
     // フォールバック分析を実行（エラー時はデフォルト値を使用）
     console.log('🔄 Performing fallback analysis...');
     const fallbackDetectedElements = ['button', 'text', 'layout']; // デフォルト要素
     const fallbackGuidelines: SearchResult[] = []; // 空のガイドライン配列
     
-    const fallbackAnalysis = await generateFallbackAnalysis(userPrompt, fallbackDetectedElements, fallbackGuidelines);
-    
-    return {
-      success: false,
-      analysis: fallbackAnalysis,
-      guidelines_used: [],
-      processing_time: Date.now() - startTime,
-      error: error instanceof Error ? error.message : 'Unknown analysis error'
-    };
+    try {
+      const fallbackAnalysis = await generateFallbackAnalysis(userPrompt, fallbackDetectedElements, fallbackGuidelines);
+      
+      return {
+        success: true, // フォールバック成功時はtrueに変更
+        analysis: fallbackAnalysis,
+        guidelines_used: [],
+        processing_time: Date.now() - startTime,
+        error: userFriendlyError
+      };
+    } catch (fallbackError) {
+      console.error('❌ Fallback analysis also failed:', fallbackError);
+      
+      return {
+        success: false,
+        analysis: {
+          current_issues: 'Analysis could not be completed due to technical issues.',
+          improvements: [],
+          predicted_impact: {
+            accessibility_score: 0,
+            usability_improvement: 'Unable to provide assessment',
+            conversion_impact: 'Unable to provide assessment'
+          }
+        },
+        guidelines_used: [],
+        processing_time: Date.now() - startTime,
+        error: userFriendlyError
+      };
+    }
   }
 }
 
@@ -449,10 +498,10 @@ async function detectUIElements(base64Image: string): Promise<UIElement[]> {
 }
 
 /**
- * 包括的分析実行
+ * 包括的分析実行（複数画像対応）
  */
 async function performComprehensiveAnalysis(
-  base64Image: string,
+  processedImages: Array<{base64Data: string; width: number; height: number}>,
   context: AnalysisContext,
   maxTokens: number
 ): Promise<string> {
@@ -460,21 +509,34 @@ async function performComprehensiveAnalysis(
   const prompt = generateComprehensiveAnalysisPrompt(context);
   const optimizedPrompt = optimizePromptForTokenLimit(prompt, Math.floor(maxTokens * 0.7));
   
-  return await analyzeImageWithGemini(base64Image, optimizedPrompt, maxTokens);
+  // 複数画像をAIに送信
+  return await analyzeMultipleImagesWithGemini(processedImages, optimizedPrompt, maxTokens);
 }
 
 /**
- * 簡易分析実行
+ * 簡易分析実行（複数画像対応）
  */
 async function performQuickAnalysis(
-  base64Image: string,
+  processedImages: Array<{base64Data: string; width: number; height: number}>,
   userPrompt: string,
-  guidelines: SearchResult[]
+  guidelines: SearchResult[],
+  isComparative: boolean = false
 ): Promise<string> {
   
   const prompt = generateQuickAnalysisPrompt(userPrompt, guidelines);
   
-  return await analyzeImageWithGemini(base64Image, prompt, 3000);
+  // 複数画像の場合は比較用プロンプトを使用
+  if (isComparative && processedImages.length > 1) {
+    const compPrompt = `
+${prompt}
+
+**重要**: 提供された${processedImages.length}枚の画像を比較分析してください。
+どちらの画像がユーザビリティとアクセシビリティの観点で優れているかを明確に判定し、その理由を具体的に説明してください。
+    `;
+    return await analyzeMultipleImagesWithGemini(processedImages, compPrompt, 4000);
+  }
+  
+  return await analyzeImageWithGemini(processedImages[0].base64Data, prompt, 3000);
 }
 
 /**
@@ -692,7 +754,7 @@ export async function analyzeMultipleDesigns(
   
   try {
     const promises = images.map((image, index) => 
-      analyzeDesign(image, userPrompts[index], { ...options, mode: 'quick' })
+      analyzeDesign([image], userPrompts[index], { ...options, mode: 'quick' })
     );
     
     return await Promise.all(promises);

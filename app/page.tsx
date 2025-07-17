@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../components/ui/card';
 import { Button } from '../components/ui/button';
@@ -9,25 +9,20 @@ import FileUpload from './components/ui/FileUpload';
 export default function Home() {
   const router = useRouter();
   const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
-  const [previewUrls, setPreviewUrls] = useState<string[]>([]);
   const [showAddImageInput, setShowAddImageInput] = useState(false);
   const [prompt, setPrompt] = useState('');
   const [error, setError] = useState<string | null>(null);
 
-  // 複数画像プレビューURLの管理
-  useEffect(() => {
-    if (selectedFiles.length > 0) {
-      const urls = selectedFiles.map(file => URL.createObjectURL(file));
-      setPreviewUrls(urls);
-      
-      // クリーンアップ
-      return () => {
-        urls.forEach(url => URL.revokeObjectURL(url));
-      };
-    } else {
-      setPreviewUrls([]);
+  // sessionStorageをクリアする関数（デバッグ用）
+  const clearSessionStorage = () => {
+    let i = 0;
+    while (sessionStorage.getItem(`uploadedImage_${i}`)) {
+      sessionStorage.removeItem(`uploadedImage_${i}`);
+      i++;
     }
-  }, [selectedFiles]);
+    sessionStorage.removeItem('analysisResult');
+    console.log('SessionStorage cleared');
+  };
 
   // 分析開始処理
   const handleAnalyze = async () => {
@@ -38,16 +33,50 @@ export default function Home() {
 
     setError(null);
     
-    // 画像データをsessionStorageに保存
-    selectedFiles.forEach((file, index) => {
-      const imageData = {
-        name: file.name,
-        size: file.size,
-        type: file.type,
-        url: previewUrls[index]
-      };
-      sessionStorage.setItem(`uploadedImage_${index}`, JSON.stringify(imageData));
+    // 画像データをBase64でsessionStorageに保存
+    const savePromises = selectedFiles.map(async (file, index) => {
+      return new Promise<void>((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          const result = e.target?.result;
+          if (!result || typeof result !== 'string') {
+            reject(new Error(`Failed to read file: ${file.name}`));
+            return;
+          }
+          
+          const imageData = {
+            name: file.name,
+            size: file.size,
+            type: file.type,
+            dataUrl: result
+          };
+          
+          console.log(`Saving image ${index}:`, {
+            name: imageData.name,
+            type: imageData.type,
+            dataUrlLength: imageData.dataUrl.length,
+            dataUrlPrefix: imageData.dataUrl.substring(0, 50)
+          });
+          
+          sessionStorage.setItem(`uploadedImage_${index}`, JSON.stringify(imageData));
+          resolve();
+        };
+        reader.onerror = (error) => {
+          console.error(`Error reading file ${file.name}:`, error);
+          reject(error);
+        };
+        reader.readAsDataURL(file);
+      });
     });
+
+    try {
+      await Promise.all(savePromises);
+      console.log('All images saved successfully');
+    } catch (error) {
+      console.error('Error saving images:', error);
+      setError('画像の保存に失敗しました: ' + (error instanceof Error ? error.message : '不明なエラー'));
+      return;
+    }
 
     // 分析ページに遷移
     const params = new URLSearchParams({
@@ -76,10 +105,6 @@ export default function Home() {
 
   const handleRemoveImage = (index: number) => {
     setSelectedFiles(prev => prev.filter((_, i) => i !== index));
-    setPreviewUrls(prev => {
-      URL.revokeObjectURL(prev[index]);
-      return prev.filter((_, i) => i !== index);
-    });
   };
 
 
@@ -216,7 +241,7 @@ export default function Home() {
           )}
 
           {/* 分析ボタン */}
-          <div className="flex justify-center">
+          <div className="flex justify-center gap-4">
             <Button
               onClick={handleAnalyze}
               disabled={selectedFiles.length === 0 || !prompt.trim()}
@@ -225,6 +250,18 @@ export default function Home() {
             >
               🔍 デザインを分析する{selectedFiles.length > 1 ? ` (${selectedFiles.length}枚)` : ''}
             </Button>
+            
+            {/* デバッグ用ボタン - 開発時のみ表示 */}
+            {process.env.NODE_ENV === 'development' && (
+              <Button
+                onClick={clearSessionStorage}
+                variant="outline"
+                size="sm"
+                className="text-xs"
+              >
+                🗑️ セッションクリア
+              </Button>
+            )}
           </div>
 
 
