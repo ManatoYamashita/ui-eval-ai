@@ -1,5 +1,6 @@
 import { typedSupabaseAdmin } from './supabase';
 import { generateEmbedding } from './ai-clients';
+import { searchLocalKnowledge, searchLocalKnowledgeByCategory, getLocalKnowledgeStats, EMERGENCY_SUGGESTIONS } from './offline-knowledge';
 import type { SearchResult } from '../types/guidelines';
 
 export interface RAGSearchOptions {
@@ -412,15 +413,140 @@ export async function searchByKeywords(
     } catch (fallbackError) {
       console.error('Manual keyword search also failed:', fallbackError);
       
-      // ネットワークエラーの場合は空の結果を返してアプリを継続
+      // ネットワークエラーの場合はローカルナレッジベースを使用
       if (fallbackError instanceof Error && (fallbackError.message.includes('fetch failed') || fallbackError.message.includes('network'))) {
-        console.log('🌐 All search methods failed due to network issues - returning empty results');
-        return [];
+        console.log('🌐 Network issues detected - switching to local knowledge base');
+        console.log('📚 Using offline knowledge search...');
+        
+        try {
+          const localResults = searchLocalKnowledge(textQuery, detectedElements, options.categories, limit);
+          console.log(`✅ Local knowledge search returned ${localResults.length} results`);
+          
+          const processingTime = Date.now() - startTime;
+          return {
+            results: localResults,
+            query: textQuery,
+            totalResults: localResults.length,
+            processingTime
+          };
+        } catch (localError) {
+          console.error('❌ Local knowledge search failed:', localError);
+          console.log('🔄 Using emergency hardcoded suggestions...');
+          
+          // 最終手段: 緊急用のハードコード結果
+          const emergencyResults = generateEmergencyResults(textQuery, detectedElements);
+          const processingTime = Date.now() - startTime;
+          
+          return {
+            results: emergencyResults,
+            query: textQuery,
+            totalResults: emergencyResults.length,
+            processingTime
+          };
+        }
       }
       
       throw new Error('Failed to perform keyword search');
     }
   }
+}
+
+/**
+ * 緊急時のハードコード結果生成
+ */
+function generateEmergencyResults(
+  query: string,
+  elements: string[]
+): SearchResult[] {
+  console.log('🚨 Generating emergency results for:', query);
+  
+  const results: SearchResult[] = [];
+  const queryLower = query.toLowerCase();
+  
+  // アクセシビリティ関連
+  if (queryLower.includes('アクセシビリティ') || queryLower.includes('accessibility')) {
+    EMERGENCY_SUGGESTIONS.accessibility.forEach((suggestion, index) => {
+      results.push({
+        id: `emergency-a11y-${index}`,
+        content: `${suggestion.title}: ${suggestion.description}`,
+        source: 'Emergency Guidelines',
+        category: 'accessibility',
+        subcategory: 'emergency',
+        relevance_score: 0.9,
+        metadata: { code: suggestion.code, type: 'emergency' }
+      });
+    });
+  }
+  
+  // ユーザビリティ関連
+  if (queryLower.includes('ユーザビリティ') || queryLower.includes('usability') || queryLower.includes('使いやす')) {
+    EMERGENCY_SUGGESTIONS.usability.forEach((suggestion, index) => {
+      results.push({
+        id: `emergency-ux-${index}`,
+        content: `${suggestion.title}: ${suggestion.description}`,
+        source: 'Emergency Guidelines',
+        category: 'usability',
+        subcategory: 'emergency',
+        relevance_score: 0.9,
+        metadata: { code: suggestion.code, type: 'emergency' }
+      });
+    });
+  }
+  
+  // デザイン関連
+  if (queryLower.includes('デザイン') || queryLower.includes('design') || queryLower.includes('visual')) {
+    EMERGENCY_SUGGESTIONS.visual_design.forEach((suggestion, index) => {
+      results.push({
+        id: `emergency-design-${index}`,
+        content: `${suggestion.title}: ${suggestion.description}`,
+        source: 'Emergency Guidelines',
+        category: 'visual_design',
+        subcategory: 'emergency',
+        relevance_score: 0.9,
+        metadata: { code: suggestion.code, type: 'emergency' }
+      });
+    });
+  }
+  
+  // 要素特有の提案
+  if (elements.includes('button')) {
+    results.push({
+      id: 'emergency-button',
+      content: 'ボタンの改善: 明確なラベル、適切なサイズ（最小44px）、高コントラストの背景色を使用しましょう。',
+      source: 'Emergency Guidelines',
+      category: 'usability',
+      subcategory: 'button',
+      relevance_score: 0.95,
+      metadata: { code: 'px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700', type: 'emergency' }
+    });
+  }
+  
+  // 一般的な改善提案（クエリが認識できない場合）
+  if (results.length === 0) {
+    results.push(
+      {
+        id: 'emergency-general-1',
+        content: '視覚的階層の改善: 見出しサイズと余白を調整して、情報の優先度を明確にしましょう。',
+        source: 'Emergency Guidelines',
+        category: 'visual_design',
+        subcategory: 'hierarchy',
+        relevance_score: 0.8,
+        metadata: { code: 'text-2xl font-bold mb-4', type: 'emergency' }
+      },
+      {
+        id: 'emergency-general-2',
+        content: 'レスポンシブデザイン: モバイルデバイスでの表示を最適化しましょう。',
+        source: 'Emergency Guidelines',
+        category: 'usability',
+        subcategory: 'responsive',
+        relevance_score: 0.8,
+        metadata: { code: 'container mx-auto px-4 sm:px-6 lg:px-8', type: 'emergency' }
+      }
+    );
+  }
+  
+  console.log(`✅ Generated ${results.length} emergency results`);
+  return results.slice(0, 5); // 最大5件
 }
 
 /**
@@ -601,10 +727,21 @@ export async function searchRelevantGuidelines(
   } catch (error) {
     console.error('Guidelines search error:', error);
     
-    // ネットワークエラーの場合は空の結果を返してアプリを継続
+    // ネットワークエラーの場合はローカルナレッジベースを使用
     if (error instanceof Error && (error.message.includes('fetch failed') || error.message.includes('network'))) {
-      console.log('🌐 Network issues detected - returning empty guidelines for analysis continuation');
-      return [];
+      console.log('🌐 Network issues detected - using local knowledge base for guidelines');
+      
+      try {
+        const localResults = searchLocalKnowledge(userPrompt, detectedElements);
+        console.log(`✅ Local knowledge base provided ${localResults.length} guidelines`);
+        return localResults;
+      } catch (localError) {
+        console.error('❌ Local knowledge search failed:', localError);
+        console.log('🚨 Using emergency guidelines...');
+        
+        // 緊急時のガイドライン
+        return generateEmergencyResults(userPrompt, detectedElements);
+      }
     }
     
     // 最終フォールバック: 基本的な検索結果を返す

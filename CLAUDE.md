@@ -41,6 +41,9 @@ npm run test-apis          # Test Google AI APIs and database functions
 # Database Status
 npm run check-db           # Verify database functions and table status
 
+# Database Functions Creation (if needed)
+npm run create-db-functions # Create PostgreSQL functions manually
+
 # Manual Testing
 # Visit http://localhost:3000 and upload a design image
 ```
@@ -48,10 +51,11 @@ npm run check-db           # Verify database functions and table status
 ## Architecture Overview
 
 ### Technology Stack
-- **Frontend**: Next.js 15 (App Router), TypeScript, TailwindCSS
+- **Frontend**: Next.js 15 (App Router), TypeScript, TailwindCSS v4.1
 - **Backend**: Supabase (PostgreSQL + pgvector), Next.js API routes
-- **AI Services**: Google Gemini 1.5 Flash, Google Text Embedding 004
+- **AI Services**: Google Gemini 1.5 Flash (`@google/generative-ai`), Google Text Embedding 004
 - **Database**: PostgreSQL with pgvector extension for vector search
+- **Development**: TypeScript strict mode, ESLint, tsx for script execution
 
 ### Core System Flow
 1. **Image Upload**: User uploads design image with natural language question
@@ -94,10 +98,11 @@ The system implements 6 levels of fallback to ensure high availability:
 ## Development Guidelines
 
 ### Code Quality Standards
-- **TypeScript**: Strict mode enabled, avoid `any` types
-- **Error Handling**: Comprehensive try-catch blocks with fallbacks
-- **API Design**: RESTful endpoints with structured responses
-- **Component Design**: Functional components with hooks, atomic design patterns
+- **TypeScript**: Strict mode enabled, avoid `any` types, use proper type definitions from `app/types/`
+- **Error Handling**: Comprehensive try-catch blocks with 6-layer fallback system
+- **API Design**: RESTful endpoints with structured responses, `/api/analyze` for main analysis
+- **Component Design**: Functional components with hooks, atomic design patterns in `app/components/ui/`
+- **File Organization**: Domain-specific separation (`lib/`, `types/`, `components/`, `api/`)
 
 ### Architecture Principles
 - **Resilience**: Multiple fallback layers for all external dependencies
@@ -195,11 +200,31 @@ ALLOWED_FILE_TYPES=image/jpeg,image/png,image/gif,image/webp
 
 ## Cursor Rules Integration
 
-This project follows specific development principles defined in `.cursor/rules/`:
-- **TypeScript Standards**: Strict typing, no `any` usage
-- **Error Handling**: Comprehensive fallback systems
-- **UI/UX Standards**: Accessible, responsive design
-- **Documentation**: Keep dev.md updated with implementation changes
+This project follows specific development principles defined in `.cursor/rules/`. Key rules include:
+
+### Core Development Standards (.cursor/rules/general.mdc)
+- **Project Scope**: UI Evaluation AI - デザイン画像分析による改善提案システム
+- **Technology Stack**: Next.js 15 (App Router), TypeScript, TailwindCSS, Supabase, Google AI APIs
+- **Knowledge Management**: 問題解決時の知見を必ずルールファイルに文書化
+- **Workflow**: 段階的確認とPDCAサイクルによる継続的改善
+
+### AI Development Workflow (.cursor/rules/ai-development.mdc)
+- **Gradual Implementation**: 大きな機能を小さな単位に分割して段階的に実装
+- **Quality Checks**: 各段階でTypeScriptエラー確認、動作テスト、コード品質確認
+- **Documentation**: セッション終了時の進捗記録とドキュメント更新
+
+### Implementation Standards (.cursor/rules/implementation.mdc)
+- **TypeScript**: Strict mode enabled, avoid `any` types
+- **Error Handling**: Comprehensive fallback systems with 6-layer architecture
+- **Performance**: 8-10 second response time targets
+- **Modularity**: Clear separation between AI, search, and UI layers
+
+### UI/UX Standards (.cursor/rules/ui-design.mdc)
+- **Accessibility**: WCAG準拠、スクリーンリーダー対応
+- **Responsive Design**: モバイルファースト、デスクトップ対応
+- **Design System**: TailwindCSS活用、再利用可能コンポーネント
+
+**Important**: All development should follow フリーザペルソナ style - 丁寧語ベース（「～です」「～ます」）with technical excellence focus.
 
 ## Debugging & Monitoring
 
