@@ -1,6 +1,6 @@
 import { typedSupabaseAdmin } from './supabase';
 import { generateEmbedding } from './ai-clients';
-import { searchLocalKnowledge, searchLocalKnowledgeByCategory, getLocalKnowledgeStats, EMERGENCY_SUGGESTIONS } from './offline-knowledge';
+import { searchLocalKnowledge, EMERGENCY_SUGGESTIONS } from './offline-knowledge';
 import type { SearchResult } from '../types/guidelines';
 
 export interface RAGSearchOptions {
@@ -358,8 +358,13 @@ export async function searchByUIElements(
  */
 export async function searchByKeywords(
   keywords: string[],
+  textQuery: string = '',
+  detectedElements: string[] = [],
+  options: RAGSearchOptions = {},
   limit: number = 10
-): Promise<SearchResult[]> {
+): Promise<RAGSearchResult> {
+  const startTime = Date.now();
+  
   try {
     console.log('🔍 Attempting keyword search with:', keywords);
     
@@ -376,7 +381,7 @@ export async function searchByKeywords(
       // 関数が存在しない場合、手動でキーワード検索を実行
       if (error.message.includes('Could not find the function')) {
         console.log('🔄 Function not found, trying manual keyword search...');
-        return performManualKeywordSearch(keywords, limit);
+        return performManualKeywordSearch(keywords, textQuery, detectedElements, options, limit);
       }
       
       // ネットワークエラーの場合は特別な処理
@@ -401,7 +406,14 @@ export async function searchByKeywords(
     }));
 
     console.log('✅ Keyword search completed, found', formattedResults.length, 'results');
-    return formattedResults;
+    
+    const processingTime = Date.now() - startTime;
+    return {
+      results: formattedResults,
+      query: textQuery,
+      totalResults: formattedResults.length,
+      processingTime
+    };
 
   } catch (error) {
     console.error('Keyword search error:', error);
@@ -409,7 +421,7 @@ export async function searchByKeywords(
     // フォールバック: 手動キーワード検索
     try {
       console.log('🔄 Attempting manual keyword search fallback...');
-      return await performManualKeywordSearch(keywords, limit);
+      return await performManualKeywordSearch(keywords, textQuery, detectedElements, options, limit);
     } catch (fallbackError) {
       console.error('Manual keyword search also failed:', fallbackError);
       
@@ -467,12 +479,13 @@ function generateEmergencyResults(
   if (queryLower.includes('アクセシビリティ') || queryLower.includes('accessibility')) {
     EMERGENCY_SUGGESTIONS.accessibility.forEach((suggestion, index) => {
       results.push({
-        id: `emergency-a11y-${index}`,
+        id: 3000 + index,
         content: `${suggestion.title}: ${suggestion.description}`,
         source: 'Emergency Guidelines',
         category: 'accessibility',
-        subcategory: 'emergency',
-        relevance_score: 0.9,
+        similarity_score: 0.9,
+        text_rank: 0.9,
+        combined_score: 0.9,
         metadata: { code: suggestion.code, type: 'emergency' }
       });
     });
@@ -482,12 +495,13 @@ function generateEmergencyResults(
   if (queryLower.includes('ユーザビリティ') || queryLower.includes('usability') || queryLower.includes('使いやす')) {
     EMERGENCY_SUGGESTIONS.usability.forEach((suggestion, index) => {
       results.push({
-        id: `emergency-ux-${index}`,
+        id: 3100 + index,
         content: `${suggestion.title}: ${suggestion.description}`,
         source: 'Emergency Guidelines',
         category: 'usability',
-        subcategory: 'emergency',
-        relevance_score: 0.9,
+        similarity_score: 0.9,
+        text_rank: 0.9,
+        combined_score: 0.9,
         metadata: { code: suggestion.code, type: 'emergency' }
       });
     });
@@ -497,12 +511,13 @@ function generateEmergencyResults(
   if (queryLower.includes('デザイン') || queryLower.includes('design') || queryLower.includes('visual')) {
     EMERGENCY_SUGGESTIONS.visual_design.forEach((suggestion, index) => {
       results.push({
-        id: `emergency-design-${index}`,
+        id: 3200 + index,
         content: `${suggestion.title}: ${suggestion.description}`,
         source: 'Emergency Guidelines',
         category: 'visual_design',
-        subcategory: 'emergency',
-        relevance_score: 0.9,
+        similarity_score: 0.9,
+        text_rank: 0.9,
+        combined_score: 0.9,
         metadata: { code: suggestion.code, type: 'emergency' }
       });
     });
@@ -511,12 +526,13 @@ function generateEmergencyResults(
   // 要素特有の提案
   if (elements.includes('button')) {
     results.push({
-      id: 'emergency-button',
+      id: 3300,
       content: 'ボタンの改善: 明確なラベル、適切なサイズ（最小44px）、高コントラストの背景色を使用しましょう。',
       source: 'Emergency Guidelines',
       category: 'usability',
-      subcategory: 'button',
-      relevance_score: 0.95,
+      similarity_score: 0.95,
+      text_rank: 0.95,
+      combined_score: 0.95,
       metadata: { code: 'px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700', type: 'emergency' }
     });
   }
@@ -525,21 +541,23 @@ function generateEmergencyResults(
   if (results.length === 0) {
     results.push(
       {
-        id: 'emergency-general-1',
+        id: 3400,
         content: '視覚的階層の改善: 見出しサイズと余白を調整して、情報の優先度を明確にしましょう。',
         source: 'Emergency Guidelines',
         category: 'visual_design',
-        subcategory: 'hierarchy',
-        relevance_score: 0.8,
+        similarity_score: 0.8,
+        text_rank: 0.8,
+        combined_score: 0.8,
         metadata: { code: 'text-2xl font-bold mb-4', type: 'emergency' }
       },
       {
-        id: 'emergency-general-2',
+        id: 3401,
         content: 'レスポンシブデザイン: モバイルデバイスでの表示を最適化しましょう。',
         source: 'Emergency Guidelines',
         category: 'usability',
-        subcategory: 'responsive',
-        relevance_score: 0.8,
+        similarity_score: 0.8,
+        text_rank: 0.8,
+        combined_score: 0.8,
         metadata: { code: 'container mx-auto px-4 sm:px-6 lg:px-8', type: 'emergency' }
       }
     );
@@ -554,8 +572,12 @@ function generateEmergencyResults(
  */
 async function performManualKeywordSearch(
   keywords: string[],
-  limit: number
-): Promise<SearchResult[]> {
+  textQuery: string = '',
+  _detectedElements: string[] = [],
+  _options: RAGSearchOptions = {},
+  limit: number = 10
+): Promise<RAGSearchResult> {
+  const startTime = Date.now();
   
   console.log('🔍 Performing manual keyword search...');
   
@@ -616,7 +638,14 @@ async function performManualKeywordSearch(
   }));
 
   console.log('✅ Manual keyword search completed, found', formattedResults.length, 'results');
-  return formattedResults;
+  
+  const processingTime = Date.now() - startTime;
+  return {
+    results: formattedResults,
+    query: textQuery,
+    totalResults: formattedResults.length,
+    processingTime
+  };
 }
 
 /**
@@ -634,7 +663,7 @@ export async function performMultiModalSearch(
     
     // 各検索を個別に試行し、失敗したものはスキップ
     let hybridResults: RAGSearchResult | null = null;
-    let keywordResults: SearchResult[] = [];
+    let keywordResults: RAGSearchResult | null = null;
 
     // ハイブリッド検索を試行
     try {
@@ -645,7 +674,7 @@ export async function performMultiModalSearch(
 
     // キーワード検索を試行（関数が存在する場合のみ）
     try {
-      keywordResults = await searchByKeywords(keywords, 3);
+      keywordResults = await searchByKeywords(keywords, textQuery, detectedElements, options, 3);
     } catch (error) {
       console.warn('Keyword search failed, skipping:', error);
     }
@@ -653,7 +682,7 @@ export async function performMultiModalSearch(
     // 結果をマージ
     const allResults = [
       ...(hybridResults?.results || []),
-      ...keywordResults
+      ...(keywordResults?.results || [])
     ];
 
     if (allResults.length === 0) {
@@ -709,6 +738,20 @@ export async function searchRelevantGuidelines(
   detectedElements: string[],
   userPrompt: string
 ): Promise<SearchResult[]> {
+  
+  // オフライン優先モードの確認
+  if (process.env.FORCE_OFFLINE_MODE === 'true') {
+    console.log('🏠 Force offline mode enabled - using local knowledge base');
+    try {
+      const localResults = searchLocalKnowledge(userPrompt, detectedElements);
+      console.log(`✅ Local knowledge base provided ${localResults.length} guidelines`);
+      return localResults;
+    } catch (localError) {
+      console.error('❌ Local knowledge search failed:', localError);
+      // 緊急時のガイドライン
+      return generateEmergencyResults(userPrompt, detectedElements);
+    }
+  }
   
   try {
     // キーワード抽出

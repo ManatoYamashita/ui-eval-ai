@@ -88,11 +88,20 @@ export async function analyzeDesign(
 
     // 5. 結果パース
     console.log('📊 Parsing results...');
+    console.log('📊 Analysis text length:', analysisText.length);
+    console.log('📊 Analysis text preview:', analysisText.substring(0, 300), '...');
+    
     const parsedAnalysis = parseAnalysisResult(analysisText);
+    console.log('📊 Parsed analysis structure:', {
+      hasCurrentIssues: !!parsedAnalysis.current_issues,
+      improvementsCount: parsedAnalysis.improvements.length,
+      hasPredictedImpact: !!parsedAnalysis.predicted_impact,
+      accessibilityScore: parsedAnalysis.predicted_impact.accessibility_score
+    });
 
     const processingTime = Date.now() - startTime;
 
-    return {
+    const finalResult = {
       success: true,
       analysis: parsedAnalysis,
       guidelines_used: relevantGuidelines.map(g => ({
@@ -102,6 +111,16 @@ export async function analyzeDesign(
       })),
       processing_time: processingTime
     };
+
+    console.log('📊 Final analysis result structure:', {
+      success: finalResult.success,
+      hasAnalysis: !!finalResult.analysis,
+      analysisKeys: Object.keys(finalResult.analysis),
+      guidelinesCount: finalResult.guidelines_used.length,
+      processingTime: finalResult.processing_time
+    });
+
+    return finalResult;
 
   } catch (error) {
     console.error('❌ Analysis error:', error);
@@ -124,15 +143,34 @@ export async function analyzeDesign(
     const fallbackGuidelines: SearchResult[] = []; // 空のガイドライン配列
     
     try {
+      console.log('🔄 Generating fallback analysis with elements:', fallbackDetectedElements);
       const fallbackAnalysis = await generateFallbackAnalysis(userPrompt, fallbackDetectedElements, fallbackGuidelines);
       
-      return {
+      console.log('📊 Fallback analysis structure:', {
+        hasCurrentIssues: !!fallbackAnalysis.current_issues,
+        improvementsCount: fallbackAnalysis.improvements.length,
+        hasPredictedImpact: !!fallbackAnalysis.predicted_impact,
+        accessibilityScore: fallbackAnalysis.predicted_impact.accessibility_score
+      });
+
+      const fallbackResult = {
         success: true, // フォールバック成功時はtrueに変更
         analysis: fallbackAnalysis,
         guidelines_used: [],
         processing_time: Date.now() - startTime,
         error: userFriendlyError
       };
+
+      console.log('📊 Fallback result final structure:', {
+        success: fallbackResult.success,
+        hasAnalysis: !!fallbackResult.analysis,
+        analysisKeys: Object.keys(fallbackResult.analysis),
+        guidelinesCount: fallbackResult.guidelines_used.length,
+        processingTime: fallbackResult.processing_time,
+        hasError: !!fallbackResult.error
+      });
+
+      return fallbackResult;
     } catch (fallbackError) {
       console.error('❌ Fallback analysis also failed:', fallbackError);
       
@@ -550,42 +588,92 @@ function parseAnalysisResult(
   predicted_impact: PredictedImpact;
 } {
   
+  console.log('📊 Starting analysis result parsing...');
+  console.log('📊 Analysis text type:', typeof analysisText);
+  console.log('📊 Analysis text length:', analysisText?.length || 0);
+  
+  if (!analysisText || typeof analysisText !== 'string') {
+    console.error('❌ Invalid analysis text:', analysisText);
+    return getDefaultAnalysisResult('無効な分析テキストが渡されました。');
+  }
+
+  if (analysisText.length < 10) {
+    console.error('❌ Analysis text too short:', analysisText);
+    return getDefaultAnalysisResult('分析テキストが短すぎます。');
+  }
+  
   try {
     // セクション抽出
+    console.log('📊 Extracting sections...');
     const sections = extractSections(analysisText);
+    console.log('📊 Extracted sections:', Object.keys(sections));
     
     // 改善提案の抽出
+    console.log('📊 Extracting improvements...');
     const improvements = extractImprovements(sections);
+    console.log('📊 Extracted improvements count:', improvements.length);
     
     // 予測効果の抽出
+    console.log('📊 Extracting predicted impact...');
     const predicted_impact = extractPredictedImpact(sections);
-    
-    return {
+    console.log('📊 Extracted predicted impact:', {
+      hasAccessibilityScore: 'accessibility_score' in predicted_impact,
+      hasUsabilityImprovement: 'usability_improvement' in predicted_impact,
+      hasConversionImpact: 'conversion_impact' in predicted_impact
+    });
+
+    const result = {
       current_issues: sections.currentAnalysis || '分析結果を取得できませんでした。',
       improvements,
       predicted_impact
     };
+
+    console.log('✅ Analysis parsing completed successfully');
+    return result;
     
   } catch (error) {
-    console.error('Analysis parsing error:', error);
+    console.error('❌ Analysis parsing error:', error);
+    console.error('❌ Analysis text sample:', analysisText.substring(0, 200), '...');
     
-    return {
-      current_issues: analysisText.substring(0, 500) + '...',
-      improvements: [{
-        priority: 'medium' as const,
-        title: '分析結果の処理エラー',
-        problem: 'AIからの応答を正しく解析できませんでした。',
-        solution: '画像を再度アップロードして分析を試してください。',
-        implementation: 'エラーが発生しました',
-        guideline_reference: 'システムエラー'
-      }],
-      predicted_impact: {
-        accessibility_score: 0,
-        usability_improvement: '分析できませんでした',
-        conversion_impact: '分析できませんでした'
-      }
-    };
+    return getDefaultAnalysisResult(
+      `分析結果の解析に失敗しました: ${error instanceof Error ? error.message : '不明なエラー'}`
+    );
   }
+}
+
+/**
+ * デフォルト分析結果の生成
+ */
+function getDefaultAnalysisResult(errorMessage: string): {
+  current_issues: string;
+  improvements: ImprovementSuggestion[];
+  predicted_impact: PredictedImpact;
+} {
+  console.log('🔄 Generating default analysis result for error:', errorMessage);
+  
+  return {
+    current_issues: errorMessage,
+    improvements: [{
+      priority: 'medium' as const,
+      title: '分析結果の処理エラー',
+      problem: 'AIからの応答を正しく解析できませんでした。',
+      solution: '画像を再度アップロードして分析を試してください。',
+      implementation: `
+/* エラー復旧用の基本的な改善 */
+.error-recovery {
+  @apply min-h-[44px] min-w-[44px] 
+         focus:ring-2 focus:ring-blue-500 
+         bg-white text-gray-900 
+         border border-gray-300;
+}`,
+      guideline_reference: 'システムエラー - 基本的なアクセシビリティガイドライン'
+    }],
+    predicted_impact: {
+      accessibility_score: 0,
+      usability_improvement: '分析を完了できませんでした',
+      conversion_impact: '分析を完了できませんでした'
+    }
+  };
 }
 
 /**

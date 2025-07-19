@@ -146,21 +146,87 @@ function AnalyzePageContent() {
       clearInterval(progressInterval);
       updateProgress(85, '結果を処理中...');
 
-      const result: AnalysisResultType = await response.json();
+      // レスポンス詳細ログ
+      console.log('📊 API Response Status:', response.status, response.statusText);
+      console.log('📊 API Response Headers:', Object.fromEntries(response.headers.entries()));
+      
+      // レスポンステキストを先に取得してJSONパース前にログ出力
+      const responseText = await response.text();
+      console.log('📊 Raw Response Text:', responseText.substring(0, 500), '...');
+      console.log('📊 Response Text Length:', responseText.length);
 
+      // JSONパース処理
+      let result: AnalysisResultType;
+      try {
+        result = JSON.parse(responseText);
+        console.log('✅ JSON Parse Success');
+        console.log('📊 Parsed Result Structure:', {
+          hasSuccess: 'success' in result,
+          hasAnalysis: 'analysis' in result,
+          hasGuidelinesUsed: 'guidelines_used' in result,
+          hasProcessingTime: 'processing_time' in result,
+          hasError: 'error' in result,
+          successValue: result.success,
+          analysisKeys: result.analysis ? Object.keys(result.analysis) : null,
+          guidelinesCount: result.guidelines_used ? result.guidelines_used.length : null
+        });
+      } catch (parseError) {
+        console.error('❌ JSON Parse Error:', parseError);
+        console.error('❌ Failed to parse response text:', responseText.substring(0, 1000));
+        throw new Error('APIからの応答を解析できませんでした。レスポンス形式に問題があります。');
+      }
+
+      // レスポンスステータス確認（JSONパース後）
       if (!response.ok) {
+        console.error('❌ HTTP Error Response:', result);
         throw new Error(result.error || `HTTP error! status: ${response.status}`);
+      }
+
+      // AnalysisResult構造の検証
+      if (!result || typeof result !== 'object') {
+        console.error('❌ Invalid result structure:', result);
+        throw new Error('APIレスポンスの構造が無効です');
+      }
+
+      if (!('success' in result) || !('analysis' in result)) {
+        console.error('❌ Missing required fields in result:', result);
+        throw new Error('APIレスポンスに必要なフィールドが不足しています');
       }
 
       // 完了時のプログレス
       updateProgress(100, '分析完了！');
       
       setTimeout(() => {
-        // 結果をsessionStorageに保存
-        sessionStorage.setItem('analysisResult', JSON.stringify(result));
-        
-        // 結果ページに遷移
-        router.push('/results');
+        try {
+          // 結果をsessionStorageに保存
+          const resultString = JSON.stringify(result);
+          console.log('💾 Saving to sessionStorage, size:', resultString.length, 'characters');
+          
+          sessionStorage.setItem('analysisResult', resultString);
+          
+          // 保存検証
+          const savedResult = sessionStorage.getItem('analysisResult');
+          if (!savedResult) {
+            console.error('❌ Failed to save to sessionStorage');
+            throw new Error('分析結果の保存に失敗しました');
+          }
+          
+          // 保存されたデータの検証
+          const parsedSaved = JSON.parse(savedResult);
+          console.log('✅ SessionStorage save verified:', {
+            savedSize: savedResult.length,
+            hasSuccess: 'success' in parsedSaved,
+            hasAnalysis: 'analysis' in parsedSaved,
+            successValue: parsedSaved.success
+          });
+          
+          // 結果ページに遷移
+          console.log('🔄 Navigating to /results');
+          router.push('/results');
+        } catch (storageError) {
+          console.error('❌ SessionStorage Error:', storageError);
+          setError('分析結果の保存中にエラーが発生しました: ' + (storageError instanceof Error ? storageError.message : '不明なエラー'));
+        }
       }, 1000);
 
     } catch (error) {

@@ -21,40 +21,49 @@ interface LocalKnowledgeItem {
 /**
  * ローカルナレッジベースの統合データ
  */
-const LOCAL_KNOWLEDGE_BASE: LocalKnowledgeItem[] = [
+const LOCAL_KNOWLEDGE_BASE: LocalKnowledgeItem[] = ([
   // WCAG 2.2ガイドライン
-  ...((wcag22 as any)?.guidelines || []).map((item: any, index: number) => ({
-    id: `wcag-${index}`,
-    content: item.content || item.guideline || item.description || '',
-    source: 'WCAG 2.2',
-    category: item.category || 'accessibility',
-    subcategory: item.subcategory || item.type || '',
-    keywords: item.keywords || [],
-    metadata: { level: item.level, criterion: item.criterion, priority: item.priority }
-  })),
+  ...((wcag22 as Record<string, unknown>)?.guidelines as Record<string, unknown>[] || []).map((item: Record<string, unknown>, index: number) => {
+    const guideline = item;
+    return {
+      id: `wcag-${index}`,
+      content: String(guideline.content || guideline.guideline || guideline.description || ''),
+      source: 'WCAG 2.2',
+      category: (guideline.category && String(guideline.category)) || 'accessibility',
+      subcategory: String(guideline.subcategory || guideline.type || ''),
+      keywords: Array.isArray(guideline.keywords) ? guideline.keywords.map(String) : [],
+      metadata: { level: guideline.level, criterion: guideline.criterion, priority: guideline.priority }
+    };
+  }),
   
   // Apple Human Interface Guidelines
-  ...((appleHig as any)?.guidelines || []).map((item: any, index: number) => ({
-    id: `hig-${index}`,
-    content: item.content || item.guideline || item.description || '',
-    source: 'Apple HIG',
-    category: item.category || 'usability',
-    subcategory: item.subcategory || item.component || '',
-    keywords: item.keywords || [],
-    metadata: { platform: item.platform, component: item.component, priority: item.priority }
-  })),
+  ...((appleHig as Record<string, unknown>)?.guidelines as Record<string, unknown>[] || []).map((item: Record<string, unknown>, index: number) => {
+    const guideline = item;
+    return {
+      id: `hig-${index}`,
+      content: String(guideline.content || guideline.guideline || guideline.description || ''),
+      source: 'Apple HIG',
+      category: (guideline.category && String(guideline.category)) || 'usability',
+      subcategory: String(guideline.subcategory || guideline.component || ''),
+      keywords: Array.isArray(guideline.keywords) ? guideline.keywords.map(String) : [],
+      metadata: { platform: guideline.platform, component: guideline.component, priority: guideline.priority }
+    };
+  }),
   
   // Refactoring UI
-  ...((refactoringUi as any)?.guidelines || []).map((item: any, index: number) => ({
-    id: `rui-${index}`,
-    content: item.content || item.guideline || item.description || '',
-    source: 'Refactoring UI',
-    category: item.category || 'visual_design',
-    subcategory: item.subcategory || item.topic || '',
-    keywords: item.keywords || [],
-    metadata: { principle: item.principle, technique: item.technique, priority: item.priority }
-  }))
-];
+  ...((refactoringUi as Record<string, unknown>)?.guidelines as Record<string, unknown>[] || []).map((item: Record<string, unknown>, index: number) => {
+    const guideline = item;
+    return {
+      id: `rui-${index}`,
+      content: String(guideline.content || guideline.guideline || guideline.description || ''),
+      source: 'Refactoring UI',
+      category: (guideline.category && String(guideline.category)) || 'visual_design',
+      subcategory: String(guideline.subcategory || guideline.topic || ''),
+      keywords: Array.isArray(guideline.keywords) ? guideline.keywords.map(String) : [],
+      metadata: { principle: guideline.principle, technique: guideline.technique, priority: guideline.priority }
+    };
+  })
+] as unknown as LocalKnowledgeItem[]);
 
 /**
  * ローカルナレッジベースでのキーワード検索
@@ -81,7 +90,6 @@ export function searchLocalKnowledge(
   function calculateScore(item: LocalKnowledgeItem): number {
     let score = 0;
     const contentLower = item.content.toLowerCase();
-    const sourceLower = item.source.toLowerCase();
     const categoryLower = item.category.toLowerCase();
     
     // カテゴリマッチング（重要度高）
@@ -132,12 +140,13 @@ export function searchLocalKnowledge(
 
   // SearchResult形式に変換
   const results: SearchResult[] = scoredResults.map((result, index) => ({
-    id: result.item.id || `local-${index}`,
+    id: index + 1000, // ローカル検索結果のためのユニークID
     content: result.item.content,
     source: result.item.source,
     category: result.item.category,
-    subcategory: result.item.subcategory || '',
-    relevance_score: result.score / 20, // 0-1の範囲に正規化
+    similarity_score: result.score / 20, // 0-1の範囲に正規化
+    text_rank: result.score / 20,
+    combined_score: result.score / 20,
     metadata: result.item.metadata || {}
   }));
 
@@ -160,12 +169,13 @@ export function searchLocalKnowledgeByCategory(
     .filter(item => item.category.toLowerCase() === category.toLowerCase())
     .slice(0, limit)
     .map((item, index) => ({
-      id: item.id || `${category}-${index}`,
+      id: index + 2000, // カテゴリ検索結果のためのユニークID
       content: item.content,
       source: item.source,
       category: item.category,
-      subcategory: item.subcategory || '',
-      relevance_score: 0.8,
+      similarity_score: 0.8,
+      text_rank: 0.8,
+      combined_score: 0.8,
       metadata: item.metadata || {}
     }));
 

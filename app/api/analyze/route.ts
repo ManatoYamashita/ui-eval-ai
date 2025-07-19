@@ -19,25 +19,12 @@ export async function POST(request: NextRequest) {
 
     // FormDataの解析
     const formData = await request.formData();
-    const mainImage = formData.get('image') as File;
+    const imageFile = formData.get('image') as File;
     const userPrompt = formData.get('prompt') as string;
     const mode = formData.get('mode') as string || 'comprehensive';
     
-    // 追加画像を取得
-    const additionalImages: File[] = [];
-    let i = 0;
-    while (true) {
-      const additionalImage = formData.get(`additional_image_${i}`) as File;
-      if (!additionalImage) break;
-      additionalImages.push(additionalImage);
-      i++;
-    }
-    
-    const allImages = [mainImage, ...additionalImages];
-    console.log(`📷 Total images received: ${allImages.length}`);
-    
     // 入力検証
-    const validationError = validateInput(allImages, userPrompt);
+    const validationError = validateInput(imageFile, userPrompt);
     if (validationError) {
       return NextResponse.json(
         { error: validationError },
@@ -45,21 +32,17 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    console.log(`🖼️ Processing ${allImages.length} images:`);
-    allImages.forEach((img, idx) => {
-      console.log(`  ${idx + 1}. ${img.name} (${img.size} bytes)`);
-    });
+    console.log(`🖼️ Processing image: ${imageFile.name} (${imageFile.size} bytes)`);
     console.log(`💬 User prompt: ${userPrompt.substring(0, 100)}...`);
 
-    // 分析実行（複数画像対応）
+    // 分析実行
     const analysisResult: AnalysisResult = await analyzeDesign(
-      allImages,
+      imageFile,
       userPrompt,
       {
         mode: mode as 'comprehensive' | 'quick',
         maxTokens: mode === 'quick' ? 3000 : 8000,
-        includeTechnicalDetails: true,
-        isComparative: allImages.length > 1
+        includeTechnicalDetails: true
       }
     );
 
@@ -124,33 +107,21 @@ export async function GET() {
 }
 
 /**
- * 入力の検証（複数画像対応）
+ * 入力の検証
  */
-function validateInput(imageFiles: File[], userPrompt: string): string | null {
+function validateInput(imageFile: File, userPrompt: string): string | null {
   
   // 画像ファイルの検証
-  if (!imageFiles || imageFiles.length === 0) {
-    return 'At least one image file is required';
+  if (!imageFile) {
+    return 'Image file is required';
   }
   
-  if (imageFiles.length > 5) {
-    return 'Maximum 5 images allowed';
+  if (!ALLOWED_TYPES.includes(imageFile.type)) {
+    return `Unsupported file type: ${imageFile.type}. Allowed types: ${ALLOWED_TYPES.join(', ')}`;
   }
   
-  for (let i = 0; i < imageFiles.length; i++) {
-    const imageFile = imageFiles[i];
-    
-    if (!imageFile) {
-      return `Image file ${i + 1} is missing`;
-    }
-    
-    if (!ALLOWED_TYPES.includes(imageFile.type)) {
-      return `Image ${i + 1}: Unsupported file type: ${imageFile.type}. Allowed types: ${ALLOWED_TYPES.join(', ')}`;
-    }
-    
-    if (imageFile.size > MAX_FILE_SIZE) {
-      return `Image ${i + 1}: File size too large: ${Math.round(imageFile.size / 1024 / 1024)}MB. Maximum allowed: ${Math.round(MAX_FILE_SIZE / 1024 / 1024)}MB`;
-    }
+  if (imageFile.size > MAX_FILE_SIZE) {
+    return `File size too large: ${Math.round(imageFile.size / 1024 / 1024)}MB. Maximum allowed: ${Math.round(MAX_FILE_SIZE / 1024 / 1024)}MB`;
   }
   
   // プロンプトの検証
